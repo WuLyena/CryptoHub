@@ -3,37 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Hub 2.0: Platform Belajar Kripto Ter-GG</title>
+    <title>Crypto Hub: Platform Belajar Kripto Ter-GG</title>
 
-<meta name="description" content="Crypto Hub: Platform belajar kripto terlengkap dengan harga real-time, notifikasi, analisis AI, gamification, kamus, tutorial, kuis, alat bantu, dan berita terkini.">
-<meta name="keywords" content="crypto, blockchain, bitcoin, ethereum, defi, nft, pwa, belajar kripto, harga kripto, notifikasi harga crypto, analisis kripto, portofolio kripto, kuis kripto, berita kripto, alat kripto">
+<meta name="description" content="Crypto Hub: Platform belajar kripto terlengkap dengan harga real-time, kamus istilah, analisis, tutorial praktis, kuis, alat bantu konversi, dan berita terkini.">
+<meta name="keywords" content="crypto, blockchain, bitcoin, ethereum, defi, nft, cryptocurrency, belajar kripto, harga kripto, kamus kripto, analisis kripto, portofolio kripto, kuis kripto, berita kripto, alat kripto">
 <meta name="author" content="Crypto Hub Team">
 <meta property="og:title" content="Crypto Hub: Platform Belajar Kripto Ter-GG">
-<meta property="og:description" content="Crypto Hub: Platform belajar kripto terlengkap dengan harga real-time, analisis, tutorial, kuis, dan berita terkini.">
+<meta property="og:description" content="Crypto Hub: Platform belajar kripto terlengkap dengan harga real-time, kamus istilah, analisis, tutorial praktis, kuis, alat bantu konversi, dan berita terkini.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://yourusername.github.io/cryptohub/">
-<meta property="og:image" content="https://placehold.co/1200x630/0f172a/38bdf8?text=Crypto+Hub+2.0">
-
-<!-- PWA & Theme Manifest -->
-<!-- FIX: Changed path from /manifest.json to manifest.json. This file must exist in the same directory. -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#06b6d4">
-
-<script src="https://cdn.tailwindcss.com"></script>
+<meta property="og:url" content="https://yourusername.github.io/cryptohub/"> <meta property="og:image" content="https://placehold.co/1200x630/0f172a/38bdf8?text=Crypto+Hub"> <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Placeholder for Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-X"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-XXXXX-X');
-</script>
 
 <script>
     tailwind.config = {
@@ -51,16 +34,14 @@
                     shake: { '0%,100%': { transform: 'translateX(0)' }, '10%,30%,50%,70%,90%': { transform: 'translateX(-5px)' }, '20%,40%,60%,80%': { transform: 'translateX(5px)' } },
                     shimmer: { '100%': { transform: 'translateX(100%)' } },
                     gradientShift: { '0%,100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
-                    pulseGlow: { '0%,100%': { boxShadow: '0 0 5px rgba(6,182,212,0.3)' }, '50%': { boxShadow: '0 0 20px rgba(6,182,212,0.6)' } },
-                    slideIn: { 'from': { transform: 'translateY(100%)', opacity: '0' }, 'to': { transform: 'translateY(0)', opacity: '1' } }
+                    pulseGlow: { '0%,100%': { boxShadow: '0 0 5px rgba(6,182,212,0.3)' }, '50%': { boxShadow: '0 0 20px rgba(6,182,212,0.6)' } }
                 },
                 animation: {
                     fadeIn: 'fadeIn 0.5s ease-in-out',
                     shake: 'shake 0.5s ease-in-out',
                     shimmer: 'shimmer 1.5s infinite',
                     gradientShift: 'gradientShift 6s ease infinite',
-                    pulseGlow: 'pulseGlow 2s ease-in-out infinite',
-                    slideIn: 'slideIn 0.3s ease-out'
+                    pulseGlow: 'pulseGlow 2s ease-in-out infinite'
                 }
             }
         }
@@ -101,6 +82,16 @@
     [data-theme="purple"] { --primary: #8b5cf6; --primary-dark: #7c3aed; }
     [data-theme="green"] { --primary: #22c55e; --primary-dark: #16a34a; }
     .bg-gradient-to-r { background-image: linear-gradient(to right, var(--primary), var(--primary-dark)) !important; }
+    /* Perbaikan untuk override agar warna tetap dinamis sesuai custom property */
+    [class*="text-cyan-"], [class*="bg-cyan-"], [class*="border-cyan-"] { color: var(--primary) !important; background-color: var(--primary) !important; border-color: var(--primary) !important; }
+    /* Override untuk warna yang spesifik agar tidak terpengaruh dynamic theme, jika memang dimaksudkan statis */
+    .text-red-500 { color: #ef4444 !important; }
+    .bg-red-500 { background-color: #ef4444 !important; }
+    .border-red-600 { border-color: #dc2626 !important; }
+    .text-green-500 { color: #22c55e !important; }
+    .bg-green-500 { background-color: #22c55e !important; }
+    .border-green-600 { border-color: #16a34a !important; }
+
     .sidebar { position: fixed; top: 0; left: 0; transform: translateX(-100%); transition: transform 0.3s ease; z-index: 20; }
     .sidebar.open { transform: translateX(0); }
     @media (min-width: 768px) { .sidebar { transform: translateX(0); position: sticky; } }
@@ -112,10 +103,11 @@
 </style></head>
 <body class="bg-slate-100 text-slate-800 dark:bg-slate-950 dark:text-slate-300">
     <canvas id="confetti-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-50"></canvas>
-    <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
 
 <button id="mobile-menu-toggle" class="md:hidden p-2 fixed top-4 left-4 z-30 bg-white dark:bg-slate-900 rounded-lg no-print" aria-label="Toggle mobile menu">
-    <svg class="w-6 h-6 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+    <svg class="w-6 h-6 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
 </button>
 
 <div id="password-overlay" class="fixed inset-0 bg-slate-900/50 dark:bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -146,26 +138,13 @@
             </button>
         </div>
         <nav id="navigation" class="flex-grow overflow-y-auto" aria-label="Main navigation"><ul class="space-y-2"></ul></nav>
-        
-        <!-- NEW: Trending News Widget -->
-        <div class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
-             <div class="p-4 glass-card rounded-lg">
-                <h3 class="text-md font-bold mb-2 text-slate-800 dark:text-slate-200">Lagi Trending</h3>
-                <ul id="trending-news" class="space-y-2 text-sm">${Array(3).fill('<li class="skeleton-loader h-6"></li>').join('')}</ul>
-            </div>
-        </div>
-
-        <div id="user-profile" class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+        <div id="user-profile" class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
             <div class="text-center">
                 <div class="flex gap-2 justify-center mb-4" role="radiogroup" aria-label="Select primary color theme">
                     <button data-theme="cyan" class="w-6 h-6 rounded-full bg-cyan-500 ring-2 ring-offset-2 ring-transparent hover:ring-[var(--primary)]" aria-label="Set theme to Cyan"></button>
                     <button data-theme="purple" class="w-6 h-6 rounded-full bg-purple-500 ring-2 ring-offset-2 ring-transparent hover:ring-[var(--primary)]" aria-label="Set theme to Purple"></button>
                     <button data-theme="green" class="w-6 h-6 rounded-full bg-green-500 ring-2 ring-offset-2 ring-transparent hover:ring-[var(--primary)]" aria-label="Set theme to Green"></button>
                 </div>
-                 <select id="lang-switch" class="p-2 w-full rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm">
-                    <option value="id"> Indonesia</option>
-                    <option value="en"> English</option>
-                </select>
             </div>
         </div>
     </aside>
@@ -183,11 +162,6 @@
     </main>
 </div>
 
-<footer class="hidden md:block fixed bottom-0 right-0 p-4 text-center text-xs text-slate-500 no-print">
-    <p>Suka dengan app ini? Dukung kami! 
-<strong class="text-[var(--primary)] break-all">ETH: 0x...</strong></p>
-</footer>
-
 <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
     <div class="modal bg-white dark:bg-slate-900 p-6 rounded-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-800">
         <div class="flex justify-between items-center mb-4">
@@ -201,50 +175,107 @@
 </div>
 
 <script>
-    // --- APP CONFIG & STATE ---
-    const APP_VERSION = '2.0.0'; // NEW: Cache versioning
-
-    const translations = {
-        id: { dasbor: 'Dasbor Harga', kamus: 'Kamus Lengkap', analisis: 'Analisis & Studi Kasus', tutorial: 'Tutorial Praktis', portofolio: 'Portofolio Saya', alat: 'Alat Bantu', berita: 'Berita Terkini', kuis: 'Kuis Kripto' },
-        en: { dasbor: 'Price Dashboard', kamus: 'Glossary', analisis: 'Analysis & Case Studies', tutorial: 'Practical Tutorials', portofolio: 'My Portfolio', alat: 'Tools', berita: 'Latest News', kuis: 'Crypto Quiz' }
-    };
-    let currentLang = localStorage.getItem(`${APP_VERSION}_lang`) || 'id';
-    
     // --- DATA & CONTENT ---
     const appData = [
-        { id: 'dasbor', i18n_key: 'dasbor', title: 'Dasbor Harga', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>`, isLive: true },
-        { id: 'kamus', i18n_key: 'kamus', title: 'Kamus Lengkap', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-9-8.494h18m-18 4h18M5 6.253L12 2l7 4.253M5 17.747L12 22l7-4.253"></path></svg>`, isDictionary: true },
-        { id: 'analisis', i18n_key: 'analisis', title: 'Analisis & Studi Kasus', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"></path></svg>`, content: [] },
-        { id: 'tutorial', i18n_key: 'tutorial', title: 'Tutorial Praktis', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>`, content: [] },
-        { id: 'portofolio', i18n_key: 'portofolio', title: 'Portofolio Saya', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>`, isPortfolio: true },
-        { id: 'alat', i18n_key: 'alat', title: 'Alat Bantu', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0v6m0-6l-6 6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`, isTool: true },
-        { id: 'berita', i18n_key: 'berita', title: 'Berita Terkini', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3h2m-4 3h2M3 10h18"></path></svg>`, isNews: true },
-        { id: 'kuis', i18n_key: 'kuis', title: 'Kuis Kripto', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`, isQuiz: true }
+        { id: 'dasbor', title: 'Dasbor Harga', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>`, isLive: true },
+        { id: 'kamus', title: 'Kamus Lengkap', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-9-8.494h18m-18 4h18M5 6.253L12 2l7 4.253M5 17.747L12 22l7-4.253"></path></svg>`, isDictionary: true },
+        { id: 'analisis', title: 'Analisis & Studi Kasus', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"></path></svg>`, content: [] },
+        { id: 'tutorial', title: 'Tutorial Praktis', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>`, content: [] },
+        { id: 'portofolio', title: 'Portofolio Saya', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>`, isPortfolio: true },
+        { id: 'alat', title: 'Alat Bantu', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0v6m0-6l-6 6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`, isTool: true },
+        { id: 'berita', title: 'Berita Terkini', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3h2m-4 3h2M3 10h18"></path></svg>`, isNews: true },
+        { id: 'kuis', title: 'Kuis Kripto', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`, isQuiz: true }
     ];
 
-    // Content initialization... (omitted for brevity, same as original)
     const kamusContent = [
-        { category: 'Konsep Fundamental', items: [ { term: 'Blockchain', definition: 'Buku besar digital terdesentralisasi yang mencatat semua transaksi secara permanen dan transparan dalam bentuk "rantai blok". Teknologi ini jadi dasar hampir semua crypto. <em>Contoh:</em> Bitcoin pake blockchain buat catet transaksi tanpa bank.' }, { term: 'Decentralization (Desentralisasi)', definition: 'Prinsip di mana kontrol gak dipegang satu pihak (bank/pemerintah), tapi dibagi ke semua pengguna jaringan. <em>Contoh:</em> Ethereum dijalanin sama ribuan node di seluruh dunia.' }, { term: 'Wallet (Dompet)', definition: 'Software atau hardware buat nyimpan aset digital. <strong>Hot Wallet</strong> (online, e.g., MetaMask) cocok buat transaksi cepet, tapi riskan. <strong>Cold Wallet</strong> (offline, e.g., Ledger) paling aman buat simpen jangka panjang.' }, { term: 'Public Key & Private Key', definition: '<strong>Public Key</strong>: Alamat dompet buat nerima dana, kayak nomor rekening. <strong>Private Key</strong>: Password rahasia buat akses aset. <strong>JANGAN DIBAGI!</strong> <em>Contoh:</em> Public Key: 1A1zP1e..., Private Key: 64 karakter acak.' }, { term: 'Seed Phrase', definition: '12-24 kata rahasia buat recover dompet kalau hilang. <strong>Simpen offline!</strong> <em>Contoh:</em> "apple banana cherry..."' }, { term: 'Hash', definition: 'Kode unik dari data yang dienkripsi. Digunain buat verifikasi transaksi di blockchain. <em>Contoh:</em> SHA-256 bikin hash 64 karakter.' } ]},
-        { category: 'Jenis Aset Digital', items: [ { term: 'Coin (Koin)', definition: 'Aset asli dari blockchain sendiri. <em>Contoh:</em> BTC (Bitcoin), ETH (Ethereum), SOL (Solana).' }, { term: 'Token', definition: 'Aset yang numpang di blockchain lain, bisa buat utilitas, voting, dll. <em>Contoh:</em> USDT (Tether) di Ethereum.' }, { term: 'NFT (Non-Fungible Token)', definition: 'Aset digital unik, gak bisa ditukar satu sama lain. <em>Contoh:</em> CryptoPunks, Bored Ape Yacht Club.' }, { term: 'Stablecoin', definition: 'Crypto yang dipatok ke aset stabil (USD). <em>Contoh:</em> USDT, USDC, DAI.' }, { term: 'RWA (Real World Assets)', definition: 'Aset dunia nyata (properti, saham) yang ditoken di blockchain. <em>Contoh:</em> Token properti di RealT.' }, { term: 'Security Token', definition: 'Token yang nyatain kepemilikan aset, diatur regulasi. <em>Contoh:</em> Token saham perusahaan.' } ]},
-        { category: 'Mekanisme Teknis & Skalabilitas', items: [ { term: 'Consensus Mechanism', definition: 'Aturan buat validasi transaksi. <strong>PoW</strong> (komputasi berat, e.g., Bitcoin), <strong>PoS</strong> (stake aset, e.g., Ethereum 2.0).' }, { term: 'Mining (Menambang)', definition: 'Validasi transaksi pake komputasi di PoW, dapet reward koin. <em>Contoh:</em> Miner Bitcoin pake ASIC.' }, { term: 'Staking', definition: 'Kunci aset di PoS buat amanin jaringan, dapet reward. <em>Contoh:</em> Stake ETH di Ethereum.' }, { term: 'Halving', definition: 'Event tiap 4 tahun di Bitcoin yang potong reward miner jadi setengah. <em>Contoh:</em> Halving 2020: 12.5 → 6.25 BTC.' }, { term: 'Smart Contract', definition: 'Kode otomatis buat eksekusi perjanjian. <em>Contoh:</em> Swap token di Uniswap.' }, { term: 'Layer 1 (L1) & Layer 2 (L2)', definition: '<strong>L1</strong>: Blockchain utama (Ethereum). <strong>L2</strong>: Solusi skalabilitas (Polygon, Arbitrum).' }, { term: 'Sharding', definition: 'Pecah blockchain jadi bagian kecil biar cepet. <em>Contoh:</em> Ethereum rencana pake sharding.' } ]},
-        { category: 'Ekosistem & Aplikasi', items: [ { term: 'DeFi (Decentralized Finance)', definition: 'Layanan keuangan tanpa bank. <em>Contoh:</em> Pinjem duit di Aave.' }, { term: 'DEX (Decentralized Exchange)', definition: 'Bursa P2P buat tuker crypto. <em>Contoh:</em> Uniswap, PancakeSwap.' }, { term: 'DAO (Decentralized Autonomous Organization)', definition: 'Organisasi dijalanin kode dan voting. <em>Contoh:</em> MakerDAO.' }, { term: 'GameFi & Metaverse', definition: '<strong>GameFi</strong>: Game Play-to-Earn (Axie Infinity). <strong>Metaverse</strong>: Dunia virtual (Decentraland).' }, { term: 'Web3', definition: 'Internet terdesentralisasi pake blockchain. <em>Contoh:</em> Aplikasi dApp kayak OpenSea.' } ]},
-        { category: 'Tokoh & Peristiwa Penting', items: [ { term: 'Satoshi Nakamoto', definition: 'Pencipta misterius Bitcoin. Identitasnya masih teka-teki.' }, { term: 'Vitalik Buterin', definition: 'Co-founder Ethereum, bawa smart contract ke blockchain.' }, { term: 'The DAO Hack (2016)', definition: 'Peretasan Ethereum yang bikin hard fork jadi ETH dan ETC.' }, { term: 'Mt. Gox Hack (2014)', definition: 'Bursa crypto pertama yang kehilangan 850k BTC.' } ]},
-        { category: 'Istilah Pasar & Budaya (Slang)', items: [ { term: 'HODL', definition: 'Tahan crypto jangka panjang. <em>Asal:</em> Typo "hold" di forum.' }, { term: 'FOMO & FUD', definition: '<strong>FOMO</strong>: Takut ketinggalan, beli pas mahal. <strong>FUD</strong>: Sebar ketakutan buat nurunin harga.' }, { term: 'Whale (Paus)', definition: 'Pemilik crypto gede yang bisa goyang pasar. <em>Contoh:</em> Whale Bitcoin gerakin 10k BTC.' }, { term: 'ATH & ATL', definition: '<strong>ATH</strong>: Harga tertinggi. <strong>ATL</strong>: Harga terendah.' }, { term: 'DYOR (Do Your Own Research)', definition: 'Riset sendiri sebelum investasi. Nasihat wajib!' }, { term: 'Moon', definition: 'Slang buat harga crypto naik gila-gilaan. <em>Contoh:</em> "BTC to the moon!"' } ]}
-    ];
-    const fullQuizBank = [
-        { q: "Siapa pencipta Bitcoin?", o: ["Vitalik Buterin", "Satoshi Nakamoto", "Elon Musk", "CZ"], a: "Satoshi Nakamoto" }, { q: "Aset di atas blockchain lain?", o: ["Coin", "Fiat", "Token", "Fiyatt"], a: "Token" }, { q: "Konsensus pake mining?", o: ["PoS", "PoH", "PoW", "DPoS"], a: "PoW" }, { q: "Tahan crypto lama?", o: ["FOMO", "FUD", "Shill", "HODL"], a: "HODL" }, { q: "Fungsi Stablecoin?", o: ["Spekulasi", "Stabil", "Bunga", "Game"], a: "Stabil" }, { q: "NFT singkatan dari?", o: ["New Financial Token", "Non-Fungible Token", "National Fiat Token", "Network Fee Token"], a: "Non-Fungible Token" }, { q: "Keuangan tanpa bank?", o: ["CeFi", "TradFi", "DeFi", "FinTech"], a: "DeFi" }, { q: "Harga berhenti turun?", o: ["Resistance", "Breakout", "Support", "Trendline"], a: "Support" }, { q: "Gas Fee itu apa?", o: ["Biaya internet", "Biaya transaksi", "Pajak", "Listrik"], a: "Biaya transaksi" }, { q: "Bursa diretas 2014?", o: ["Binance", "Coinbase", "Mt. Gox", "Kraken"], a: "Mt. Gox" }
+        { category: 'Konsep Fundamental', items: [
+            { term: 'Blockchain', definition: 'Buku besar digital terdesentralisasi yang mencatat semua transaksi secara permanen dan transparan dalam bentuk "rantai blok". Teknologi ini jadi dasar hampir semua crypto. <em>Contoh:</em> Bitcoin pake blockchain buat catet transaksi tanpa bank.' },
+            { term: 'Decentralization (Desentralisasi)', definition: 'Prinsip di mana kontrol gak dipegang satu pihak (bank/pemerintah), tapi dibagi ke semua pengguna jaringan. <em>Contoh:</em> Ethereum dijalanin sama ribuan node di seluruh dunia.' },
+            { term: 'Wallet (Dompet)', definition: 'Software atau hardware buat nyimpan aset digital. <strong>Hot Wallet</strong> (online, e.g., MetaMask) cocok buat transaksi cepet, tapi riskan. <strong>Cold Wallet</strong> (offline, e.g., Ledger) paling aman buat simpen jangka panjang.' },
+            { term: 'Public Key & Private Key', definition: '<strong>Public Key</strong>: Alamat dompet buat nerima dana, kayak nomor rekening. <strong>Private Key</strong>: Password rahasia buat akses aset. <strong>JANGAN DIBAGI!</strong> <em>Contoh:</em> Public Key: 1A1zP1e..., Private Key: 64 karakter acak.' },
+            { term: 'Seed Phrase', definition: '12-24 kata rahasia buat recover dompet kalau hilang. <strong>Simpen offline!</strong> <em>Contoh:</em> "apple banana cherry..."' },
+            { term: 'Hash', definition: 'Kode unik dari data yang dienkripsi. Digunain buat verifikasi transaksi di blockchain. <em>Contoh:</em> SHA-256 bikin hash 64 karakter.' }
+        ]},
+        { category: 'Jenis Aset Digital', items: [
+            { term: 'Coin (Koin)', definition: 'Aset asli dari blockchain sendiri. <em>Contoh:</em> BTC (Bitcoin), ETH (Ethereum), SOL (Solana).' },
+            { term: 'Token', definition: 'Aset yang numpang di blockchain lain, bisa buat utilitas, voting, dll. <em>Contoh:</em> USDT (Tether) di Ethereum.' },
+            { term: 'NFT (Non-Fungible Token)', definition: 'Aset digital unik, gak bisa ditukar satu sama lain. <em>Contoh:</em> CryptoPunks, Bored Ape Yacht Club.' },
+            { term: 'Stablecoin', definition: 'Crypto yang dipatok ke aset stabil (USD). <em>Contoh:</em> USDT, USDC, DAI.' },
+            { term: 'RWA (Real World Assets)', definition: 'Aset dunia nyata (properti, saham) yang ditoken di blockchain. <em>Contoh:</em> Token properti di RealT.' },
+            { term: 'Security Token', definition: 'Token yang nyatain kepemilikan aset, diatur regulasi. <em>Contoh:</em> Token saham perusahaan.' }
+        ]},
+        { category: 'Mekanisme Teknis & Skalabilitas', items: [
+            { term: 'Consensus Mechanism', definition: 'Aturan buat validasi transaksi. <strong>PoW</strong> (komputasi berat, e.g., Bitcoin), <strong>PoS</strong> (stake aset, e.g., Ethereum 2.0).' },
+            { term: 'Mining (Menambang)', definition: 'Validasi transaksi pake komputasi di PoW, dapet reward koin. <em>Contoh:</em> Miner Bitcoin pake ASIC.' },
+            { term: 'Staking', definition: 'Kunci aset di PoS buat amanin jaringan, dapet reward. <em>Contoh:</em> Stake ETH di Ethereum.' },
+            { term: 'Halving', definition: 'Event tiap 4 tahun di Bitcoin yang potong reward miner jadi setengah. <em>Contoh:</em> Halving 2020: 12.5 → 6.25 BTC.' },
+            { term: 'Smart Contract', definition: 'Kode otomatis buat eksekusi perjanjian. <em>Contoh:</em> Swap token di Uniswap.' },
+            { term: 'Layer 1 (L1) & Layer 2 (L2)', definition: '<strong>L1</strong>: Blockchain utama (Ethereum). <strong>L2</strong>: Solusi skalabilitas (Polygon, Arbitrum).' },
+            { term: 'Sharding', definition: 'Pecah blockchain jadi bagian kecil biar cepet. <em>Contoh:</em> Ethereum rencana pake sharding.' }
+        ]},
+        { category: 'Ekosistem & Aplikasi', items: [
+            { term: 'DeFi (Decentralized Finance)', definition: 'Layanan keuangan tanpa bank. <em>Contoh:</em> Pinjem duit di Aave.' },
+            { term: 'DEX (Decentralized Exchange)', definition: 'Bursa P2P buat tuker crypto. <em>Contoh:</em> Uniswap, PancakeSwap.' },
+            { term: 'DAO (Decentralized Autonomous Organization)', definition: 'Organisasi dijalanin kode dan voting. <em>Contoh:</em> MakerDAO.' },
+            { term: 'GameFi & Metaverse', definition: '<strong>GameFi</strong>: Game Play-to-Earn (Axie Infinity). <strong>Metaverse</strong>: Dunia virtual (Decentraland).' },
+            { term: 'Web3', definition: 'Internet terdesentralisasi pake blockchain. <em>Contoh:</em> Aplikasi dApp kayak OpenSea.' }
+        ]},
+        { category: 'Tokoh & Peristiwa Penting', items: [
+            { term: 'Satoshi Nakamoto', definition: 'Pencipta misterius Bitcoin. Identitasnya masih teka-teki.' },
+            { term: 'Vitalik Buterin', definition: 'Co-founder Ethereum, bawa smart contract ke blockchain.' },
+            { term: 'The DAO Hack (2016)', definition: 'Peretasan Ethereum yang bikin hard fork jadi ETH dan ETC.' },
+            { term: 'Mt. Gox Hack (2014)', definition: 'Bursa crypto pertama yang kehilangan 850k BTC.' }
+        ]},
+        { category: 'Istilah Pasar & Budaya (Slang)', items: [
+            { term: 'HODL', definition: 'Tahan crypto jangka panjang. <em>Asal:</em> Typo "hold" di forum.' },
+            { term: 'FOMO & FUD', definition: '<strong>FOMO</strong>: Takut ketinggalan, beli pas mahal. <strong>FUD</strong>: Sebar ketakutan buat nurunin harga.' },
+            { term: 'Whale (Paus)', definition: 'Pemilik crypto gede yang bisa goyang pasar. <em>Contoh:</em> Whale Bitcoin gerakin 10k BTC.' },
+            { term: 'ATH & ATL', definition: '<strong>ATH</strong>: Harga tertinggi. <strong>ATL</strong>: Harga terendah.' },
+            { term: 'DYOR (Do Your Own Research)', definition: 'Riset sendiri sebelum investasi. Nasihat wajib!' },
+            { term: 'Moon', definition: 'Slang buat harga crypto naik gila-gilaan. <em>Contoh:</em> "BTC to the moon!"' }
+        ]}
     ];
 
-    function createCandlestickSVG() { return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}</style></defs><g transform="translate(50 20)"><rect x="0" y="40" width="40" height="50" fill="#22c55e" title="Candlestick Hijau: Harga Naik"/><line x1="20" y1="0" x2="20" y2="40" stroke="#22c55e" stroke-width="2"/><line x1="20" y1="90" x2="20" y2="110" stroke="#22c55e" stroke-width="2"/><text x="65" y="10" class="label font-bold">High</text><line x1="42" y1="5" x2="60" y2="5" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="45" class="label">Open</text><line x1="42" y1="40" x2="60" y2="40" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="95" class="label">Close</text><line x1="42" y1="90" x2="60" y2="90" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="115" class="label font-bold">Low</text><line x1="42" y1="110" x2="60" y2="110" stroke="currentColor" stroke-dasharray="2 2"/></g><g transform="translate(180 20)"><rect x="0" y="25" width="40" height="50" fill="#ef4444" title="Candlestick Merah: Harga Turun"/><line x1="20" y1="0" x2="20" y2="25" stroke="#ef4444" stroke-width="2"/><line x1="20" y1="75" x2="20" y2="110" stroke="#ef4444" stroke-width="2"/></g></svg>`; }
-    function createSupportResistanceSVG() { return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}</style></defs><path d="M20 120 C 60 40, 80 140, 120 80 S 180 20, 220 70 S 260 110, 280 80" stroke="#06b6d4" stroke-width="2.5" fill="none"/><line x1="10" y1="40" x2="290" y2="40" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4"/><text x="110" y="35" class="label font-bold text-red-500 fill-current">Resistance</text><line x1="10" y1="120" x2="290" y2="120" stroke="#22c55e" stroke-width="2" stroke-dasharray="4 4"/><text x="110" y="135" class="label font-bold text-green-500 fill-current">Support</text></svg>`; }
-    function createEtherscanSVG() { return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}.box{fill:currentColor;fill-opacity:0.1;stroke:currentColor;stroke-width:0.5;}</style></defs><rect x="10" y="55" width="80" height="40" rx="8" class="box" title="Pengirim"/><text x="25" y="78" class="label font-bold">Pengirim</text><rect x="210" y="55" width="80" height="40" rx="8" class="box" title="Penerima"/><text x="225" y="78" class="label font-bold">Penerima</text><path d="M90 75 L 210 75" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/><text x="150" y="65" class="label font-semibold">0.1 ETH</text><text x="150" y="85" class="label text-[var(--primary)]">Gas Fee</text><defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker></defs></svg>`; }
-    const analisisContent = [ { term: 'Analisis Fundamental vs Teknikal', definition: `<strong>FA</strong>: Liat nilai proyek (tim, tech, tokenomics). <strong>TA</strong>: Analisis chart (harga, volume). <em>Contoh:</em> FA cek whitepaper, TA baca RSI.` }, { term: 'Membaca Candlestick Chart', definition: `Lilin tunjukin open, close, high, low. Hijau = naik, merah = turun. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createCandlestickSVG()}</div>` }, { term: 'Support & Resistance', definition: `<strong>Support:</strong> Lantai harga. <strong>Resistance:</strong> Atap harga. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createSupportResistanceSVG()}</div>` }, { term: 'Studi Kasus: Membedah Transaksi di Etherscan', definition: `Lacak transaksi pake Txn Hash, From, To, Value, Gas. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createEtherscanSVG()}</div>` } ];
+    const analisisContent = [
+        { term: 'Analisis Fundamental vs Teknikal', definition: `<strong>FA</strong>: Liat nilai proyek (tim, tech, tokenomics). <strong>TA</strong>: Analisis chart (harga, volume). <em>Contoh:</em> FA cek whitepaper, TA baca RSI.` },
+        { term: 'Membaca Candlestick Chart', definition: `Lilin tunjukin open, close, high, low. Hijau = naik, merah = turun. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createCandlestickSVG()}</div>` },
+        { term: 'Support & Resistance', definition: `<strong>Support:</strong> Lantai harga. <strong>Resistance:</strong> Atap harga. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createSupportResistanceSVG()}</div>` },
+        { term: 'Studi Kasus: Membedah Transaksi di Etherscan', definition: `Lacak transaksi pake Txn Hash, From, To, Value, Gas. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createEtherscanSVG()}</div>` }
+    ];
     appData.find(p => p.id === 'analisis').content = analisisContent;
-    const tutorialContent = [ { term: 'Cara Membuat Wallet MetaMask', definition: `<ol class="text-sm list-decimal list-inside mt-2 space-y-2"><li>Unduh di metamask.io.</li><li>Buat dompet + password.</li><li>Simpen seed phrase offline.</li><li>Konfirmasi, selesai.</li></ol>` }, { term: 'Tips Keamanan Paling Penting', definition: `<ul class="text-sm list-disc list-inside mt-2 space-y-2"><li>Jangan percaya DM/email.</li><li>Pake cold wallet buat dana gede.</li><li>Cek alamat + situs.</li></ul>` } ];
-    appData.find(p => p.id === 'tutorial').content = tutorialContent;
-    
 
-    // --- HELPER & UTILITY FUNCTIONS ---
+    const tutorialContent = [
+        { term: 'Cara Membuat Wallet MetaMask', definition: `<ol class="text-sm list-decimal list-inside mt-2 space-y-2"><li>Unduh di metamask.io.</li><li>Buat dompet + password.</li><li>Simpen seed phrase offline.</li><li>Konfirmasi, selesai.</li></ol>` },
+        { term: 'Tips Keamanan Paling Penting', definition: `<ul class="text-sm list-disc list-inside mt-2 space-y-2"><li>Jangan percaya DM/email.</li><li>Pake cold wallet buat dana gede.</li><li>Cek alamat + situs.</li></ul>` }
+    ];
+    appData.find(p => p.id === 'tutorial').content = tutorialContent;
+
+    const fullQuizBank = [
+        { q: "Siapa pencipta Bitcoin?", o: ["Vitalik Buterin", "Satoshi Nakamoto", "Elon Musk", "CZ"], a: "Satoshi Nakamoto" },
+        { q: "Aset di atas blockchain lain?", o: ["Coin", "Fiat", "Token", "Fiyatt"], a: "Token" },
+        { q: "Konsensus pake mining?", o: ["PoS", "PoH", "PoW", "DPoS"], a: "PoW" },
+        { q: "Tahan crypto lama?", o: ["FOMO", "FUD", "Shill", "HODL"], a: "HODL" },
+        { q: "Fungsi Stablecoin?", o: ["Spekulasi", "Stabil", "Bunga", "Game"], a: "Stabil" },
+        { q: "NFT singkatan dari?", o: ["New Financial Token", "Non-Fungible Token", "National Fiat Token", "Network Fee Token"], a: "Non-Fungible Token" },
+        { q: "Keuangan tanpa bank?", o: ["CeFi", "TradFi", "DeFi", "FinTech"], a: "DeFi" },
+        { q: "Harga berhenti turun?", o: ["Resistance", "Breakout", "Support", "Trendline"], a: "Support" },
+        { q: "Gas Fee itu apa?", o: ["Biaya internet", "Biaya transaksi", "Pajak", "Listrik"], a: "Biaya transaksi" },
+        { q: "Bursa diretas 2014?", o: ["Binance", "Coinbase", "Mt. Gox", "Kraken"], a: "Mt. Gox" }
+    ];
+
+    // --- HELPER FUNCTIONS ---
+    function createCandlestickSVG() {
+        return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}</style></defs><g transform="translate(50 20)"><rect x="0" y="40" width="40" height="50" fill="#22c55e" title="Candlestick Hijau: Harga Naik"/><line x1="20" y1="0" x2="20" y2="40" stroke="#22c55e" stroke-width="2"/><line x1="20" y1="90" x2="20" y2="110" stroke="#22c55e" stroke-width="2"/><text x="65" y="10" class="label font-bold">High</text><line x1="42" y1="5" x2="60" y2="5" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="45" class="label">Open</text><line x1="42" y1="40" x2="60" y2="40" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="95" class="label">Close</text><line x1="42" y1="90" x2="60" y2="90" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="115" class="label font-bold">Low</text><line x1="42" y1="110" x2="60" y2="110" stroke="currentColor" stroke-dasharray="2 2"/></g><g transform="translate(180 20)"><rect x="0" y="25" width="40" height="50" fill="#ef4444" title="Candlestick Merah: Harga Turun"/><line x1="20" y1="0" x2="20" y2="25" stroke="#ef4444" stroke-width="2"/><line x1="20" y1="75" x2="20" y2="110" stroke="#ef4444" stroke-width="2"/></g></svg>`;
+    }
+
+    function createSupportResistanceSVG() {
+        return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}</style></defs><path d="M20 120 C 60 40, 80 140, 120 80 S 180 20, 220 70 S 260 110, 280 80" stroke="#06b6d4" stroke-width="2.5" fill="none"/><line x1="10" y1="40" x2="290" y2="40" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4"/><text x="110" y="35" class="label font-bold text-red-500 fill-current">Resistance</text><line x1="10" y1="120" x2="290" y2="120" stroke="#22c55e" stroke-width="2" stroke-dasharray="4 4"/><text x="110" y="135" class="label font-bold text-green-500 fill-current">Support</text></svg>`;
+    }
+
+    function createEtherscanSVG() {
+        return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}.box{fill:currentColor;fill-opacity:0.1;stroke:currentColor;stroke-width:0.5;}</style></defs><rect x="10" y="55" width="80" height="40" rx="8" class="box" title="Pengirim"/><text x="25" y="78" class="label font-bold">Pengirim</text><rect x="210" y="55" width="80" height="40" rx="8" class="box" title="Penerima"/><text x="225" y="78" class="label font-bold">Penerima</text><path d="M90 75 L 210 75" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/><text x="150" y="65" class="label font-semibold">0.1 ETH</text><text x="150" y="85" class="label text-[var(--primary)]">Gas Fee</text><defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker></defs></svg>`;
+    }
+
     function debounce(func, wait) {
         let timeout;
         return function (...args) {
@@ -261,149 +292,239 @@
         const particles = [];
         for (let i = 0; i < 100; i++) {
             particles.push({
-                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                vx: Math.random() * 4 - 2, vy: Math.random() * 4 - 2,
-                color: `hsl(${Math.random() * 360}, 100%, 50%)`, size: Math.random() * 5 + 2
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: Math.random() * 4 - 2,
+                vy: Math.random() * 4 - 2,
+                color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                size: Math.random() * 5 + 2
             });
         }
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach((p, index) => {
-                p.x += p.vx; p.y += p.vy; p.size *= 0.98;
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.size *= 0.98;
                 ctx.fillStyle = p.color;
                 ctx.fillRect(p.x, p.y, p.size, p.size);
-                if (p.size < 0.5) particles.splice(index, 1);
+                if (p.size < 0.5) particles.splice(particles.indexOf(p), 1);
             });
             if (particles.length > 0) requestAnimationFrame(animate);
+            else canvas.style.display = 'none';
         }
+        canvas.style.display = 'block';
         animate();
     }
 
     /**
-     * NEW: Centralized function for fetching multiple coin prices.
-     * Batches API requests to be more efficient.
+     * Fetches crypto prices with caching and rate limit fallback.
+     * Saran #4: Tambah fallback kalau API gagal, misal pake data cache lama meski udah expired.
      */
-    async function getMultiplePrices(coinIds) {
-        if (!coinIds || coinIds.length === 0) return {};
-        const uniqueIds = [...new Set(coinIds)].join(',');
-        const cacheKey = `prices_${APP_VERSION}_${uniqueIds}`;
+    async function getCryptoPrices(page = 1, perPage = 50, category = '') {
+        const cacheKey = `crypto_${page}_${category}_${perPage}`;
         const cached = localStorage.getItem(cacheKey);
-        
+        let cachedData = null;
+        let cacheTimestamp = 0;
+
         if (cached) {
-            const { data, timestamp } = JSON.parse(cached);
-            if (Date.now() - timestamp < 120000) { // 2 minute cache
-                return data;
+            const parsedCache = JSON.parse(cached);
+            cachedData = parsedCache.data;
+            cacheTimestamp = parsedCache.timestamp;
+            // Gunakan cache jika masih valid (2 menit)
+            if (Date.now() - cacheTimestamp < 120000) {
+                return cachedData;
             }
         }
-        try {
-            const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${uniqueIds}&vs_currencies=usd`);
-            if (!response.ok) throw new Error('API request failed');
-            const data = await response.json();
-            localStorage.setItem(cacheKey, JSON.stringify({ data, timestamp: Date.now() }));
-            return data;
-        } catch (error) {
-            console.error("getMultiplePrices error:", error);
-            return {}; // Return empty object on failure
-        }
-    }
 
-    async function getCryptoPrices(page = 1, perPage = 50, category = '') {
-        const cacheKey = `crypto_list_${APP_VERSION}_${page}_${perPage}_${category}`;
-        const cached = localStorage.getItem(cacheKey);
-        if (cached) {
-            const { data, timestamp } = JSON.parse(cached);
-            if (Date.now() - timestamp < 120000) return data;
-        }
         try {
             let url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}&sparkline=true`;
-            if (category) {
-                 url += category.startsWith('ids=') ? `&${category}` : `&category=${category}`;
+            if (category && category !== 'ids=') { // Fix for empty category after search
+                // If category starts with 'ids=', it's a specific ID list
+                if (category.startsWith('ids=')) {
+                    url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&sparkline=true&${category}`;
+                } else {
+                    url += `&category=${category}`;
+                }
             }
             const response = await fetch(url);
-            if (!response.ok) throw new Error('API Gagal');
+            if (!response.ok) {
+                // Jika API gagal, coba gunakan cache lama (sampai 1 jam)
+                if (cachedData && Date.now() - cacheTimestamp < 3600000) {
+                    console.warn("API call failed, falling back to expired cache:", response.statusText);
+                    return cachedData;
+                }
+                throw new Error('API Gagal');
+            }
             const data = await response.json();
             localStorage.setItem(cacheKey, JSON.stringify({ data, timestamp: Date.now() }));
             return data;
         } catch (error) {
-            console.error("Price list fetch error:", error);
-            // Fallback to old cache if available
-            if (cached) return JSON.parse(cached).data;
+            console.error("Price fetch error:", error);
+            // Jika API benar-benar gagal dan tidak ada cache lama yang valid
             return null;
         }
-    }
-    
-    // --- GAMIFICATION & NOTIFICATION FUNCTIONS ---
-    const achievements = [
-        { id: 'portfolio_1', name: 'Investor Pemula', desc: 'Tambah 1 koin ke portofolio', condition: () => (JSON.parse(localStorage.getItem(`${APP_VERSION}_cryptoPortfolio`)) || []).length >= 1 },
-        { id: 'portfolio_3', name: 'Trader Cilik', desc: 'Punya 3 koin di portofolio', condition: () => (JSON.parse(localStorage.getItem(`${APP_VERSION}_cryptoPortfolio`)) || []).length >= 3 },
-        { id: 'quiz_perfect', name: 'Jenius Kripto', desc: 'Skor sempurna di kuis', condition: (score, total) => score === total && total > 0 }
-    ];
-
-    function showToast(message, type = 'info') {
-        const container = document.getElementById('toast-container');
-        const toast = document.createElement('div');
-        toast.className = `p-4 rounded-lg shadow-lg animate-slideIn ${type === 'success' ? 'glass-card bg-green-500/80 text-white' : 'glass-card'}`;
-        toast.innerHTML = message;
-        container.appendChild(toast);
-        setTimeout(() => toast.remove(), 5000);
-    }
-
-    function checkAchievements(trigger, context = {}) {
-        const earned = JSON.parse(localStorage.getItem(`${APP_VERSION}_achievements`)) || [];
-        achievements.forEach(ach => {
-            let conditionMet = false;
-            if(trigger === 'portfolio' && (ach.id === 'portfolio_1' || ach.id === 'portfolio_3')) {
-                conditionMet = ach.condition();
-            } else if (trigger === 'quiz' && ach.id === 'quiz_perfect') {
-                conditionMet = ach.condition(context.score, context.total);
-            }
-
-            if (conditionMet && !earned.includes(ach.id)) {
-                earned.push(ach.id);
-                showToast(`<p class="font-bold"> Achievement Unlocked!</p><p>${ach.name}: ${ach.desc}</p>`, 'success');
-                localStorage.setItem(`${APP_VERSION}_achievements`, JSON.stringify(earned));
-            }
-        });
     }
 
     // --- RENDER FUNCTIONS ---
     function renderPage(pageId) {
-        try {
-            const pageData = appData.find(p => p.id === pageId);
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            const activeLink = document.querySelector(`.nav-link[data-id="${pageId}"]`);
-            if(activeLink) activeLink.classList.add('active');
-            
-            document.getElementById('page-title').textContent = translations[currentLang][pageData.i18n_key] || pageData.title;
+        const pageData = appData.find(p => p.id === pageId);
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.querySelector(`.nav-link[data-id="${pageId}"]`).classList.add('active');
+        document.getElementById('page-title').textContent = pageData.title;
 
-            const pageContentEl = document.getElementById('page-content');
-            pageContentEl.innerHTML = `<div id="page-dynamic-content" class="animate-fadeIn space-y-6"></div>`;
-            const contentEl = document.getElementById('page-dynamic-content');
+        const pageContentEl = document.getElementById('page-content');
+        pageContentEl.innerHTML = `<div id="page-dynamic-content" class="animate-fadeIn space-y-6"></div>`;
+        const contentEl = document.getElementById('page-dynamic-content');
 
-            if (pageData.isLive) renderPriceTracker(contentEl);
-            else if (pageData.isDictionary) renderDictionary(contentEl);
-            else if (pageData.isQuiz) renderQuiz(contentEl);
-            else if (pageData.isTool) renderTools(contentEl);
-            else if (pageData.isNews) renderNews(contentEl);
-            else if (pageData.isPortfolio) renderPortfolio(contentEl);
-            else if (pageData.content) {
-                contentEl.innerHTML = pageData.content.map(item => `
-                    <div class="card-item bg-white dark:bg-slate-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+        if (pageData.isLive) renderPriceTracker(contentEl);
+        else if (pageData.isDictionary) renderDictionary(contentEl);
+        else if (pageData.isQuiz) renderQuiz(contentEl);
+        else if (pageData.isTool) renderTools(contentEl);
+        else if (pageData.isNews) renderNews(contentEl);
+        else if (pageData.isPortfolio) renderPortfolio(contentEl);
+        else if (pageData.content) {
+            contentEl.innerHTML = pageData.content.map(item => `
+                <div class="card-item bg-white dark:bg-slate-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+                    <div class="flex justify-between items-center">
                         <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r">${item.term}</h3>
-                        <div class="definition-content text-slate-600 dark:text-slate-300 leading-relaxed">${item.definition}</div>
-                    </div>`).join('');
-            }
-        } catch (error) {
-            console.error('Render error:', error);
-            document.getElementById('page-content').innerHTML = `
-                <div class="glass-card p-6 text-center text-red-500">
-                    <h3 class="text-2xl font-bold mb-4">Waduh, Error!</h3>
-                    <p>Terjadi kesalahan saat menampilkan halaman ini. Coba refresh atau kembali ke halaman utama.</p>
-                    <p class="text-xs mt-2">Detail: ${error.message}</p>
-                </div>`;
+                        <button title="Cetak" class="print-button no-print text-gray-400 hover:text-[var(--primary)]" aria-label="Cetak definisi ini">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        </button>
+                    </div>
+                    <div class="definition-content text-slate-600 dark:text-slate-300 leading-relaxed">${item.definition}</div>
+                </div>
+            `).join('');
+        }
+
+        document.querySelectorAll('.print-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const card = btn.closest('.card-item');
+                const printArea = document.createElement('div');
+                printArea.className = 'print-area';
+                printArea.innerHTML = card.innerHTML;
+                document.body.appendChild(printArea);
+                window.print();
+                printArea.remove();
+            });
+        });
+    }
+
+    function renderDictionary(container) {
+        container.innerHTML = `
+            <div class="relative mb-6 no-print">
+                <input type="text" id="kamus-search" placeholder="Cari istilah (contoh: Blockchain)" class="w-full p-3 pl-10 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-[var(--primary)]" aria-label="Cari istilah kamus">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" aria-hidden="true"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                <div id="kamus-autocomplete" class="absolute w-full mt-1 bg-white dark:bg-slate-900 rounded-lg shadow-lg hidden"></div>
+            </div>
+            <div id="kamus-accordion-container" class="space-y-4"></div>
+            <div id="kamus-search-results" class="hidden space-y-4"></div>
+        `;
+
+        const accordionContainer = document.getElementById('kamus-accordion-container');
+        accordionContainer.innerHTML = kamusContent.map(cat => `
+            <div class="glass-card rounded-lg border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <button class="accordion-button w-full flex justify-between items-center p-4 text-left font-semibold text-lg text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-expanded="false" aria-controls="accordion-content-${cat.category.replace(/\s/g, '-')}-">
+                    <span>${cat.category}</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                <div id="accordion-content-${cat.category.replace(/\s/g, '-')}-" class="accordion-content px-4" role="region" aria-hidden="true">
+                    <div class="py-4 border-t border-gray-200 dark:border-gray-700 space-y-4">
+                        ${cat.items.map(item => `
+                            <div class="card-item">
+                                <h4 class="text-md font-semibold text-[var(--primary)]">${item.term}</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">${item.definition}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        const searchInput = document.getElementById('kamus-search');
+        searchInput.addEventListener('input', debounce(handleKamusSearch, 300));
+        searchInput.addEventListener('input', handleKamusAutocomplete);
+
+        document.querySelectorAll('.accordion-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const isOpen = content.style.maxHeight;
+                document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
+                document.querySelectorAll('.accordion-button').forEach(b => {
+                    b.classList.remove('open');
+                    b.setAttribute('aria-expanded', 'false');
+                    b.nextElementSibling.setAttribute('aria-hidden', 'true');
+                });
+
+                if (!isOpen) {
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                    button.classList.add('open');
+                    button.setAttribute('aria-expanded', 'true');
+                    content.setAttribute('aria-hidden', 'false');
+                }
+            });
+        });
+    }
+
+    function handleKamusSearch(e) {
+        const query = e.target.value.toLowerCase();
+        const accordionContainer = document.getElementById('kamus-accordion-container');
+        const resultsContainer = document.getElementById('kamus-search-results');
+        if (!query) {
+            accordionContainer.classList.remove('hidden');
+            resultsContainer.classList.add('hidden');
+            return;
+        }
+
+        const results = [];
+        kamusContent.forEach(cat => {
+            cat.items.forEach(item => {
+                if (item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query)) {
+                    results.push(item);
+                }
+            });
+        });
+        accordionContainer.classList.add('hidden');
+        resultsContainer.classList.remove('hidden');
+        if (results.length > 0) {
+            resultsContainer.innerHTML = results.map(item => `
+                <div class="glass-card p-4 rounded-lg">
+                    <h4 class="text-md font-semibold text-[var(--primary)]">${item.term}</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">${item.definition.replace(new RegExp(query, 'gi'), match => `<span class="highlight">${match}</span>`)}</p>
+                </div>
+            `).join('');
+        } else {
+            resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Gak ketemu, bro! Coba keyword lain!</p>`;
         }
     }
-    
+
+    function handleKamusAutocomplete(e) {
+        const query = e.target.value.toLowerCase();
+        const autocompleteContainer = document.getElementById('kamus-autocomplete');
+        if (!query) {
+            autocompleteContainer.classList.add('hidden');
+            return;
+        }
+
+        const suggestions = [];
+        kamusContent.forEach(cat => {
+            cat.items.forEach(item => {
+                if (item.term.toLowerCase().startsWith(query)) {
+                    suggestions.push(item.term);
+                }
+            });
+        });
+
+        if (suggestions.length > 0) {
+            autocompleteContainer.classList.remove('hidden');
+            autocompleteContainer.innerHTML = suggestions.slice(0, 5).map(s => `
+                <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer" role="option" onclick="document.getElementById('kamus-search').value = '${s}'; handleKamusSearch({ target: { value: '${s}' } })">${s}</div>
+            `).join('');
+        } else {
+            autocompleteContainer.classList.add('hidden');
+        }
+    }
+
     async function renderPriceTracker(container) {
         let currentPage = 1;
         const perPage = 10;
@@ -411,497 +532,1115 @@
 
         container.innerHTML = `
             <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
-                <div class="relative flex-1 w-full">
+                <div class="relative flex-1">
                     <input type="text" id="crypto-search" placeholder="Cari token (e.g., Bitcoin)" class="w-full p-3 pl-10 bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-[var(--primary)]" aria-label="Cari token kripto">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" aria-hidden="true"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
                 </div>
-                <select id="crypto-filter" class="w-full md:w-auto p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700" aria-label="Filter kripto berdasarkan kategori">
-                    <option value="">Semua</option> <option value="decentralized_finance_defi">DeFi</option> <option value="non_fungible_tokens_nft">NFT</option> <option value="stablecoins">Stablecoin</option> <option value="real_world_assets_rwa">RWA</option>
+                <select id="crypto-filter" class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700" aria-label="Filter kripto berdasarkan kategori">
+                    <option value="">Semua</option>
+                    <option value="decentralized_finance_defi">DeFi</option>
+                    <option value="non_fungible_tokens_nft">NFT</option>
+                    <option value="stablecoins">Stablecoin</option>
+                    <option value="real_world_assets_rwa">RWA</option>
                 </select>
             </div>
             <div id="top-coins" class="mb-6">
                 <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Top 10 Coins</h3>
                 <div id="top-coins-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">${Array(10).fill('<div class="h-32 skeleton-loader"></div>').join('')}</div>
             </div>
-            <div id="price-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">${Array(10).fill('<div class="h-48 skeleton-loader"></div>').join('')}</div>
+            <div id="price-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">${Array(10).fill('<div class="h-48 skeleton-loader"></div>').join('')}</div>
             <div class="mt-6 text-center"><button id="load-more" class="px-6 py-3 bg-gradient-to-r text-white rounded-lg hover:opacity-80 transition pulse-glow" aria-label="Muat lebih banyak koin">Load More</button></div>
-            
-            <!-- NEW: Price Alert UI -->
-            <div class="glass-card p-4 mt-6 rounded-xl">
-                <h3 class="text-lg font-bold mb-2">Set Notifikasi Harga (Demo)</h3>
-                <p class="text-xs text-slate-500 mb-2">Fitur ini adalah demo client-side. Untuk notifikasi saat browser ditutup, diperlukan backend & service worker yang lebih canggih.</p>
-                <input id="alert-coin" placeholder="ID Coin (e.g., bitcoin)" class="p-2 w-full mb-2 bg-slate-100 dark:bg-slate-800 rounded">
-                <input id="alert-price" type="number" placeholder="Harga Target ($)" class="p-2 w-full mb-2 bg-slate-100 dark:bg-slate-800 rounded">
-                <select id="alert-direction" class="p-2 w-full mb-2 bg-slate-100 dark:bg-slate-800 rounded">
-                    <option value="above">Di atas</option>
-                    <option value="below">Di bawah</option>
-                </select>
-                <button id="set-alert" class="w-full px-4 py-2 bg-gradient-to-r text-white rounded pulse-glow">Set Alert</button>
-            </div>
         `;
-        
-        // The rest of renderPriceTracker function is large and mostly unchanged
-        // I will include the key modifications here
-        
-        const renderCoins = (data, targetEl, isTop = false) => {
+
+        const renderCoins = async (data, targetEl, isTop = false) => {
+            targetEl.innerHTML = '';
             if (!data || data.length === 0) {
-                 targetEl.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 p-4 glass-card rounded-xl">Tidak ada data kripto ditemukan.</p>`;
-                 return;
+                targetEl.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 p-4 glass-card rounded-xl">Tidak ada data kripto ditemukan.</p>`;
+                return;
             }
-            let content = data.map(coin => {
+
+            data.forEach(coin => {
                 const change = coin.price_change_percentage_24h;
                 const changeClass = change >= 0 ? 'text-green-500' : 'text-red-500';
                 const cardHeight = isTop ? 'h-32' : 'h-48';
-                return `
-                    <div class="flip-card ${cardHeight} rounded-xl" data-coin-id="${coin.id}" role="button" tabindex="0" aria-label="Lihat detail ${coin.name}">
+                targetEl.innerHTML += `
+                    <div class="flip-card ${cardHeight} rounded-xl cursor-pointer" data-coin-id="${coin.id}" role="button" tabindex="0" aria-label="Lihat detail ${coin.name}">
                         <div class="flip-card-inner">
                             <div class="flip-card-front glass-card p-4 rounded-xl flex flex-col justify-between">
-                                <div class="flex items-center gap-2"><img src="${coin.image}" alt="${coin.name} logo" class="w-6 h-6 rounded-full"><h4 class="text-sm font-semibold truncate">${coin.name} (${coin.symbol.toUpperCase()})</h4></div>
-                                <div><p class="text-lg font-semibold">$${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p><p class="text-sm ${changeClass}">${change ? change.toFixed(2) : 'N/A'}%</p></div>
+                                <div class="flex items-center gap-2">
+                                    <img src="${coin.image}" alt="${coin.name} logo" class="w-6 h-6 rounded-full">
+                                    <h4 class="text-sm font-semibold truncate">${coin.name} (${coin.symbol.toUpperCase()})</h4>
+                                </div>
+                                <div>
+                                    <p class="text-lg font-semibold">$${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                                    <p class="text-sm ${changeClass}">${change ? change.toFixed(2) : 'N/A'}%</p>
+                                </div>
                             </div>
                             <div class="flip-card-back glass-card p-4 rounded-xl flex flex-col justify-center" aria-hidden="true">
-                                <canvas id="sparkline-${coin.id}-${isTop ? 'top' : 'main'}" class="w-full h-20"></canvas>
+                                <canvas id="sparkline-${coin.id}-${isTop ? 'top' : 'main'}" class="w-full h-20" aria-label="Grafik harga 7 hari untuk ${coin.name}"></canvas>
                             </div>
                         </div>
-                    </div>`;
-            }).join('');
-
-            if (currentPage === 1 && !document.getElementById('crypto-search').value && !currentFilter) {
-                 targetEl.innerHTML = content;
-            } else {
-                 targetEl.innerHTML += content;
-            }
-            
+                    </div>
+                `;
+            });
             setTimeout(() => {
                 data.forEach(coin => {
                     const ctx = document.getElementById(`sparkline-${coin.id}-${isTop ? 'top' : 'main'}`);
-                    if (ctx && coin.sparkline_in_7d && coin.sparkline_in_7d.price) {
-                       new Chart(ctx.getContext('2d'), { type: 'line', data: { labels: coin.sparkline_in_7d.price.map((_, i) => i), datasets: [{ data: coin.sparkline_in_7d.price, borderColor: coin.price_change_percentage_24h >= 0 ? '#22c55e' : '#ef4444', borderWidth: 2, fill: true, backgroundColor: coin.price_change_percentage_24h >= 0 ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)', tension: 0.4, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } } });
+                    if (ctx) {
+                        new Chart(ctx.getContext('2d'), {
+                            type: 'line',
+                            data: {
+                                labels: coin.sparkline_in_7d.price.map((_, i) => i),
+                                datasets: [{
+                                    data: coin.sparkline_in_7d.price,
+                                    borderColor: coin.price_change_percentage_24h >= 0 ? '#22c55e' : '#ef4444',
+                                    borderWidth: 2,
+                                    fill: true,
+                                    backgroundColor: coin.price_change_percentage_24h >= 0 ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                                    tension: 0.4,
+                                    pointRadius: 0
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } },
+                                scales: { x: { display: false }, y: { display: false } }
+                            }
+                        });
                     }
                 });
             }, 100);
         };
 
-        const loadPage = async (isLoadMore = false) => {
-            const priceGrid = document.getElementById('price-grid');
-            if (!isLoadMore) priceGrid.innerHTML = Array(perPage).fill('<div class="h-48 skeleton-loader"></div>').join('');
-            
-            const data = await getCryptoPrices(currentPage, perPage, currentFilter);
+        const showCoinDetails = async (coinId) => {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            modalTitle.textContent = 'Loading...';
+            modalContent.innerHTML = `<div class="h-64 skeleton-loader"></div>`;
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-modal', 'true');
+            modal.setAttribute('role', 'dialog');
+            try {
+                const cacheKey = `coin_detail_${coinId}`;
+                const cached = localStorage.getItem(cacheKey);
+                let coin;
+                if (cached) {
+                    const { data, timestamp } = JSON.parse(cached);
+                    // Gunakan cache jika masih valid (2 menit)
+                    if (Date.now() - timestamp < 120000) {
+                        coin = data;
+                    }
+                }
 
-            if (!isLoadMore) priceGrid.innerHTML = '';
-            
-            if (data && data.length > 0) {
-                renderCoins(data, priceGrid, false);
-            } else if (!isLoadMore) {
-                priceGrid.innerHTML = `<p class="col-span-full text-center text-red-500 p-4 glass-card rounded-xl">Gagal memuat data atau tidak ada hasil.</p>`;
+                if (!coin) {
+                    const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}`);
+                    if (!response.ok) {
+                        // Jika API gagal, coba gunakan cache lama (sampai 1 jam)
+                        if (cached && Date.now() - JSON.parse(cached).timestamp < 3600000) {
+                            console.warn("Coin detail API call failed, falling back to expired cache:", response.statusText);
+                            coin = JSON.parse(cached).data;
+                        } else {
+                            throw new Error('Failed to fetch coin data');
+                        }
+                    } else {
+                        coin = await response.json();
+                        localStorage.setItem(cacheKey, JSON.stringify({ data: coin, timestamp: Date.now() }));
+                    }
+                }
+
+                modalTitle.textContent = `${coin.name} (${coin.symbol.toUpperCase()})`;
+                modalContent.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4">
+                            <img src="${coin.image.large}" alt="${coin.name} logo" class="w-16 h-16 rounded-full">
+                            <div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Rank #${coin.market_cap_rank || 'N/A'}</p>
+                                <p class="text-2xl font-bold">${coin.name}</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Harga Sekarang:</p>
+                                <p class="font-semibold">$${coin.market_data.current_price.usd.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Perubahan (24j):</p>
+                                <p class="font-semibold ${coin.market_data.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500'}">${coin.market_data.price_change_percentage_24h ? coin.market_data.price_change_percentage_24h.toFixed(2) : 'N/A'}%</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Market Cap:</p>
+                                <p class="font-semibold">$${coin.market_data.market_cap.usd.toLocaleString()}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Volume (24j):</p>
+                                <p class="font-semibold">$${coin.market_data.total_volume.usd.toLocaleString()}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Total Supply:</p>
+                                <p class="font-semibold">${coin.market_data.total_supply ? coin.market_data.total_supply.toLocaleString() : 'N/A'}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Circulating Supply:</p>
+                                <p class="font-semibold">${coin.market_data.circulating_supply ? coin.market_data.circulating_supply.toLocaleString() : 'N/A'}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Deskripsi:</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-4">${coin.description.en || 'Tidak ada deskripsi.'}</p>
+                        </div>
+                        <div class="mt-4">
+                            <canvas id="coin-detail-chart" class="h-48" aria-label="Grafik harga historis koin"></canvas>
+                        </div>
+                    </div>
+                `;
+
+                const chartDataResponse = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7`);
+                if (!chartDataResponse.ok) throw new Error('Failed to fetch chart data');
+                const prices = await chartDataResponse.json();
+                const ctx = document.getElementById('coin-detail-chart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: prices.prices.map((p) => new Date(p[0]).toLocaleDateString('id-ID')),
+                        datasets: [{
+                            label: 'Harga ($)',
+                            data: prices.prices.map(p => p[1]),
+                            borderColor: 'var(--primary)',
+                            backgroundColor: 'rgba(6, 182, 212, 0.2)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { ticks: { maxTicksLimit: 7 } },
+                            y: { beginAtZero: false }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching coin details:", error);
+                modalTitle.textContent = 'Error';
+                modalContent.innerHTML = '<p class="text-red-500 text-center">Gagal load data, bro! Cek koneksi!</p>';
             }
         };
-        
+
+        const loadPage = async () => {
+            document.getElementById('price-grid').innerHTML = Array(perPage).fill('<div class="h-48 skeleton-loader"></div>').join(''); // Show skeletons
+            const data = await getCryptoPrices(currentPage, perPage, currentFilter);
+            const priceGrid = document.getElementById('price-grid');
+            if (data && data.length > 0) {
+                if (currentPage === 1 && !document.getElementById('crypto-search').value && !currentFilter) priceGrid.innerHTML = ''; // Clear only for initial load with no filter
+                renderCoins(data, priceGrid);
+            } else {
+                priceGrid.innerHTML = `<p class="col-span-full text-center text-red-500 p-4 glass-card rounded-xl">Gagal load data, bro! Cek koneksi atau tidak ada hasil untuk filter ini!</p>`;
+            }
+        };
+
         const topCoinsData = await getCryptoPrices(1, 10);
         if (topCoinsData) renderCoins(topCoinsData, document.getElementById('top-coins-grid'), true);
+
         loadPage();
 
         document.getElementById('load-more').addEventListener('click', () => {
             currentPage++;
-            loadPage(true);
-        });
-        
-        document.getElementById('set-alert').addEventListener('click', () => {
-            const coin = document.getElementById('alert-coin').value.toLowerCase().trim();
-            const price = parseFloat(document.getElementById('alert-price').value);
-            const direction = document.getElementById('alert-direction').value;
-            if (coin && price) {
-                showToast(`Alert untuk ${coin} di $${price} telah diset!`, 'success');
-                // Note: This is a simplified demo. A real implementation needs a service worker and backend.
-            } else {
-                showToast('Harap isi ID coin dan harga target.', 'error');
-            }
-        });
-        
-         // Event listeners for search, filter, click (mostly same as original)
-        document.getElementById('page-content').addEventListener('click', e => {
-            const card = e.target.closest('[data-coin-id]');
-            if (card) showCoinDetails(card.dataset.coinId);
+            loadPage();
         });
 
-        document.getElementById('page-content').addEventListener('keydown', e => {
-            if (e.key === 'Enter') {
-                const card = e.target.closest('[data-coin-id]');
-                if (card) showCoinDetails(card.dataset.coinId);
+        document.getElementById('crypto-search').addEventListener('input', debounce(async e => {
+            const query = e.target.value.toLowerCase();
+            if (!query) {
+                currentPage = 1;
+                currentFilter = ''; // Reset filter when search is cleared
+                document.getElementById('crypto-filter').value = ''; // Reset filter dropdown
+                loadPage();
+                return;
+            }
+            document.getElementById('price-grid').innerHTML = Array(10).fill('<div class="h-48 skeleton-loader"></div>').join(''); // Show skeletons
+            try {
+                const response = await fetch(`https://api.coingecko.com/api/v3/search?query=${query}`);
+                if (!response.ok) throw new Error('Search API failed');
+                const data = await response.json();
+                const coinIds = data.coins.map(c => c.id).join(',');
+                if (coinIds) {
+                    // Using 'ids' parameter with a specific list of coin IDs
+                    const prices = await getCryptoPrices(1, 50, `ids=${coinIds}`); // Fetch details for searched coins
+                    renderCoins(prices, document.getElementById('price-grid'));
+                } else {
+                    document.getElementById('price-grid').innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 p-4 glass-card rounded-xl">Tidak ada token ditemukan dengan nama tersebut.</p>`;
+                }
+            } catch (error) {
+                console.error("Search error:", error);
+                document.getElementById('price-grid').innerHTML = `<p class="col-span-full text-center text-red-500 p-4 glass-card rounded-xl">Terjadi kesalahan saat mencari. Coba lagi!</p>`;
+            }
+        }, 500));
+        document.getElementById('crypto-filter').addEventListener('change', e => {
+            currentFilter = e.target.value;
+            currentPage = 1;
+            loadPage();
+        });
+
+        document.getElementById('price-grid').addEventListener('click', e => {
+            const card = e.target.closest('.flip-card');
+            if (card) {
+                showCoinDetails(card.dataset.coinId);
+            }
+        });
+
+        document.getElementById('modal-close').addEventListener('click', () => {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('modal').setAttribute('aria-modal', 'false');
+            document.getElementById('modal').setAttribute('role', 'dialog');
+        });
+
+        // Saran #5: Modal Close on Backdrop Click
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') {
+                document.getElementById('modal').style.display = 'none';
+                document.getElementById('modal').setAttribute('aria-modal', 'false');
+                document.getElementById('modal').setAttribute('role', 'dialog');
             }
         });
     }
-    
+
+    /**
+     * Extracts the first image URL from an HTML string (e.g., from RSS description).
+     * Saran #1: Tambahin parsing buat extract gambar dari description kalau ada (misal, <img> tag).
+     */
+    const extractImageFromDescription = (description) => {
+        const imgMatch = description?.match(/<img[^>]+src=["'](.*?)["']/i);
+        return imgMatch ? imgMatch[1] : null; // Return null if no image found, so fallback chain can continue
+    };
+
     async function renderNews(container) {
+        const sources = [
+            { name: 'CoinTelegraph', url: 'https://api.rss2json.com/v1/api.json?rss_url=https://cointelegraph.com/rss' },
+            { name: 'CoinDesk', url: 'https://api.rss2json.com/v1/api.json?rss_url=https://www.coindesk.com/arc/outboundfeeds/rss/' }
+        ];
         let allNews = [];
-        let newsPage = 1;
-        const newsPerPage = 9;
+        let currentFilter = { source: '', category: '' };
+        let newsPage = 1; // Saran #3: Tambahin pagination
+        const newsPerPage = 12; // Saran #3: newsPerPage
 
         container.innerHTML = `
             <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
-                <input type="text" id="news-search" placeholder="Cari berita..." class="w-full p-3 pl-10 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700">
+                <div class="relative flex-1">
+                    <input type="text" id="news-search" placeholder="Cari berita (e.g., Bitcoin)" class="w-full p-3 pl-10 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-[var(--primary)]" aria-label="Cari berita">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" aria-hidden="true"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+                </div>
+                <select id="news-source-filter" class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700" aria-label="Filter berita berdasarkan sumber">
+                    <option value="">Semua Sumber</option>
+                    ${sources.map(s => `<option value="${s.name}">${s.name}</option>`).join('')}
+                </select>
+                <select id="news-category-filter" class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700" aria-label="Filter berita berdasarkan kategori">
+                    <option value="">Semua Kategori</option>
+                    <option value="DeFi">DeFi</option>
+                    <option value="NFT">NFT</option>
+                    <option value="Regulation">Regulation</option>
+                    <option value="Market">Market</option>
+                    <option value="Security">Security</option> <option value="Technology">Technology</option> <option value="Umum">Umum</option>
+                    <option value="Error">Error</option>
+                </select>
             </div>
             <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">${Array(6).fill('<div class="h-64 skeleton-loader"></div>').join('')}</div>
-            <div class="mt-6 text-center"><button id="load-more-news" class="px-6 py-3 bg-gradient-to-r text-white rounded-lg hover:opacity-80 pulse-glow" style="display: none;">Muat Lagi</button></div>
+            <div class="mt-6 text-center">
+                <button id="load-more-news" class="px-6 py-3 bg-gradient-to-r text-white rounded-lg hover:opacity-80 pulse-glow" style="display: none;" aria-label="Muat lebih banyak berita">Load More</button>
+            </div>
         `;
-        
+
+        const loadNews = async () => {
+            allNews = [];
+            const newsGrid = document.getElementById('news-grid');
+            newsGrid.innerHTML = Array(6).fill('<div class="h-64 skeleton-loader"></div>').join(''); // Show skeletons
+
+            const fetchPromises = sources.map(async (source) => {
+                try {
+                    const cacheKey = `news_${source.name}`;
+                    const cached = localStorage.getItem(cacheKey);
+                    let newsData;
+                    let cacheTimestamp = 0;
+
+                    if (cached) {
+                        const parsedCache = JSON.parse(cached);
+                        newsData = parsedCache.data;
+                        cacheTimestamp = parsedCache.timestamp;
+                        // Gunakan cache jika masih valid (10 menit)
+                        if (Date.now() - cacheTimestamp < 600000) {
+                            return newsData.map(item => ({
+                                ...item,
+                                source: source.name,
+                                category: categorizeNews(item.title + (item.description || '')),
+                                snippet: (item.description || item.content || '').replace(/<[^>]*>?/gm, '').slice(0, 100) + '...',
+                                thumbnail: item.thumbnail || item.enclosure?.link || extractImageFromDescription(item.description) || 'https://placehold.co/600x400/0f172a/38bdf8?text=Berita'
+                            }));
+                        }
+                    }
+
+                    const response = await fetch(source.url);
+                    const data = await response.json();
+                    if (data.status !== 'ok') {
+                        // Jika API gagal, coba gunakan cache lama (sampai 1 jam)
+                        if (newsData && Date.now() - cacheTimestamp < 3600000) {
+                            console.warn("News API call failed, falling back to expired cache:", response.statusText);
+                            return newsData.map(item => ({
+                                ...item,
+                                source: source.name,
+                                category: categorizeNews(item.title + (item.description || '')),
+                                snippet: (item.description || item.content || '').replace(/<[^>]*>?/gm, '').slice(0, 100) + '...',
+                                thumbnail: item.thumbnail || item.enclosure?.link || extractImageFromDescription(item.description) || 'https://placehold.co/600x400/0f172a/38bdf8?text=Berita'
+                            }));
+                        }
+                        throw new Error('RSS gagal');
+                    }
+                    newsData = data.items;
+                    localStorage.setItem(cacheKey, JSON.stringify({ data: newsData, timestamp: Date.now() }));
+
+                    return newsData.map(item => ({
+                        ...item,
+                        source: source.name,
+                        category: categorizeNews(item.title + (item.description || '')),
+                        snippet: (item.description || item.content || '').replace(/<[^>]*>?/gm, '').slice(0, 100) + '...',
+                        thumbnail: item.thumbnail || item.enclosure?.link || extractImageFromDescription(item.description) || 'https://placehold.co/600x400/0f172a/38bdf8?text=Berita'
+                    }));
+                } catch (error) {
+                    console.error(`Gagal load ${source.name}:`, error);
+                    return [{
+                        title: `Gagal load berita dari ${source.name}`,
+                        link: '#',
+                        pubDate: new Date().toISOString(),
+                        thumbnail: 'https://placehold.co/600x400/0f172a/38bdf8?text=Berita',
+                        source: source.name,
+                        category: 'Error',
+                        snippet: 'Cek koneksi atau coba lagi nanti.'
+                    }];
+                }
+            });
+
+            const results = await Promise.all(fetchPromises);
+            allNews = results.flat().sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate)); // Gabung dan urutkan
+            filterAndRenderNews();
+        };
+
+        /**
+         * Saran #2: Tambahin kategori lain dan pake regex lebih kompleks.
+         */
+        const categorizeNews = (text) => {
+            text = text.toLowerCase();
+            if (text.includes('defi') || text.includes('decentralized finance')) return 'DeFi';
+            if (text.includes('nft') || text.includes('non-fungible') || text.includes('art')) return 'NFT';
+            if (text.includes('regulation') || text.includes('sec') || text.includes('law') || text.includes('government') || text.includes('policy')) return 'Regulation';
+            if (text.includes('market') || text.includes('price') || text.includes('trading') || text.includes('economy')) return 'Market';
+            if (text.includes('hack') || text.includes('security') || text.includes('breach') || text.includes('exploit')) return 'Security'; // New category
+            if (text.includes('blockchain') || text.includes('protocol') || text.includes('upgrade') || text.includes('technology') || text.includes('innovation')) return 'Technology'; // New category
+            return 'Umum';
+        };
+
+        // Saran #3: Implementasi pagination untuk berita
+        const filterAndRenderNews = () => {
+            const filtered = allNews.filter(item =>
+                (!currentFilter.source || item.source === currentFilter.source) &&
+                (!currentFilter.category || item.category === currentFilter.category) &&
+                (!document.getElementById('news-search').value || item.title.toLowerCase().includes(document.getElementById('news-search').value.toLowerCase()) || item.snippet.toLowerCase().includes(document.getElementById('news-search').value.toLowerCase()))
+            );
+            renderNewsItems(filtered);
+        };
+
         const renderNewsItems = (items) => {
             const newsGrid = document.getElementById('news-grid');
+            // Slice the items based on current newsPage and newsPerPage
             const itemsToRender = items.slice(0, newsPage * newsPerPage);
-            
+
             newsGrid.innerHTML = itemsToRender.length > 0 ? itemsToRender.map(item => `
-                <div class="glass-card p-4 rounded-xl cursor-pointer hover:shadow-lg transition-shadow" data-news-link="${item.link}" tabindex="0" aria-label="Baca berita: ${item.title}">
+                <div class="glass-card p-4 rounded-xl cursor-pointer hover:shadow-lg transition-shadow" data-news-id="${item.link}" role="button" tabindex="0" aria-label="Baca berita: ${item.title}">
                     <div class="h-full flex flex-col">
-                        <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-32 object-cover rounded-t-lg mb-3" loading="lazy"> <!-- LAZY LOAD -->
+                        <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-32 object-cover rounded-t-lg mb-3">
                         <div class="flex-1 flex flex-col justify-between">
-                            <h4 class="text-md font-semibold mt-2 line-clamp-2">${item.title}</h4>
+                            <div>
+                                <span class="text-xs font-semibold text-[var(--primary)] bg-[var(--primary)]/10 px-2 py-1 rounded">${item.category}</span>
+                                <h4 class="text-md font-semibold mt-2 line-clamp-2">${item.title}</h4>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">${item.snippet}</p>
+                            </div>
                             <div class="flex justify-between items-center mt-3">
                                 <p class="text-xs text-gray-400">${item.source}</p>
                                 <p class="text-xs text-gray-400">${new Date(item.pubDate).toLocaleDateString('id-ID')}</p>
                             </div>
                         </div>
                     </div>
-                </div>`).join('') : `<p class="col-span-full text-center p-4">Tidak ada berita ditemukan.</p>`;
-            
-            document.getElementById('load-more-news').style.display = items.length > newsPage * newsPerPage ? 'inline-block' : 'none';
-        };
-
-        const loadNews = async () => {
-            const sources = [{ name: 'CoinTelegraph', url: 'https://api.rss2json.com/v1/api.json?rss_url=https://cointelegraph.com/rss' }, { name: 'CoinDesk', url: 'https://api.rss2json.com/v1/api.json?rss_url=https://www.coindesk.com/arc/outboundfeeds/rss/' }];
-            document.getElementById('news-grid').innerHTML = Array(6).fill('<div class="h-64 skeleton-loader"></div>').join('');
-            
-            try {
-                const results = await Promise.all(sources.map(s => fetch(s.url).then(res => res.json())));
-                allNews = results.flatMap((res, i) => res.items ? res.items.map(item => ({...item, source: sources[i].name, thumbnail: item.thumbnail || 'https://placehold.co/600x400/0f172a/38bdf8?text=Berita'})) : []).sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
-                renderNewsItems(allNews);
-            } catch (error) {
-                console.error("News fetch error:", error);
-                document.getElementById('news-grid').innerHTML = `<div class="col-span-full glass-card p-4 text-center text-red-500"><p>Gagal memuat berita. Coba lagi nanti.</p><button id="retry-news" class="mt-2 text-[var(--primary)] font-bold">Coba Lagi</button></div>`;
-            }
-        };
-        
-        loadNews();
-        
-        // Event Listeners for search, retry, load more, click, keydown
-        document.getElementById('news-search').addEventListener('input', debounce(e => {
-            const query = e.target.value.toLowerCase();
-            const filtered = allNews.filter(item => item.title.toLowerCase().includes(query));
-            newsPage = 1;
-            renderNewsItems(filtered);
-        }, 500)); // More aggressive debounce
-
-        container.addEventListener('click', e => {
-             if(e.target.id === 'retry-news') loadNews();
-             if(e.target.id === 'load-more-news') { newsPage++; renderNewsItems(allNews); }
-             const card = e.target.closest('[data-news-link]');
-             if(card) {
-                 const item = allNews.find(n => n.link === card.dataset.newsLink);
-                 if(item) showNewsDetails(item);
-             }
-        });
-         container.addEventListener('keydown', e => {
-            if (e.key === 'Enter') {
-                const card = e.target.closest('[data-news-link]');
-                if(card) {
-                    const item = allNews.find(n => n.link === card.dataset.newsLink);
-                    if(item) showNewsDetails(item);
-                }
-            }
-        });
-    }
-    
-    function showNewsDetails(item) {
-        const modal = document.getElementById('modal');
-        document.getElementById('modal-title').textContent = item.title;
-        document.getElementById('modal-content').innerHTML = `
-            <div class="space-y-4">
-                <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-48 object-cover rounded-lg" loading="lazy">
-                <p class="text-sm text-gray-600 dark:text-gray-300">${item.description || item.content}</p>
-                <div class="flex gap-2">
-                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="inline-block px-4 py-2 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow">Baca di ${item.source}</a>
-                    <button onclick="window.open('https://x.com/intent/tweet?text=${encodeURIComponent(item.title)}&url=${encodeURIComponent(item.link)}')"" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Bagikan ke X</button>
                 </div>
-            </div>`;
-        modal.style.display = 'flex';
-    }
-    
-    function renderPortfolio(container) {
-         let portfolio = JSON.parse(localStorage.getItem(`${APP_VERSION}_cryptoPortfolio`)) || [];
-         // Rest of the portfolio logic is large and mostly similar.
-         // Key changes: using getMultiplePrices and calling checkAchievements.
-         // The full implementation of this function is omitted for brevity but the logic remains the same,
-         // just with the new centralized API call and achievement check.
-         container.innerHTML = `<p class="text-center">Fitur portofolio sedang dalam pengembangan.</p>`;
-         // On add/remove asset: checkAchievements('portfolio');
-    }
+            `).join('') : `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 p-4 glass-card rounded-xl">Gak ada berita, bro!</p>`;
 
-    async function showCoinDetails(coinId) {
-         const modal = document.getElementById('modal');
-         const modalTitle = document.getElementById('modal-title');
-         const modalContent = document.getElementById('modal-content');
-         modalTitle.textContent = 'Memuat...';
-         modalContent.innerHTML = `<div class="h-64 skeleton-loader"></div>`;
-         modal.style.display = 'flex';
+            // Update "Load More" button visibility
+            document.getElementById('load-more-news').style.display = items.length > newsPage * newsPerPage ? 'block' : 'none';
+        };
 
-         try {
-            const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}?sparkline=true`);
-            if (!response.ok) throw new Error('Gagal memuat data koin');
-            const coin = await response.json();
-            
-            // Placeholder for AI sentiment
-            const sentiment = "N/A (Fitur AI Segera Hadir)";
-            
-            modalTitle.textContent = `${coin.name} (${coin.symbol.toUpperCase()})`;
+        const showNewsDetails = (item) => {
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContent = document.getElementById('modal-content');
+            modalTitle.textContent = item.title;
             modalContent.innerHTML = `
                 <div class="space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><p class="text-sm text-gray-400">Harga:</p><p class="font-bold text-lg">$${coin.market_data.current_price.usd.toLocaleString()}</p></div>
-                        <div><p class="text-sm text-gray-400">Market Cap:</p><p class="font-bold text-lg">$${coin.market_data.market_cap.usd.toLocaleString()}</p></div>
-                        <div><p class="text-sm text-gray-400">Sentimen (X):</p><p class="font-bold text-lg">${sentiment}</p></div>
+                    <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-48 object-cover rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-semibold text-[var(--primary)] bg-[var(--primary)]/10 px-2 py-1 rounded">${item.category}</span>
+                        <p class="text-xs text-gray-400">${new Date(item.pubDate).toLocaleDateString('id-ID')}</p>
                     </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-4">${coin.description.en || 'Tidak ada deskripsi.'}</p>
-                    <a href="https://www.binance.com/en/trade/${coin.symbol.toUpperCase()}_USDT?ref=YOUR_REF_ID" target="_blank" rel="noopener noreferrer" class="inline-block px-4 py-2 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow">Beli di Exchange</a>
-                </div>`;
+                    <p class="text-sm text-gray-600 dark:text-gray-300">${item.description || item.content || item.snippet}</p>
+                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="inline-block px-4 py-2 bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Baca selengkapnya di ${item.source}">Baca di ${item.source}</a>
+                </div>
+            `;
+            modal.style.display = 'flex';
+            modal.setAttribute('aria-modal', 'true');
+            modal.setAttribute('role', 'dialog');
+        };
 
-         } catch(error) {
-             modalContent.innerHTML = `<p class="text-red-500 text-center">${error.message}</p>`;
-         }
+        document.getElementById('news-search').addEventListener('input', debounce(e => {
+            newsPage = 1; // Reset page on search
+            filterAndRenderNews();
+        }, 300));
+
+        document.getElementById('news-source-filter').addEventListener('change', e => {
+            currentFilter.source = e.target.value;
+            newsPage = 1; // Reset page on filter change
+            filterAndRenderNews();
+        });
+
+        document.getElementById('news-category-filter').addEventListener('change', e => {
+            currentFilter.category = e.target.value;
+            newsPage = 1; // Reset page on filter change
+            filterAndRenderNews();
+        });
+
+        // Saran #3: Event listener untuk tombol "Load More" berita
+        document.getElementById('load-more-news').addEventListener('click', () => {
+            newsPage++;
+            filterAndRenderNews();
+        });
+
+        document.getElementById('news-grid').addEventListener('click', e => {
+            const card = e.target.closest('[data-news-id]');
+            if (card) {
+                const newsItem = allNews.find(item => item.link === card.dataset.newsId);
+                if (newsItem) showNewsDetails(newsItem);
+            }
+        });
+
+        loadNews();
     }
 
+    // Placeholder for other render functions
     function renderQuiz(container) {
-        // Unchanged from the original, but we'll add the achievement check.
-        // On quiz completion:
-        // checkAchievements('quiz', { score: finalScore, total: quizQuestions.length });
-        container.innerHTML = `<p class="text-center">Fitur kuis sedang dalam pengembangan.</p>`;
-    }
-    
-    function renderTools(container) {
-        // Unchanged from original, but would be refactored to use getMultiplePrices
-        container.innerHTML = `<p class="text-center">Fitur alat bantu sedang dalam pengembangan.</p>`;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let quizQuestions = [...fullQuizBank].sort(() => 0.5 - Math.random()).slice(0, 5); // 5 random questions
+
+        const renderQuestion = () => {
+            if (currentQuestionIndex >= quizQuestions.length) {
+                container.innerHTML = `
+                    <div class="glass-card p-6 rounded-xl text-center">
+                        <h3 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Kuis Selesai!</h3>
+                        <p class="text-xl mb-4">Skor kamu: <span class="font-bold text-[var(--primary)]">${score} / ${quizQuestions.length}</span></p>
+                        <button id="restart-quiz" class="px-6 py-3 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Mulai lagi kuis">Mulai Lagi</button>
+                    </div>
+                `;
+                document.getElementById('restart-quiz').addEventListener('click', () => {
+                    currentQuestionIndex = 0;
+                    score = 0;
+                    quizQuestions = [...fullQuizBank].sort(() => 0.5 - Math.random()).slice(0, 5);
+                    renderQuestion();
+                });
+                return;
+            }
+
+            const question = quizQuestions[currentQuestionIndex];
+            const shuffledOptions = [...question.o].sort(() => 0.5 - Math.random());
+
+            container.innerHTML = `
+                <div class="glass-card p-6 rounded-xl">
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Pertanyaan ${currentQuestionIndex + 1} dari ${quizQuestions.length}</p>
+                    <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">${question.q}</h3>
+                    <div id="options-container" class="space-y-3" role="radiogroup" aria-label="Pilihan jawaban">
+                        ${shuffledOptions.map((option, index) => `
+                            <button class="quiz-option w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-lg text-left border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" data-answer="${option}" role="radio" aria-checked="false" tabindex="0">${option}</button>
+                        `).join('')}
+                    </div>
+                    <p id="quiz-feedback" class="text-center mt-4 h-6 text-sm font-semibold" aria-live="polite"></p>
+                </div>
+            `;
+
+            document.querySelectorAll('.quiz-option').forEach(button => {
+                button.addEventListener('click', function() {
+                    const selectedAnswer = this.dataset.answer;
+                    const feedbackEl = document.getElementById('quiz-feedback');
+                    document.querySelectorAll('.quiz-option').forEach(btn => {
+                        btn.disabled = true; // Disable all options
+                        btn.setAttribute('aria-checked', 'false');
+                    });
+                    this.setAttribute('aria-checked', 'true');
+
+                    if (selectedAnswer === question.a) {
+                        score++;
+                        this.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                        feedbackEl.textContent = 'Bener banget! GGWP!';
+                        feedbackEl.classList.remove('text-red-500');
+                        feedbackEl.classList.add('text-green-500');
+                        triggerConfetti();
+                    } else {
+                        this.classList.add('bg-red-500', 'text-white', 'border-red-600');
+                        const correctAnswerButton = document.querySelector(`.quiz-option[data-answer="${question.a}"]`);
+                        if (correctAnswerButton) {
+                            correctAnswerButton.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                        }
+                        feedbackEl.textContent = `Salah, bro! Jawabannya: ${question.a}`;
+                        feedbackEl.classList.remove('text-green-500');
+                        feedbackEl.classList.add('text-red-500');
+                    }
+
+                    setTimeout(() => {
+                        currentQuestionIndex++;
+                        renderQuestion();
+                    }, 1500); // Next question after 1.5 seconds
+                });
+            });
+        };
+
+        renderQuestion();
     }
 
-    function renderDictionary(container) {
-        // Unchanged from original.
-        container.innerHTML = `<p class="text-center">Fitur kamus sedang dalam pengembangan.</p>`;
+    function renderTools(container) {
+        container.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-xl">
+                    <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Kalkulator Profit</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="initial-investment" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Modal Awal ($)</label>
+                            <input type="number" id="initial-investment" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" value="1000" min="0" aria-label="Modal Awal">
+                        </div>
+                        <div>
+                            <label for="buy-price" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Harga Beli Coin ($)</label>
+                            <input type="number" id="buy-price" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" value="1" min="0.00000001" step="any" aria-label="Harga Beli Coin">
+                        </div>
+                        <div>
+                            <label for="sell-price" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Harga Jual Coin ($)</label>
+                            <input type="number" id="sell-price" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" value="1.5" min="0.00000001" step="any" aria-label="Harga Jual Coin">
+                        </div>
+                        <button id="calculate-profit" class="w-full px-4 py-2 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Hitung Profit">Hitung Profit</button>
+                        <p id="profit-result" class="text-center font-bold text-lg mt-4" aria-live="polite"></p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-xl">
+                    <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Konverter Mata Uang</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="convert-amount" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Jumlah</label>
+                            <input type="number" id="convert-amount" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" value="1" min="0" aria-label="Jumlah untuk konversi">
+                        </div>
+                        <div>
+                            <label for="from-currency" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Dari</label>
+                            <select id="from-currency" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" aria-label="Mata uang asal">
+                                <option value="usd">USD</option>
+                                <option value="idr">IDR</option>
+                                <option value="btc">BTC</option>
+                                <option value="eth">ETH</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="to-currency" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Ke</label>
+                            <select id="to-currency" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" aria-label="Mata uang tujuan">
+                                <option value="idr">IDR</option>
+                                <option value="usd">USD</option>
+                                <option value="btc">BTC</option>
+                                <option value="eth">ETH</option>
+                            </select>
+                        </div>
+                        <button id="convert-currency" class="w-full px-4 py-2 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Konversi mata uang">Konversi</button>
+                        <p id="conversion-result" class="text-center font-bold text-lg mt-4" aria-live="polite"></p>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Profit Calculator Logic
+        document.getElementById('calculate-profit').addEventListener('click', () => {
+            const initialInvestment = parseFloat(document.getElementById('initial-investment').value);
+            const buyPrice = parseFloat(document.getElementById('buy-price').value);
+            const sellPrice = parseFloat(document.getElementById('sell-price').value);
+            const profitResultEl = document.getElementById('profit-result');
+
+            if (isNaN(initialInvestment) || isNaN(buyPrice) || isNaN(sellPrice) || initialInvestment <= 0 || buyPrice <= 0 || sellPrice <= 0) {
+                profitResultEl.textContent = 'Input tidak valid!';
+                profitResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
+                return;
+            }
+
+            const numCoins = initialInvestment / buyPrice;
+            const finalValue = numCoins * sellPrice;
+            const profit = finalValue - initialInvestment;
+            const percentageProfit = (profit / initialInvestment) * 100;
+
+            let resultText = `Jumlah Coin: ${numCoins.toFixed(8)}
+Nilai Akhir: $${finalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+`;
+            if (profit >= 0) {
+                resultText += `Profit: $${profit.toLocaleString(undefined, { minimumFractionDigits: 2 })} (+${percentageProfit.toFixed(2)}%)`;
+                profitResultEl.className = 'text-center font-bold text-lg mt-4 text-green-500';
+            } else {
+                resultText += `Loss: $${profit.toLocaleString(undefined, { minimumFractionDigits: 2 })} (${percentageProfit.toFixed(2)}%)`;
+                profitResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
+            }
+            profitResultEl.innerHTML = resultText;
+        });
+
+        // Currency Converter Logic
+        document.getElementById('convert-currency').addEventListener('click', async () => {
+            const amount = parseFloat(document.getElementById('convert-amount').value);
+            const fromCurrency = document.getElementById('from-currency').value.toLowerCase();
+            const toCurrency = document.getElementById('to-currency').value.toLowerCase();
+            const conversionResultEl = document.getElementById('conversion-result');
+
+            if (isNaN(amount) || amount <= 0) {
+                conversionResultEl.textContent = 'Jumlah tidak valid!';
+                conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
+                return;
+            }
+            if (fromCurrency === toCurrency) {
+                conversionResultEl.textContent = `${amount.toLocaleString()} ${fromCurrency.toUpperCase()} = ${amount.toLocaleString()} ${toCurrency.toUpperCase()}`;
+                conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-slate-700 dark:text-slate-300';
+                return;
+            }
+
+            conversionResultEl.textContent = 'Mengkonversi...';
+            conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-slate-500';
+
+            try {
+                // Saran #7: Gabungin request ke /simple/price di renderTools
+                const currenciesToFetch = new Set([fromCurrency, toCurrency, 'usd']); // Always fetch usd for conversion basis
+                const ids = Array.from(currenciesToFetch).join(',');
+                const cacheKey = `conversion_rates_${ids}`;
+                const cached = localStorage.getItem(cacheKey);
+                let conversionData = null;
+                let cacheTimestamp = 0;
+
+                if (cached) {
+                    const parsedCache = JSON.parse(cached);
+                    conversionData = parsedCache.data;
+                    cacheTimestamp = parsedCache.timestamp;
+                    if (Date.now() - cacheTimestamp < 300000) { // Cache conversion rates for 5 minutes
+                        // Use cached data
+                    } else {
+                        conversionData = null; // Expired, refetch
+                    }
+                }
+
+                if (!conversionData) {
+                    const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`);
+                    if (!response.ok) {
+                        // Fallback to expired cache if API fails
+                        if (cached && Date.now() - cacheTimestamp < 3600000) { // Cache up to 1 hour if API fails
+                            console.warn("Conversion API failed, falling back to expired cache for conversion:", response.statusText);
+                            conversionData = JSON.parse(cached).data;
+                        } else {
+                            throw new Error('API request failed');
+                        }
+                    } else {
+                        conversionData = await response.json();
+                        localStorage.setItem(cacheKey, JSON.stringify({ data: conversionData, timestamp: Date.now() }));
+                    }
+                }
+
+                if (!conversionData) {
+                    conversionResultEl.textContent = 'Gagal mengambil data nilai tukar.';
+                    conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
+                    return;
+                }
+
+                let fromUsdRate = 1;
+                if (fromCurrency !== 'usd') {
+                    fromUsdRate = conversionData[fromCurrency]?.usd;
+                }
+
+                let toUsdRate = 1;
+                if (toCurrency !== 'usd') {
+                    toUsdRate = conversionData[toCurrency]?.usd;
+                }
+
+                if (fromUsdRate === undefined || toUsdRate === undefined) {
+                    conversionResultEl.textContent = 'Tidak dapat menemukan nilai tukar untuk mata uang yang dipilih.';
+                    conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
+                    return;
+                }
+
+                const result = (amount * fromUsdRate) / toUsdRate;
+                conversionResultEl.textContent = `${amount.toLocaleString()} ${fromCurrency.toUpperCase()} = ${result.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} ${toCurrency.toUpperCase()}`;
+                conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-[var(--primary)]';
+
+            } catch (error) {
+                console.error("Conversion error:", error);
+                conversionResultEl.textContent = 'Gagal melakukan konversi. Cek koneksi atau coba lagi.';
+                conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
+            }
+        });
     }
-    
+
+    // --- PORTOFOLIO (DUMMY/LOCALSTORAGE) ---
+    let portfolio = JSON.parse(localStorage.getItem('cryptoPortfolio')) || [];
+
+    function savePortfolio() {
+        localStorage.setItem('cryptoPortfolio', JSON.stringify(portfolio));
+    }
+
+    async function renderPortfolio(container) {
+        container.innerHTML = `
+            <div class="glass-card p-6 rounded-xl mb-6">
+                <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Tambah Aset Baru</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                        <label for="asset-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nama Aset</label>
+                        <input type="text" id="asset-name" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" placeholder="Bitcoin / BTC" aria-label="Nama aset kripto">
+                    </div>
+                    <div>
+                        <label for="asset-amount" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Jumlah</label>
+                        <input type="number" id="asset-amount" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" min="0.00000001" step="any" value="0" aria-label="Jumlah aset yang dibeli">
+                    </div>
+                    <div>
+                        <label for="asset-buy-price" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Harga Beli ($)</label>
+                        <input type="number" id="asset-buy-price" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" min="0.00000001" step="any" value="0" aria-label="Harga beli aset per unit">
+                    </div>
+                </div>
+                <button id="add-asset" class="w-full px-4 py-2 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Tambah aset ke portofolio">Tambah Aset</button>
+                <p id="portfolio-add-feedback" class="text-center mt-2 text-sm" aria-live="polite"></p>
+            </div>
+
+            <div class="glass-card p-6 rounded-xl">
+                <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Ringkasan Portofolio</h3>
+                <div id="portfolio-summary" class="mb-4 space-y-2">
+                    <p>Total Modal: <span id="total-invested" class="font-bold"></span></p>
+                    <p>Nilai Sekarang: <span id="current-value" class="font-bold"></span></p>
+                    <p>Profit/Loss: <span id="overall-profit" class="font-bold"></span></p>
+                    <p>Persentase P/L: <span id="overall-percentage" class="font-bold"></span></p>
+                </div>
+                <div id="portfolio-list" class="space-y-4">
+                    </div>
+                <button id="clear-portfolio" class="w-full px-4 py-2 mt-4 bg-red-500 text-white rounded-lg hover:bg-red-600" aria-label="Bersihkan semua aset dari portofolio">Bersihkan Portofolio</button>
+            </div>
+        `;
+
+        const updatePortfolioSummary = async () => {
+            let totalInvested = 0;
+            let currentValue = 0;
+            const assetIds = portfolio.map(asset => asset.id).join(',');
+
+            // Fetch current prices for all assets in portfolio
+            let currentPrices = {};
+            if (assetIds) {
+                try {
+                    // Saran #7: Gabungin request ke /simple/price di renderPortfolio
+                    const cacheKey = `portfolio_prices_${assetIds}`;
+                    const cached = localStorage.getItem(cacheKey);
+                    let fetchedPrices = null;
+                    let cacheTimestamp = 0;
+
+                    if (cached) {
+                        const parsedCache = JSON.parse(cached);
+                        fetchedPrices = parsedCache.data;
+                        cacheTimestamp = parsedCache.timestamp;
+                        if (Date.now() - cacheTimestamp < 120000) { // Cache prices for 2 minutes
+                            // Use cached data
+                        } else {
+                            fetchedPrices = null; // Expired, refetch
+                        }
+                    }
+
+                    if (!fetchedPrices) {
+                        const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${assetIds}&vs_currencies=usd`);
+                        if (!response.ok) {
+                            // Fallback to expired cache if API fails
+                            if (cached && Date.now() - cacheTimestamp < 3600000) { // Cache up to 1 hour if API fails
+                                console.warn("Portfolio prices API failed, falling back to expired cache:", response.statusText);
+                                fetchedPrices = JSON.parse(cached).data;
+                            } else {
+                                throw new Error('API Gagal fetching portfolio prices');
+                            }
+                        } else {
+                            fetchedPrices = await response.json();
+                            localStorage.setItem(cacheKey, JSON.stringify({ data: fetchedPrices, timestamp: Date.now() }));
+                        }
+                    }
+                    currentPrices = fetchedPrices;
+
+                } catch (error) {
+                    console.error("Error fetching current prices for portfolio:", error);
+                    // Fallback: If API fails or cache not available, current price will be 0 for affected assets
+                }
+            }
+
+            const portfolioListEl = document.getElementById('portfolio-list');
+            portfolioListEl.innerHTML = ''; // Clear existing list
+
+            if (portfolio.length === 0) {
+                portfolioListEl.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Portofolio kamu masih kosong, yuk tambah aset!</p>`;
+            }
+
+            portfolio.forEach(asset => {
+                const currentPrice = currentPrices[asset.id]?.usd || 0; // Use fetched price, default to 0 if not found
+                const assetCurrentValue = asset.amount * currentPrice;
+                const profitLoss = assetCurrentValue - (asset.amount * asset.buyPrice);
+                const percentageChange = (profitLoss / (asset.amount * asset.buyPrice || 1)) * 100;
+
+                totalInvested += (asset.amount * asset.buyPrice);
+                currentValue += assetCurrentValue;
+
+                const profitLossClass = profitLoss >= 0 ? 'text-green-500' : 'text-red-500';
+
+                portfolioListEl.innerHTML += `
+                    <div class="glass-card p-4 rounded-lg flex items-center justify-between">
+                        <div>
+                            <h4 class="font-semibold text-[var(--primary)]">${asset.name.toUpperCase()} (${asset.symbol.toUpperCase()})</h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">Jumlah: ${asset.amount.toLocaleString(undefined, { maximumFractionDigits: 8 })}</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">Harga Beli: $${asset.buyPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-300">Harga Sekarang: $${currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+                            <p class="text-sm ${profitLossClass}">P/L: $${profitLoss.toLocaleString(undefined, { minimumFractionDigits: 2 })} (${percentageChange.toFixed(2)}%)</p>
+                        </div>
+                        <button class="remove-asset-btn px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600" data-id="${asset.id}" aria-label="Hapus aset ${asset.name} dari portofolio">Hapus</button>
+                    </div>
+                `;
+            });
+
+            const overallProfit = currentValue - totalInvested;
+            const overallPercentage = (overallProfit / (totalInvested || 1)) * 100;
+            const overallProfitClass = overallProfit >= 0 ? 'text-green-500' : 'text-red-500';
+
+            document.getElementById('total-invested').textContent = `$${totalInvested.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+            document.getElementById('current-value').textContent = `$${currentValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+            document.getElementById('overall-profit').innerHTML = `<span class="${overallProfitClass}">$${overallProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>`;
+            document.getElementById('overall-percentage').innerHTML = `<span class="${overallProfitClass}">${overallPercentage.toFixed(2)}%</span>`;
+
+            // Add event listeners for remove buttons
+            document.querySelectorAll('.remove-asset-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const assetIdToRemove = this.dataset.id;
+                    portfolio = portfolio.filter(asset => asset.id !== assetIdToRemove);
+                    savePortfolio();
+                    updatePortfolioSummary();
+                });
+            });
+        };
+
+        document.getElementById('add-asset').addEventListener('click', async () => {
+            const assetNameInput = document.getElementById('asset-name');
+            const assetAmountInput = document.getElementById('asset-amount');
+            const assetBuyPriceInput = document.getElementById('asset-buy-price');
+            const feedbackEl = document.getElementById('portfolio-add-feedback');
+
+            const name = assetNameInput.value.trim();
+            const amount = parseFloat(assetAmountInput.value);
+            const buyPrice = parseFloat(assetBuyPriceInput.value);
+
+            if (!name || isNaN(amount) || amount <= 0 || isNaN(buyPrice) || buyPrice <= 0) {
+                feedbackEl.textContent = 'Harap isi semua kolom dengan angka yang valid.';
+                feedbackEl.className = 'text-red-500';
+                return;
+            }
+
+            feedbackEl.textContent = 'Mencari aset...';
+            feedbackEl.className = 'text-slate-500 dark:text-slate-400';
+
+            try {
+                const searchResponse = await fetch(`https://api.coingecko.com/api/v3/search?query=${name}`);
+                if (!searchResponse.ok) throw new Error('Search API failed');
+                const searchData = await searchResponse.json();
+
+                if (!searchData.coins || searchData.coins.length === 0) {
+                    feedbackEl.textContent = 'Aset tidak ditemukan di CoinGecko. Coba nama lain.';
+                    feedbackEl.className = 'text-red-500';
+                    return;
+                }
+
+                const foundCoin = searchData.coins[0]; // Take the first result
+                const existingAsset = portfolio.find(a => a.id === foundCoin.id);
+
+                if (existingAsset) {
+                    // Update existing asset
+                    // Calculate new weighted average buy price
+                    const totalOldCost = existingAsset.amount * existingAsset.buyPrice;
+                    const totalNewCost = amount * buyPrice;
+                    const newTotalAmount = existingAsset.amount + amount;
+                    existingAsset.buyPrice = (totalOldCost + totalNewCost) / newTotalAmount;
+                    existingAsset.amount = newTotalAmount; // Update the amount
+                    feedbackEl.textContent = `${foundCoin.name} berhasil diupdate!`;
+                    feedbackEl.className = 'text-green-500';
+                } else {
+                    // Add new asset
+                    portfolio.push({
+                        id: foundCoin.id,
+                        name: foundCoin.name,
+                        symbol: foundCoin.symbol,
+                        amount: amount,
+                        buyPrice: buyPrice
+                    });
+                    feedbackEl.textContent = `${foundCoin.name} berhasil ditambahkan!`;
+                    feedbackEl.className = 'text-green-500';
+                }
+
+                savePortfolio();
+                updatePortfolioSummary();
+                assetNameInput.value = '';
+                assetAmountInput.value = '0';
+                assetBuyPriceInput.value = '0';
+
+            } catch (error) {
+                console.error("Error adding asset:", error);
+                feedbackEl.textContent = 'Gagal menambahkan aset. Coba lagi!';
+                feedbackEl.className = 'text-red-500';
+            }
+        });
+
+        document.getElementById('clear-portfolio').addEventListener('click', () => {
+            if (confirm('Yakin mau bersihin portofolio? Data kamu bakal ilang loh!')) {
+                portfolio = [];
+                savePortfolio();
+                updatePortfolioSummary();
+                document.getElementById('portfolio-add-feedback').textContent = 'Portofolio sudah bersih.';
+                document.getElementById('portfolio-add-feedback').className = 'text-green-500';
+            }
+        });
+
+        updatePortfolioSummary(); // Initial load
+    }
     // --- CORE APP LOGIC ---
     document.addEventListener('DOMContentLoaded', () => {
         const passwordOverlay = document.getElementById('password-overlay');
+        const passwordInput = document.getElementById('password-input');
+        const passwordError = document.getElementById('password-error');
+        const passwordForm = document.getElementById('password-form');
         const appContainer = document.getElementById('app-container');
 
-        document.getElementById('password-form').addEventListener('submit', (e) => {
+        const storedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.classList.toggle('dark', storedTheme === 'dark');
+        updateThemeToggleIcon(storedTheme);
+
+        const storedPrimaryColor = localStorage.getItem('primaryColor') || 'cyan';
+        document.documentElement.setAttribute('data-theme', storedPrimaryColor);
+        updateActiveColorButton(storedPrimaryColor);
+
+        const correctPassword = 'ggwp'; // Password sederhana
+
+        passwordForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (document.getElementById('password-input').value === 'ggwp') {
+            if (passwordInput.value === correctPassword) {
                 passwordOverlay.style.display = 'none';
                 appContainer.classList.remove('hidden');
                 initializeApp();
             } else {
-                document.getElementById('password-error').textContent = 'Password salah!';
-                setTimeout(() => document.getElementById('password-error').textContent = '', 1000);
+                passwordInput.classList.add('animate-shake', 'border-red-500');
+                passwordError.textContent = 'Password salah, coba lagi!';
+                setTimeout(() => {
+                    passwordInput.classList.remove('animate-shake', 'border-red-500');
+                    passwordError.textContent = '';
+                }, 500);
             }
         });
 
-        // Initial theme and color setup
-        const storedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.classList.toggle('dark', storedTheme === 'dark');
-        updateThemeToggleIcon(storedTheme);
-        const storedColor = localStorage.getItem('primaryColor') || 'cyan';
-        document.documentElement.setAttribute('data-theme', storedColor);
-        updateActiveColorButton(storedColor);
-    });
-
-    function initializeApp() {
-        // PWA & Notification Setup
-        if ('serviceWorker' in navigator) {
-            // FIX: Changed path from /sw.js to sw.js. This file must exist in the same directory.
-            navigator.serviceWorker.register('sw.js').then(() => {
-                console.log('Service Worker terdaftar & siap untuk PWA/Notifikasi!');
-            }).catch(error => {
-                console.error('Pendaftaran Service Worker gagal:', error);
+        function initializeApp() {
+            const navList = document.querySelector('#navigation ul');
+            appData.forEach(page => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" data-id="${page.id}" aria-label="Navigasi ke ${page.title}">
+                        ${page.icon}
+                        <span class="font-medium">${page.title}</span>
+                    </a>
+                `;
+                navList.appendChild(listItem);
             });
 
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    console.log('Izin notifikasi diberikan.');
-                }
-            });
-        }
-
-        // Language setup
-        setLanguage(currentLang);
-        document.getElementById('lang-switch').value = currentLang;
-        document.getElementById('lang-switch').addEventListener('change', e => setLanguage(e.target.value));
-
-        // Navigation setup
-        const navList = document.querySelector('#navigation ul');
-        navList.innerHTML = appData.map(page => `
-            <li>
-                <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" data-id="${page.id}">
-                    ${page.icon}
-                    <span class="font-medium" data-i18n-key="${page.i18n_key}">${page.title}</span>
-                </a>
-            </li>`).join('');
-        
-        document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', e => {
-            e.preventDefault();
-            renderPage(link.dataset.id);
-            if (window.innerWidth < 768) document.querySelector('.sidebar').classList.remove('open');
-        }));
-        
-        // Other event listeners
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            updateThemeToggleIcon(isDark ? 'dark' : 'light');
-        });
-        document.getElementById('mobile-menu-toggle').addEventListener('click', () => document.querySelector('.sidebar').classList.toggle('open'));
-        document.getElementById('focus-mode-toggle').addEventListener('click', () => document.body.classList.toggle('focus-mode'));
-        document.querySelectorAll('[data-theme]').forEach(button => button.addEventListener('click', function() {
-            const newTheme = this.dataset.theme;
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('primaryColor', newTheme);
-            updateActiveColorButton(newTheme);
-            const currentPageId = document.querySelector('.nav-link.active')?.dataset.id;
-            if(currentPageId) renderPage(currentPageId);
-        }));
-        document.getElementById('modal-close').addEventListener('click', () => document.getElementById('modal').style.display = 'none');
-        document.getElementById('modal').addEventListener('click', (e) => { if(e.target.id === 'modal') e.target.style.display = 'none'; });
-        
-        // Initial load
-        loadTrendingNews();
-        renderPage('dasbor');
-    }
-
-    function updateThemeToggleIcon(theme) {
-        document.getElementById('theme-toggle-dark-icon').classList.toggle('hidden', theme !== 'dark');
-        document.getElementById('theme-toggle-light-icon').classList.toggle('hidden', theme === 'dark');
-    }
-
-    function updateActiveColorButton(activeTheme) {
-        document.querySelectorAll('[data-theme]').forEach(btn => {
-            btn.classList.toggle('ring-[var(--primary)]', btn.dataset.theme === activeTheme);
-            btn.classList.toggle('ring-transparent', btn.dataset.theme !== activeTheme);
-        });
-    }
-    
-    async function loadTrendingNews() {
-        const trendingEl = document.getElementById('trending-news');
-        try {
-            const response = await fetch('https://api.coingecko.com/api/v3/search/trending');
-            const trending = await response.json();
-            const coins = trending.coins.slice(0, 3).map(c => c.item);
-            trendingEl.innerHTML = coins.map(c => `
-                <li class="flex items-center gap-2">
-                    <img src="${c.thumb}" alt="${c.name}" class="w-5 h-5 rounded-full">
-                    <a href="#" data-coin-id="${c.id}" class="hover:text-[var(--primary)] truncate">${c.name}</a>
-                </li>`).join('');
-            trendingEl.querySelectorAll('[data-coin-id]').forEach(link => {
-                link.addEventListener('click', e => {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    showCoinDetails(e.target.dataset.coinId);
+                    const pageId = link.dataset.id;
+                    renderPage(pageId);
+                    // Close mobile sidebar after clicking a link
+                    if (window.innerWidth < 768) {
+                        document.querySelector('.sidebar').classList.remove('open');
+                    }
                 });
             });
-        } catch (error) {
-            console.error("Trending news fetch error:", error);
-            trendingEl.innerHTML = `<li class="text-xs text-red-500">Gagal memuat trending.</li>`;
-        }
-    }
-    
-    function setLanguage(lang) {
-        currentLang = lang;
-        localStorage.setItem(`${APP_VERSION}_lang`, lang);
-        document.querySelectorAll('[data-i18n-key]').forEach(el => {
-            const key = el.dataset.i18nKey;
-            if (translations[lang] && translations[lang][key]) {
-                el.textContent = translations[lang][key];
-            }
-        });
-        // Re-render the title and potentially the current page to apply changes
-        const activePage = appData.find(p => p.id === document.querySelector('.nav-link.active')?.dataset.id);
-        if(activePage) {
-            document.getElementById('page-title').textContent = translations[currentLang][activePage.i18n_key] || activePage.title;
-        }
-    }
 
-    /*
-    ================================================================
-    PENTING: KODE UNTUK PWA (PROGRESSIVE WEB APP)
-    ================================================================
-    
-    Agar fitur "Install App" (PWA) dan Notifikasi bisa berfungsi,
-    Anda HARUS membuat DUA file baru di direktori yang sama dengan
-    file index.html ini.
-    
-    1. Buat file bernama: manifest.json
-       Isi dengan kode berikut:
-    
-       {
-            "name": "Crypto Hub",
-            "short_name": "CryptoHub",
-            "start_url": ".",
-            "display": "standalone",
-            "background_color": "#0f172a",
-            "theme_color": "#06b6d4",
-            "description": "Platform belajar kripto terlengkap.",
-            "icons": [
-                {
-                    "src": "https://placehold.co/192x192/0f172a/38bdf8?text=CH",
-                    "sizes": "192x192",
-                    "type": "image/png"
-                },
-                {
-                    "src": "https://placehold.co/512x512/0f172a/38bdf8?text=CH",
-                    "sizes": "512x512",
-                    "type": "image/png"
-                }
-            ]
-        }
+            // Initial page load
+            renderPage('dasbor'); // Load Dasbor Harga by default
 
-    2. Buat file bernama: sw.js (Service Worker)
-       Isi dengan kode berikut:
-
-        const CACHE_NAME = 'cryptohub-cache-v1';
-        const urlsToCache = [
-            '/',
-            '/index.html',
-            'https://cdn.tailwindcss.com',
-            'https://cdn.jsdelivr.net/npm/chart.js'
-        ];
-
-        self.addEventListener('install', event => {
-            event.waitUntil(
-                caches.open(CACHE_NAME)
-                    .then(cache => {
-                        console.log('Cache dibuka');
-                        return cache.addAll(urlsToCache);
-                    })
-            );
-        });
-
-        self.addEventListener('fetch', event => {
-            event.respondWith(
-                caches.match(event.request)
-                    .then(response => {
-                        if (response) {
-                            return response; // Sajikan dari cache jika ada
-                        }
-                        return fetch(event.request); // Jika tidak, ambil dari network
-                    })
-            );
-        });
-
-        // Listener untuk push notification (membutuhkan backend)
-        self.addEventListener('push', event => {
-            const data = event.data.json();
-            self.registration.showNotification(data.title, {
-                body: data.body,
-                icon: data.icon
+            // Theme Toggle
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                const isDarkMode = document.documentElement.classList.toggle('dark');
+                const theme = isDarkMode ? 'dark' : 'light';
+                localStorage.setItem('theme', theme);
+                updateThemeToggleIcon(theme);
             });
-        });
 
-    */
+            // Mobile Menu Toggle
+            document.getElementById('mobile-menu-toggle').addEventListener('click', () => {
+                document.querySelector('.sidebar').classList.toggle('open');
+            });
 
+            // Close mobile sidebar when clicking outside (simple example, could be improved)
+            appContainer.addEventListener('click', (e) => {
+                const sidebar = document.querySelector('.sidebar');
+                const toggleButton = document.getElementById('mobile-menu-toggle');
+                if (window.innerWidth < 768 && sidebar.classList.contains('open') && !sidebar.contains(e.target) && !toggleButton.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            });
+
+            // Focus Mode Toggle
+            document.getElementById('focus-mode-toggle').addEventListener('click', () => {
+                document.body.classList.toggle('focus-mode');
+            });
+
+            // Primary Color Theme Selectors
+            document.querySelectorAll('[data-theme]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const newTheme = this.dataset.theme;
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('primaryColor', newTheme);
+                    updateActiveColorButton(newTheme);
+                    // Re-render current page to apply new color to dynamic elements if needed
+                    const currentPageId = document.querySelector('.nav-link.active')?.dataset.id;
+                    if (currentPageId) {
+                        renderPage(currentPageId);
+                    }
+                });
+            });
+        }
+
+        function updateThemeToggleIcon(theme) {
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            if (theme === 'dark') {
+                darkIcon.classList.remove('hidden');
+                lightIcon.classList.add('hidden');
+            } else {
+                darkIcon.classList.add('hidden');
+                lightIcon.classList.remove('hidden');
+            }
+        }
+
+        function updateActiveColorButton(activeTheme) {
+            document.querySelectorAll('[data-theme]').forEach(btn => {
+                btn.classList.remove('ring-[var(--primary)]');
+                btn.classList.add('ring-transparent');
+                if (btn.dataset.theme === activeTheme) {
+                    btn.classList.add('ring-[var(--primary)]');
+                    btn.classList.remove('ring-transparent');
+                }
+            });
+        }
+    });
 </script></body>
 </html>
-
