@@ -4,2025 +4,1080 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Hub: Platform Belajar Kripto Ter-GG</title>
+    <title>Crypto Hub Ultimate: Platform Analisis & Edukasi Kripto Terpadu</title>
 
-    <meta name="description"
-        content="Crypto Hub: Platform belajar kripto terlengkap dengan harga real-time, kamus istilah, analisis, tutorial praktis, kuis, alat bantu konversi, dan berita terkini.">
-    <meta name="keywords"
-        content="crypto, blockchain, bitcoin, ethereum, defi, nft, cryptocurrency, belajar kripto, harga kripto, kamus kripto, analisis kripto, portofolio kripto, kuis kripto, berita kripto, alat kripto">
-    <meta name="author" content="Crypto Hub Team">
-    <meta property="og:title" content="Crypto Hub: Platform Belajar Kripto Ter-GG">
-    <meta property="og:description"
-        content="Crypto Hub: Platform belajar kripto terlengkap dengan harga real-time, kamus istilah, analisis, tutorial praktis, kuis, alat bantu konversi, dan berita terkini.">
+    <!-- Meta Tags for SEO & Sharing -->
+    <meta name="description" content="Crypto Hub Ultimate: Platform analisis dan edukasi kripto all-in-one dengan data real-time, AI summary, portofolio cloud, simulator trading, dan UI/UX modern.">
+    <meta name="keywords" content="crypto, blockchain, bitcoin, ethereum, defi, nft, cryptocurrency, belajar kripto, harga kripto, analisis kripto, portofolio kripto, simulator trading, berita kripto AI">
+    <meta name="author" content="Gemini Fusion Project">
+    <meta property="og:title" content="Crypto Hub Ultimate: Platform Analisis & Edukasi Kripto Terpadu">
+    <meta property="og:description" content="Jelajahi dunia kripto dengan alat analisis canggih, berita yang diringkas AI, portofolio berbasis cloud, dan fitur edukasi interaktif.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourusername.github.io/cryptohub/">
-    <meta property="og:image" content="https://placehold.co/1200x630/0f172a/38bdf8?text=Crypto+Hub">
+    <meta property="og:image" content="https://placehold.co/1200x630/0f172a/38bdf8?text=Crypto+Hub+Ultimate">
+
+    <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Mengimpor modul-modul yang dibutuhkan dari Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, addDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Konfigurasi Firebase akan diambil dari environment Canvas (__firebase_config)
+        // Jika tidak ada, akan menggunakan placeholder (untuk development lokal)
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "YOUR_API_KEY", // Ganti dengan config Anda jika testing lokal
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Menyimpan instance Firebase di window object agar bisa diakses secara global di dalam skrip modul
+        window.firebase = {
+            app: initializeApp(firebaseConfig),
+            getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken,
+            getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, addDoc, getDocs, writeBatch
+        };
+    </script>
+    
+    <!-- Tailwind CSS Configuration -->
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { inter: ['Inter', 'sans-serif'], poppins: ['Poppins', 'sans-serif'] },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    },
                     colors: {
+                        // Tema warna yang bisa diganti-ganti
+                        primary: 'rgba(var(--primary-rgb), <alpha-value>)',
+                        'primary-dark': 'rgba(var(--primary-dark-rgb), <alpha-value>)',
+                         // Warna dasar
                         cyan: { 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2' },
-                        slate: { 850: '#162033', 950: '#0f172a' },
                         purple: { 500: '#8b5cf6', 600: '#7c3aed' },
-                        green: { 500: '#22c55e', 600: '#16a34a' }
+                        green: { 500: '#22c55e', 600: '#16a34a' },
+                        // Warna UI
+                        'pro-dark': '#0d1117',
+                        'pro-light': '#f7faff',
                     },
                     keyframes: {
                         fadeIn: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
                         shake: { '0%,100%': { transform: 'translateX(0)' }, '10%,30%,50%,70%,90%': { transform: 'translateX(-5px)' }, '20%,40%,60%,80%': { transform: 'translateX(5px)' } },
                         shimmer: { '100%': { transform: 'translateX(100%)' } },
-                        gradientShift: { '0%,100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
-                        pulseGlow: { '0%,100%': { boxShadow: '0 0 5px rgba(6,182,212,0.3)' }, '50%': { boxShadow: '0 0 20px rgba(6,182,212,0.6)' } }
+                        pulseGlow: { '0%,100%': { boxShadow: '0 0 8px rgba(var(--primary-rgb),0.3)' }, '50%': { boxShadow: '0 0 24px rgba(var(--primary-rgb),0.6)' } },
                     },
                     animation: {
-                        fadeIn: 'fadeIn 0.5s ease-in-out',
+                        fadeIn: 'fadeIn 0.5s ease-out forwards',
                         shake: 'shake 0.5s ease-in-out',
                         shimmer: 'shimmer 1.5s infinite',
-                        gradientShift: 'gradientShift 6s ease infinite',
-                        pulseGlow: 'pulseGlow 2s ease-in-out infinite'
+                        pulseGlow: 'pulseGlow 2.5s ease-in-out infinite',
                     }
                 }
             }
         }
     </script>
 
+    <!-- Custom Styles -->
     <style>
+        :root {
+            --primary-rgb: 6, 182, 212; /* Cyan */
+            --primary-dark-rgb: 8, 145, 178;
+        }
+        [data-theme="purple"] { --primary-rgb: 139, 92, 246; --primary-dark-rgb: 124, 58, 237; }
+        [data-theme="green"] { --primary-rgb: 34, 197, 94; --primary-dark-rgb: 22, 163, 74; }
+
+        /* Latar belakang profesional dan futuristik */
         body {
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s;
+            font-family: 'inter', sans-serif;
+            background-color: #f7faff;
+            color: #1e293b;
+            background-image: linear-gradient(180deg, #f7faff 0%, #f0f5ff 100%);
+            background-attachment: fixed;
+            transition: background-color 0.5s ease;
+        }
+        .dark body {
+            background-color: #0d1117;
+            color: #cbd5e1;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.07) 1px, transparent 0),
+                radial-gradient(at top center, rgba(var(--primary-rgb), 0.15), transparent 40%);
+            background-size: 2rem 2rem, 100% 100%;
+            background-attachment: fixed;
         }
 
-        h1,
-        h2,
-        h3,
-        h4 {
-            font-family: 'Poppins', sans-serif;
+        h1, h2, h3, h4 { font-family: 'poppins', sans-serif; }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0); }
+        .dark ::-webkit-scrollbar-track { background: rgba(0,0,0,0); }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #374151; }
+        
+        /* Glassmorphism Card Pro - Gaya utama kartu */
+        .glass-card-pro {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(203, 213, 225, 0.5);
+            transition: all 0.3s ease;
+        }
+        .dark .glass-card-pro {
+            background: rgba(23, 28, 40, 0.75);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        .glass-card-pro:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
         }
 
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #e2e8f0;
-        }
-
-        .dark ::-webkit-scrollbar-track {
-            background: #020617;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #94a3b8;
-            border-radius: 4px;
-        }
-
-        .dark ::-webkit-scrollbar-thumb {
-            background: #334155;
-        }
-
+        /* Styling untuk link navigasi aktif */
         .nav-link.active {
-            background-image: linear-gradient(to right, var(--primary), var(--primary-dark));
-            color: white;
-            box-shadow: 0 4px 14px rgba(6, 182, 212, 0.39);
+            background: rgba(var(--primary-rgb), 0.1);
+            color: rgb(var(--primary-rgb));
+            font-weight: 600;
         }
+        .nav-link.active svg { color: rgb(var(--primary-rgb)); }
 
+        /* Skeleton Loader (untuk efek loading) */
         .skeleton-loader {
-            position: relative;
-            overflow: hidden;
-            background: #e2e8f0;
-            border-radius: 8px;
+            position: relative; overflow: hidden; background-color: #e2e8f0; border-radius: 0.75rem;
         }
-
+        .dark .skeleton-loader { background-color: #1e293b; }
         .skeleton-loader::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 150%;
-            height: 100%;
+            content: ''; position: absolute; top: 0; left: -150%; width: 150%; height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             animation: shimmer 1.5s infinite;
         }
+        .dark .skeleton-loader::after { background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent); }
 
-        .dark .skeleton-loader {
-            background: #1e293b;
+        /* Styling Tombol & Input */
+        .btn-pro {
+            background-image: linear-gradient(to right, rgb(var(--primary-rgb)), rgb(var(--primary-dark-rgb)));
+            transition: all 0.3s ease;
+        }
+        .btn-pro:hover { box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.4); transform: translateY(-2px); }
+        .input-pro {
+            background-color: #fff; border: 1px solid #cbd5e1;
+        }
+        .dark .input-pro {
+            background-color: #1e293b; border-color: #334155;
+        }
+        .input-pro:focus {
+            border-color: rgb(var(--primary-rgb));
+            box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+            outline: none;
         }
 
-        .dark .skeleton-loader::after {
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+        /* Notifikasi Toast */
+        #toast-container {
+            position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 9999;
         }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
+        .toast-item {
+            opacity: 0; transform: translateX(100%); transition: all 0.5s ease;
         }
-
-        .accordion-button svg {
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .accordion-button.open svg {
-            transform: rotate(180deg);
-        }
-
-        body.focus-mode .sidebar,
-        body.focus-mode #page-header {
-            display: none;
-        }
-
-        body.focus-mode .main-content {
-            margin-left: 0;
-            padding-top: 2.5rem;
-        }
-
-        body.focus-mode .page-container {
-            max-width: 100%;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s;
-        }
-
-        .dark .glass-card {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .flip-card {
-            perspective: 1000px;
-        }
-
-        .flip-card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-
-        .flip-card:hover .flip-card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .flip-card-front,
-        .flip-card-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .flip-card-back {
-            transform: rotateY(180deg);
-            justify-content: center;
-        }
-
-        .highlight {
-            background: rgba(6, 182, 212, 0.2);
-            padding: 2px 4px;
-            border-radius: 4px;
-        }
-
-        .modal {
-            animation: fadeIn 0.3s;
-        }
-
-        .modal-backdrop {
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-
-            .print-area,
-            .print-area * {
-                visibility: visible;
-            }
-
-            .print-area {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-
-            .no-print {
-                display: none;
-            }
-        }
-
-        :root {
-            --primary: #06b6d4;
-            --primary-dark: #0891b2;
-        }
-
-        [data-theme="purple"] {
-            --primary: #8b5cf6;
-            --primary-dark: #7c3aed;
-        }
-
-        [data-theme="green"] {
-            --primary: #22c55e;
-            --primary-dark: #16a34a;
-        }
-
-        .bg-gradient-to-r {
-            background-image: linear-gradient(to right, var(--primary), var(--primary-dark)) !important;
-        }
-
-        /* Override untuk warna yang spesifik agar tidak terpengaruh dynamic theme, jika memang dimaksudkan statis */
-        .text-red-500 {
-            color: #ef4444 !important;
-        }
-
-        .bg-red-500 {
-            background-color: #ef4444 !important;
-        }
-
-        .border-red-600 {
-            border-color: #dc2626 !important;
-        }
-
-        .text-green-500 {
-            color: #22c55e !important;
-        }
-
-        .bg-green-500 {
-            background-color: #22c55e !important;
-        }
-
-        .border-green-600 {
-            border-color: #16a34a !important;
-        }
-
-        .quiz-option.correct {
-            border-color: #22c55e !important;
-        }
-
-        .quiz-option.incorrect {
-            border-color: #ef4444 !important;
-        }
-
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            z-index: 20;
-        }
-
-        .sidebar.open {
-            transform: translateX(0);
-        }
-
-        @media (min-width: 768px) {
-            .sidebar {
-                transform: translateX(0);
-                position: sticky;
-            }
-        }
-
-        button,
-        [data-coin-id],
-        [data-news-id] {
-            cursor: pointer;
-        }
-
-        .pulse-glow {
-            animation: pulseGlow 2s ease-in-out infinite;
-        }
-
-        .card-item:hover,
-        .flip-card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
-        }
-
-        #page-header {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-        }
-
-        .dark #page-header {
-            background: rgba(15, 23, 42, 0.9);
-        }
+        .toast-item.show { opacity: 1; transform: translateX(0); }
+        
+        .price-up { color: #22c55e; }
+        .price-down { color: #ef4444; }
     </style>
 </head>
 
-<body class="bg-slate-100 text-slate-800 dark:bg-slate-950 dark:text-slate-300">
-    <canvas id="confetti-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-50"></canvas>
+<body class="antialiased">
 
-    <button id="mobile-menu-toggle"
-        class="md:hidden p-2 fixed top-4 left-4 z-30 bg-white dark:bg-slate-900 rounded-lg no-print"
-        aria-label="Toggle mobile menu">
-        <svg class="w-6 h-6 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
+    <!-- Area Notifikasi Toast -->
+    <div id="toast-container"></div>
+    
+    <!-- Canvas untuk Efek Confetti (dari skrip Deepseek/Grok) -->
+    <canvas id="confetti-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[10000]"></canvas>
+
+    <!-- Tombol Menu Mobile -->
+    <button id="mobile-menu-toggle" class="md:hidden p-2 fixed top-4 left-4 z-40 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded-lg">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
     </button>
-
-    <div id="password-overlay"
-        class="fixed inset-0 bg-slate-900/50 dark:bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div id="password-box" class="w-full max-w-sm glass-card p-8 rounded-2xl shadow-2xl text-center">
-            <div class="flex justify-center mb-6">
-                <svg class="w-12 h-12 text-[var(--primary)] animate-pulseGlow" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M16.62,10.95c-1.32-1.32-3.48-1.32-4.8,0L10.3,12.47c-1.32,1.32-1.32,3.48,0,4.8c1.32,1.32,3.48,1.32,4.8,0l1.52-1.52C17.95,14.43,17.95,12.27,16.62,10.95Z"
-                        fill="currentColor" />
-                    <path
-                        d="M12.47,10.3l1.52-1.52c-1.32-1.32-1.32-3.48,0-4.8c-1.32-1.32-3.48-1.32-4.8,0L7.67,5.5c-1.32,1.32-1.32,3.48,0,4.8L12.47,10.3Z"
-                        fill="currentColor" fill-opacity="0.4" />
-                </svg>
-            </div>
-            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Akses Crypto Hub</h2>
-            <p class="text-slate-500 dark:text-slate-400 mb-6">Masukkan password buat buka.</p>
-            <form id="password-form">
-                <input type="password" id="password-input"
-                    class="w-full p-3 text-center bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-[var(--primary)] focus:border-[var(--primary)]"
-                    placeholder="••••••••" aria-label="Password input">
-                <p id="password-error" class="text-red-500 text-sm mt-2 h-5"></p>
-                <button type="submit"
-                    class="w-full mt-4 px-6 py-3 bg-gradient-to-r text-white font-semibold rounded-lg hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary)] dark:focus:ring-offset-slate-900 pulse-glow"
-                    aria-label="Buka aplikasi">Buka</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="app-container" class="hidden flex flex-col md:flex-row min-h-screen">
-        <aside
-            class="sidebar w-full md:w-72 glass-card p-6 md:sticky md:top-0 md:h-screen md:flex md:flex-col border-r border-slate-200 dark:border-slate-800 z-20 no-print">
-            <div class="flex justify-between items-center mb-8">
+    
+    <!-- Struktur Utama Aplikasi -->
+    <div id="app-container" class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-72 bg-white/80 dark:bg-black/50 border-r border-slate-200/80 dark:border-slate-800/80 backdrop-blur-lg md:sticky fixed top-0 h-screen flex-col p-4 z-30 hidden md:flex -translate-x-full md:translate-x-0 transition-transform duration-300">
+            <!-- Header Sidebar -->
+            <div class="flex justify-between items-center mb-6 px-2">
                 <div class="flex items-center gap-3">
-                    <svg class="w-8 h-8 text-[var(--primary)]" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M16.62,10.95c-1.32-1.32-3.48-1.32-4.8,0L10.3,12.47c-1.32,1.32-1.32,3.48,0,4.8c1.32,1.32,3.48,1.32,4.8,0l1.52-1.52C17.95,14.43,17.95,12.27,16.62,10.95Z"
-                            fill="currentColor" />
-                        <path
-                            d="M12.47,10.3l1.52-1.52c-1.32-1.32-1.32-3.48,0-4.8c-1.32-1.32-3.48-1.32-4.8,0L7.67,5.5c-1.32,1.32-1.32,3.48,0,4.8L12.47,10.3Z"
-                            fill="currentColor" fill-opacity="0.4" />
-                    </svg>
-                    <h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">Crypto Hub</h1>
+                    <svg class="w-8 h-8 text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.62,10.95c-1.32-1.32-3.48-1.32-4.8,0L10.3,12.47c-1.32,1.32-1.32,3.48,0,4.8c1.32,1.32,3.48,1.32,4.8,0l1.52-1.52C17.95,14.43,17.95,12.27,16.62,10.95Z" fill="currentColor"/><path d="M12.47,10.3l1.52-1.52c-1.32-1.32-1.32-3.48,0-4.8c-1.32-1.32-3.48-1.32-4.8,0L7.67,5.5c-1.32,1.32-1.32,3.48,0,4.8L12.47,10.3Z" fill="currentColor" fill-opacity="0.4"/></svg>
+                    <h1 class="text-xl font-extrabold">Crypto Hub <span class="text-xs font-medium text-primary">Ultimate</span></h1>
                 </div>
-                <button id="theme-toggle" type="button"
-                    class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-sm p-2.5"
-                    aria-label="Toggle theme">
-                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                    </svg>
-                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
-                            fill-rule="evenodd" clip-rule="evenodd"></path>
-                    </svg>
-                </button>
             </div>
-            <nav id="navigation" class="flex-grow overflow-y-auto" aria-label="Main navigation">
-                <ul class="space-y-2"></ul>
+            
+            <!-- Navigasi -->
+            <nav id="navigation" class="flex-grow">
+                <ul class="space-y-1"></ul>
             </nav>
-            <div id="user-profile" class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-700">
-                <div class="text-center">
-                    <div class="flex gap-2 justify-center mb-4" role="radiogroup"
-                        aria-label="Select primary color theme">
-                        <button data-theme="cyan"
-                            class="w-6 h-6 rounded-full bg-cyan-500 ring-2 ring-offset-2 ring-transparent hover:ring-[var(--primary)]"
-                            aria-label="Set theme to Cyan"></button>
-                        <button data-theme="purple"
-                            class="w-6 h-6 rounded-full bg-purple-500 ring-2 ring-offset-2 ring-transparent hover:ring-[var(--primary)]"
-                            aria-label="Set theme to Purple"></button>
-                        <button data-theme="green"
-                            class="w-6 h-6 rounded-full bg-green-500 ring-2 ring-offset-2 ring-transparent hover:ring-[var(--primary)]"
-                            aria-label="Set theme to Green"></button>
+            
+            <!-- User/Footer Section -->
+            <div class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800">
+                <div id="user-info" class="text-xs text-slate-500 mb-4 px-2">
+                    <p>User ID (dari Firebase):</p>
+                    <p id="user-id-display" class="break-all font-mono">Loading...</p>
+                </div>
+                 <div class="flex justify-around items-center gap-4">
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+                        <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                    <div class="flex gap-2 justify-center" role="radiogroup" aria-label="Pilih tema warna">
+                        <button data-theme="cyan" aria-label="Tema Sian" class="w-5 h-5 rounded-full bg-cyan-500 ring-2 ring-offset-2 ring-transparent ring-offset-white dark:ring-offset-pro-dark"></button>
+                        <button data-theme="purple" aria-label="Tema Ungu" class="w-5 h-5 rounded-full bg-purple-500 ring-2 ring-offset-2 ring-transparent ring-offset-white dark:ring-offset-pro-dark"></button>
+                        <button data-theme="green" aria-label="Tema Hijau" class="w-5 h-5 rounded-full bg-green-500 ring-2 ring-offset-2 ring-transparent ring-offset-white dark:ring-offset-pro-dark"></button>
                     </div>
                 </div>
             </div>
         </aside>
 
-        <main class="main-content flex-1 p-6 md:p-10 overflow-y-auto">
-            <div id="page-header"
-                class="max-w-7xl mx-auto flex justify-between items-center mb-8 no-print sticky top-0 glass-card p-4 rounded-xl">
-                <h2 id="page-title" class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white"></h2>
-                <div class="flex items-center gap-2">
-                    <button id="focus-mode-toggle" title="Mode Fokus"
-                        class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg p-2.5"
-                        aria-label="Toggle focus mode">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5">
-                            </path>
-                        </svg>
-                    </button>
-                </div>
+        <!-- Konten Utama -->
+        <main class="main-content flex-1 md:ml-72 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+            <div id="page-header" class="flex justify-between items-center mb-6">
+                 <h2 id="page-title" class="text-3xl font-extrabold text-slate-900 dark:text-white"></h2>
             </div>
-            <div id="page-content" class="page-container max-w-7xl mx-auto"></div>
+            <div id="page-content" class="animate-fadeIn"></div>
         </main>
     </div>
 
-    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
-        <div
-            class="modal bg-white dark:bg-slate-900 p-6 rounded-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-800">
+    <!-- Modal Universal -->
+    <div id="modal-container" class="hidden fixed inset-0 z-[9998] flex items-center justify-center p-4">
+        <div id="modal-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div id="modal-content-box" class="relative z-10 bg-white/80 dark:bg-slate-900/80 p-6 rounded-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto glass-card-pro animate-fadeIn">
             <div class="flex justify-between items-center mb-4">
-                <h3 id="modal-title" class="text-xl font-bold text-slate-900 dark:text-white"></h3>
-                <button id="modal-close" class="text-slate-500 hover:text-[var(--primary)]" aria-label="Tutup modal">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                        </path>
-                    </svg>
-                </button>
+                <h3 id="modal-title" class="text-xl font-bold"></h3>
+                <button id="modal-close" class="text-slate-500 hover:text-primary"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             </div>
-            <div id="modal-content"></div>
+            <div id="modal-body"></div>
         </div>
     </div>
+    
+    <!-- === JAVASCRIPT LOGIC === -->
+    <script type="module">
+        // --- GLOBAL STATE & CONFIG ---
+        const state = {
+            currentPage: 'dasbor',
+            firebase: window.firebase,
+            db: null,
+            auth: null,
+            userId: null,
+            isAuthReady: false,
+            activeCharts: {},
+            portfolioListener: null, // Untuk unsubscribe dari listener Firestore
+        };
 
-    <script>
-        // Menyimpan instansi Chart.js yang aktif untuk setiap elemen canvas
-        // Ini penting agar kita bisa menghancurkan Chart lama sebelum membuat yang baru
-        window.activeCharts = window.activeCharts || {};
-
-        // Fungsi untuk menghancurkan semua Chart yang aktif saat pindah halaman
-        function destroyAllActiveCharts() {
-            for (const chartId in window.activeCharts) {
-                if (window.activeCharts[chartId] && typeof window.activeCharts[chartId].destroy === 'function') {
-                    window.activeCharts[chartId].destroy();
-                }
-                delete window.activeCharts[chartId];
+        const config = {
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'crypto-hub-ultimate',
+            api: {
+                coingecko: 'https://api.coingecko.com/api/v3',
+                fearAndGreed: 'https://api.alternative.me/fng/?limit=1',
+                rss2json: 'https://api.rss2json.com/v1/api.json?rss_url=',
+                newsSources: [
+                    { name: 'CoinTelegraph', url: 'https://cointelegraph.com/rss' },
+                    { name: 'CoinDesk', url: 'https://www.coindesk.com/arc/outboundfeeds/rss/' },
+                    { name: 'Decrypt', url: 'https://decrypt.co/feed' }
+                ],
+            },
+            gemini: {
+                 apiUrl: (apiKey) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+                 apiKey: "" // Disediakan oleh environment Canvas, biarkan kosong
             }
-        }
-
-        // --- DATA & CONTENT ---
-        const appData = [
-            { id: 'dasbor', title: 'Dasbor Harga', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>`, isLive: true },
-            { id: 'kamus', title: 'Kamus Lengkap', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-9-8.494h18m-18 4h18M5 6.253L12 2l7 4.253M5 17.747L12 22l7-4.253"></path></svg>`, isDictionary: true },
-            { id: 'analisis', title: 'Analisis & Studi Kasus', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"></path></svg>`, content: [] },
-            { id: 'tutorial', title: 'Tutorial Praktis', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>`, content: [] },
-            { id: 'portofolio', title: 'Portofolio Saya', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>`, isPortfolio: true },
-            { id: 'alat', title: 'Alat Bantu', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 0v6m0-6l-6 6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`, isTool: true },
-            { id: 'berita', title: 'Berita Terkini', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3h2m-4 3h2M3 10h18"></path></svg>`, isNews: true },
-            { id: 'kuis', title: 'Kuis Kripto', icon: `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`, isQuiz: true }
-        ];
-
+        };
+        
+        // Data untuk Kamus Kripto yang telah diperbarui
         const kamusContent = [
             {
-                category: 'Konsep Fundamental', items: [
-                    { term: 'Blockchain', definition: 'Buku besar digital terdesentralisasi yang mencatat semua transaksi secara permanen dan transparan dalam bentuk "rantai blok". Teknologi ini jadi dasar hampir semua crypto. <em>Contoh:</em> Bitcoin pake blockchain buat catet transaksi tanpa bank.' },
-                    { term: 'Decentralization (Desentralisasi)', definition: 'Prinsip di mana kontrol gak dipegang satu pihak (bank/pemerintah), tapi dibagi ke semua pengguna jaringan. <em>Contoh:</em> Ethereum dijalanin sama ribuan node di seluruh dunia.' },
-                    { term: 'Wallet (Dompet)', definition: 'Software atau hardware buat nyimpan aset digital. <strong>Hot Wallet</strong> (online, e.g., MetaMask) cocok buat transaksi cepet, tapi riskan. <strong>Cold Wallet</strong> (offline, e.g., Ledger) paling aman buat simpen jangka panjang.' },
-                    { term: 'Public Key & Private Key', definition: '<strong>Public Key</strong>: Alamat dompet buat nerima dana, kayak nomor rekening. <strong>Private Key</strong>: Password rahasia buat akses aset. <strong>JANGAN DIBAGI!</strong> <em>Contoh:</em> Public Key: 1A1zP1e..., Private Key: 64 karakter acak.' },
-                    { term: 'Seed Phrase', definition: '12-24 kata rahasia buat recover dompet kalau hilang. <strong>Simpen offline!</strong> <em>Contoh:</em> "apple banana cherry..."' },
-                    { term: 'Hash', definition: 'Kode unik dari data yang dienkripsi. Digunain buat verifikasi transaksi di blockchain. <em>Contoh:</em> SHA-256 bikin hash 64 karakter.' }
+                category: 'Konsep Dasar',
+                icon: 'fa-solid fa-cubes',
+                items: [
+                    { term: 'Blockchain', definition: 'Buku besar digital terdesentralisasi yang mencatat semua transaksi secara permanen dan transparan dalam "rantai blok". Ini adalah teknologi inti di balik sebagian besar aset kripto.' },
+                    { term: 'Cryptocurrency', definition: 'Aset digital yang menggunakan kriptografi untuk mengamankan transaksi, mengontrol pembuatan unit baru, dan memverifikasi transfer aset.' },
+                    { term: 'Desentralisasi', definition: 'Distribusi kekuasaan dan kontrol dari satu entitas pusat ke banyak titik dalam jaringan. Tidak ada satu pihak pun yang memiliki kendali penuh.' },
+                    { term: 'Wallet (Dompet)', definition: 'Program perangkat lunak atau perangkat keras yang menyimpan kunci publik dan pribadi Anda. Kunci ini digunakan untuk mengirim dan menerima aset kripto. Ada <strong>Hot Wallet</strong> (online) dan <strong>Cold Wallet</strong> (offline).' },
                 ]
             },
             {
-                category: 'Jenis Aset Digital', items: [
-                    { term: 'Coin (Koin)', definition: 'Aset asli dari blockchain sendiri. <em>Contoh:</em> BTC (Bitcoin), ETH (Ethereum), SOL (Solana).' },
-                    { term: 'Token', definition: 'Aset yang numpang di blockchain lain, bisa buat utilitas, voting, dll. <em>Contoh:</em> USDT (Tether) di Ethereum.' },
-                    { term: 'NFT (Non-Fungible Token)', definition: 'Aset digital unik, gak bisa ditukar satu sama lain. <em>Contoh:</em> CryptoPunks, Bored Ape Yacht Club.' },
-                    { term: 'Stablecoin', definition: 'Crypto yang dipatok ke aset stabil (USD). <em>Contoh:</em> USDT, USDC, DAI.' },
-                    { term: 'RWA (Real World Assets)', definition: 'Aset dunia nyata (properti, saham) yang ditoken di blockchain. <em>Contoh:</em> Token properti di RealT.' },
-                    { term: 'Security Token', definition: 'Token yang nyatain kepemilikan aset, diatur regulasi. <em>Contoh:</em> Token saham perusahaan.' }
+                category: 'Dunia DeFi & NFT',
+                icon: 'fa-solid fa-hand-holding-dollar',
+                items: [
+                    { term: 'DeFi (Decentralized Finance)', definition: 'Ekosistem aplikasi keuangan yang dibangun di atas blockchain, memungkinkan layanan seperti pinjam-meminjam dan trading tanpa perantara seperti bank.' },
+                    { term: 'NFT (Non-Fungible Token)', definition: 'Token unik yang mewakili kepemilikan atas aset digital atau fisik, seperti seni, musik, atau item dalam game. Tidak dapat ditukar satu sama lain.' },
+                    { term: 'Smart Contract', definition: 'Program yang berjalan di blockchain dan dieksekusi secara otomatis ketika kondisi tertentu terpenuhi. Ini adalah tulang punggung dari DeFi dan NFT.' },
+                    { term: 'Yield Farming', definition: 'Strategi untuk memaksimalkan keuntungan dengan cara meminjamkan atau men-stake aset kripto di berbagai protokol DeFi untuk mendapatkan imbalan.' },
                 ]
             },
             {
-                category: 'Mekanisme Teknis & Skalabilitas', items: [
-                    { term: 'Consensus Mechanism', definition: 'Aturan buat validasi transaksi. <strong>PoW</strong> (komputasi berat, e.g., Bitcoin), <strong>PoS</strong> (stake aset, e.g., Ethereum 2.0).' },
-                    { term: 'Mining (Menambang)', definition: 'Validasi transaksi pake komputasi di PoW, dapet reward koin. <em>Contoh:</em> Miner Bitcoin pake ASIC.' },
-                    { term: 'Staking', definition: 'Kunci aset di PoS buat amanin jaringan, dapet reward. <em>Contoh:</em> Stake ETH di Ethereum.' },
-                    { term: 'Halving', definition: 'Event tiap 4 tahun di Bitcoin yang potong reward miner jadi setengah. <em>Contoh:</em> Halving 2020: 12.5 → 6.25 BTC.' },
-                    { term: 'Smart Contract', definition: 'Kode otomatis buat eksekusi perjanjian. <em>Contoh:</em> Swap token di Uniswap.' },
-                    { term: 'Layer 1 (L1) & Layer 2 (L2)', definition: '<strong>L1</strong>: Blockchain utama (Ethereum). <strong>L2</strong>: Solusi skalabilitas (Polygon, Arbitrum).' },
-                    { term: 'Sharding', definition: 'Pecah blockchain jadi bagian kecil biar cepet. <em>Contoh:</em> Ethereum rencana pake sharding.' }
+                category: 'Trading & Investasi',
+                icon: 'fa-solid fa-chart-line',
+                items: [
+                    { term: 'HODL', definition: 'Singkatan dari "Hold On for Dear Life". Ini adalah strategi investasi jangka panjang di mana investor menahan aset kripto mereka terlepas dari fluktuasi harga.' },
+                    { term: 'ATH (All-Time High)', definition: 'Harga tertinggi yang pernah dicapai oleh suatu aset kripto sepanjang sejarahnya.' },
+                    { term: 'FOMO (Fear Of Missing Out)', definition: 'Perasaan cemas atau takut ketinggalan keuntungan besar, yang seringkali mendorong keputusan investasi yang impulsif saat pasar sedang naik.' },
+                    { term: 'Whale (Paus)', definition: 'Individu atau entitas yang memegang sejumlah besar aset kripto, yang tindakannya dapat mempengaruhi pasar secara signifikan.' },
                 ]
             },
             {
-                category: 'Ekosistem & Aplikasi', items: [
-                    { term: 'DeFi (Decentralized Finance)', definition: 'Layanan keuangan tanpa bank. <em>Contoh:</em> Pinjem duit di Aave.' },
-                    { term: 'DEX (Decentralized Exchange)', definition: 'Bursa P2P buat tuker crypto. <em>Contoh:</em> Uniswap, PancakeSwap.' },
-                    { term: 'DAO (Decentralized Autonomous Organization)', definition: 'Organisasi dijalanin kode dan voting. <em>Contoh:</em> MakerDAO.' },
-                    { term: 'GameFi & Metaverse', definition: '<strong>GameFi</strong>: Game Play-to-Earn (Axie Infinity). <strong>Metaverse</strong>: Dunia virtual (Decentraland).' },
-                    { term: 'Web3', definition: 'Internet terdesentralisasi pake blockchain. <em>Contoh:</em> Aplikasi dApp kayak OpenSea.' }
+                category: 'Teknologi & Keamanan',
+                icon: 'fa-solid fa-shield-halved',
+                items: [
+                    { term: 'Private Key (Kunci Pribadi)', definition: 'Kode rahasia yang memberikan akses penuh ke aset kripto Anda di dalam dompet. Siapa pun yang memiliki kunci ini dapat mengontrol dana Anda. Jaga kerahasiaannya!' },
+                    { term: 'Seed Phrase (Frasa Pemulihan)', definition: 'Daftar 12 hingga 24 kata yang dapat digunakan untuk memulihkan akses ke dompet kripto Anda jika Anda kehilangan perangkat. Ini adalah master key Anda.' },
+                    { term: 'Layer 2 (L2)', definition: 'Sebuah kerangka kerja atau protokol sekunder yang dibangun di atas blockchain utama (Layer 1) untuk meningkatkan kecepatan transaksi dan mengurangi biaya. Contoh: Arbitrum, Optimism.' },
+                    { term: 'Gas Fee', definition: 'Biaya yang dibayarkan kepada validator jaringan untuk memproses transaksi di blockchain, terutama di jaringan Ethereum. Biayanya bervariasi tergantung pada kepadatan jaringan.' },
                 ]
             },
-            {
-                category: 'Tokoh & Peristiwa Penting', items: [
-                    { term: 'Satoshi Nakamoto', definition: 'Pencipta misterius Bitcoin. Identitasnya masih teka-teki.' },
-                    { term: 'Vitalik Buterin', definition: 'Co-founder Ethereum, bawa smart contract ke blockchain.' },
-                    { term: 'The DAO Hack (2016)', definition: 'Peretasan Ethereum yang bikin hard fork jadi ETH dan ETC.' },
-                    { term: 'Mt. Gox Hack (2014)', definition: 'Bursa crypto pertama yang kehilangan 850k BTC.' }
-                ]
-            },
-            {
-                category: 'Istilah Pasar & Budaya (Slang)', items: [
-                    { term: 'HODL', definition: 'Tahan crypto jangka panjang. <em>Asal:</em> Typo "hold" di forum.' },
-                    { term: 'FOMO & FUD', definition: '<strong>FOMO</strong>: Takut ketinggalan, beli pas mahal. <strong>FUD</strong>: Sebar ketakutan buat nurunin harga.' },
-                    { term: 'Whale (Paus)', definition: 'Pemilik crypto gede yang bisa goyang pasar. <em>Contoh:</em> Whale Bitcoin gerakin 10k BTC.' },
-                    { term: 'ATH & ATL', definition: '<strong>ATH</strong>: Harga tertinggi. <strong>ATL</strong>: Harga terendah.' },
-                    { term: 'DYOR (Do Your Own Research)', definition: 'Riset sendiri sebelum investasi. Nasihat wajib!' },
-                    { term: 'Moon', definition: 'Slang buat harga crypto naik gila-gilaan. <em>Contoh:</em> "BTC to the moon!"' }
-                ]
-            }
         ];
 
-        const analisisContent = [
-            { term: 'Analisis Fundamental vs Teknikal', definition: `<strong>FA</strong>: Liat nilai proyek (tim, tech, tokenomics). <strong>TA</strong>: Analisis chart (harga, volume). <em>Contoh:</em> FA cek whitepaper, TA baca RSI.` },
-            { term: 'Membaca Candlestick Chart', definition: `Lilin tunjukin open, close, high, low. Hijau = naik, merah = turun. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createCandlestickSVG()}</div>` },
-            { term: 'Support & Resistance', definition: `<strong>Support:</strong> Lantai harga. <strong>Resistance:</strong> Atap harga. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createSupportResistanceSVG()}</div>` },
-            { term: 'Studi Kasus: Membedah Transaksi di Etherscan', definition: `Lacak transaksi pake Txn Hash, From, To, Value, Gas. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createEtherscanSVG()}</div>` }
+        // Struktur menu navigasi utama
+        const appData = [
+            { id: 'dasbor', title: 'Dasbor', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>`, render: renderDashboard },
+            { id: 'portofolio', title: 'Portofolio', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20V16"/></svg>`, render: renderPortfolio },
+            { id: 'berita', title: 'Berita & AI Summary', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M12 10h4"/></svg>`, render: renderNews },
+            { type: 'divider', title: 'Edukasi & Simulasi' },
+            { id: 'kamus', title: 'Kamus Kripto', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`, render: renderDictionary },
+            { id: 'simulator', title: 'Simulator Trading', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>`, render: renderSimulator },
+            { type: 'divider', title: 'Alat' },
+            { id: 'alat', title: 'Alat Bantu', icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.7 18.9c.4-1.5.7-3.2.7-5s-.3-3.5-.7-5"/><path d="M12 17.8c-1.8 0-3.5-.4-5-1.1"/><path d="M2.3 18.9c-.4-1.5-.7-3.2-.7-5s.3-3.5.7-5"/><path d="M12 6.2c1.8 0 3.5.4 5 1.1"/><path d="m3 7 18 10"/><path d="m21 7-18 10"/></svg>`, render: renderTools },
         ];
-        appData.find(p => p.id === 'analisis').content = analisisContent;
-
-        const tutorialContent = [
-            { term: 'Cara Membuat Wallet MetaMask', definition: `<ol class="text-sm list-decimal list-inside mt-2 space-y-2"><li>Unduh di metamask.io.</li><li>Buat dompet + password.</li><li>Simpen seed phrase offline.</li><li>Konfirmasi, selesai.</li></ol>` },
-            { term: 'Tips Keamanan Paling Penting', definition: `<ul class="text-sm list-disc list-inside mt-2 space-y-2"><li>Jangan percaya DM/email.</li><li>Pake cold wallet buat dana gede.</li><li>Cek alamat + situs.</li></ul>` }
-        ];
-        appData.find(p => p.id === 'tutorial').content = tutorialContent;
-
-        const fullQuizBank = [
-            { q: "Siapa pencipta Bitcoin?", o: ["Vitalik Buterin", "Satoshi Nakamoto", "Elon Musk", "CZ"], a: "Satoshi Nakamoto" },
-            { q: "Aset di atas blockchain lain?", o: ["Coin", "Fiat", "Token", "Fiyatt"], a: "Token" },
-            { q: "Konsensus pake mining?", o: ["PoS", "PoH", "PoW", "DPoS"], a: "PoW" },
-            { q: "Tahan crypto lama?", o: ["FOMO", "FUD", "Shill", "HODL"], a: "HODL" },
-            { q: "Fungsi Stablecoin?", o: ["Spekulasi", "Stabil", "Bunga", "Game"], a: "Stabil" },
-            { q: "NFT singkatan dari?", o: ["New Financial Token", "Non-Fungible Token", "National Fiat Token", "Network Fee Token"], a: "Non-Fungible Token" },
-            { q: "Keuangan tanpa bank?", o: ["CeFi", "TradFi", "DeFi", "FinTech"], a: "DeFi" },
-            { q: "Harga berhenti turun?", o: ["Resistance", "Breakout", "Support", "Trendline"], a: "Support" },
-            { q: "Gas Fee itu apa?", o: ["Biaya internet", "Biaya transaksi", "Pajak", "Listrik"], a: "Biaya transaksi" },
-            { q: "Bursa diretas 2014?", o: ["Binance", "Coinbase", "Mt. Gox", "Kraken"], a: "Mt. Gox" }
-        ];
-
-        // --- HELPER FUNCTIONS ---
-        function createCandlestickSVG() {
-            return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}</style></defs><g transform="translate(50 20)"><rect x="0" y="40" width="40" height="50" fill="#22c55e" title="Candlestick Hijau: Harga Naik"/><line x1="20" y1="0" x2="20" y2="40" stroke="#22c55e" stroke-width="2"/><line x1="20" y1="90" x2="20" y2="110" stroke="#22c55e" stroke-width="2"/><text x="65" y="10" class="label font-bold">High</text><line x1="42" y1="5" x2="60" y2="5" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="45" class="label">Open</text><line x1="42" y1="40" x2="60" y2="40" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="95" class="label">Close</text><line x1="42" y1="90" x2="60" y2="90" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="115" class="label font-bold">Low</text><line x1="42" y1="110" x2="60" y2="110" stroke="currentColor" stroke-dasharray="2 2"/></g><g transform="translate(180 20)"><rect x="0" y="25" width="40" height="50" fill="#ef4444" title="Candlestick Merah: Harga Turun"/><line x1="20" y1="0" x2="20" y2="25" stroke="#ef4444" stroke-width="2"/><line x1="20" y1="75" x2="20" y2="110" stroke="#ef4444" stroke-width="2"/></g></svg>`;
-        }
-
-        function createSupportResistanceSVG() {
-            return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}</style></defs><path d="M20 120 C 60 40, 80 140, 120 80 S 180 20, 220 70 S 260 110, 280 80" stroke="#06b6d4" stroke-width="2.5" fill="none"/><line x1="10" y1="40" x2="290" y2="40" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4"/><text x="110" y="35" class="label font-bold text-red-500 fill-current">Resistance</text><line x1="10" y1="120" x2="290" y2="120" stroke="#22c55e" stroke-width="2" stroke-dasharray="4 4"/><text x="110" y="135" class="label font-bold text-green-500 fill-current">Support</text></svg>`;
-        }
-
-        function createEtherscanSVG() {
-            return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}.box{fill:currentColor;fill-opacity:0.1;stroke:currentColor;stroke-width:0.5;}</style></defs><rect x="10" y="55" width="80" height="40" rx="8" class="box" title="Pengirim"/><text x="25" y="78" class="label font-bold">Pengirim</text><rect x="210" y="55" width="80" height="40" rx="8" class="box" title="Penerima"/><text x="225" y="78" class="label font-bold">Penerima</text><path d="M90 75 L 210 75" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/><text x="150" y="65" class="label font-semibold">0.1 ETH</text><text x="150" y="85" class="label text-[var(--primary)]">Gas Fee</text><defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker></defs></svg>`;
-        }
-
-        function debounce(func, wait) {
+        
+        // --- UTILITY FUNCTIONS ---
+        const $ = (selector) => document.querySelector(selector);
+        const $$ = (selector) => document.querySelectorAll(selector);
+        
+        const debounce = (func, wait) => {
             let timeout;
-            return function (...args) {
+            return (...args) => {
                 clearTimeout(timeout);
                 timeout = setTimeout(() => func.apply(this, args), wait);
             };
-        }
+        };
 
-        function triggerConfetti() {
-            const canvas = document.getElementById('confetti-canvas');
+        const showToast = (message, type = 'success', duration = 3000) => {
+            const container = $('#toast-container');
+            const toastId = `toast-${Date.now()}`;
+            const colors = {
+                success: 'bg-green-500', error: 'bg-red-500', info: 'bg-blue-500'
+            };
+            const toastHTML = `
+                <div id="${toastId}" class="toast-item flex items-center w-full max-w-xs p-4 mb-4 text-white ${colors[type]} rounded-lg shadow-lg">
+                    <div class="ms-3 text-sm font-normal">${message}</div>
+                </div>`;
+            container.insertAdjacentHTML('beforeend', toastHTML);
+            const toastElement = $(`#${toastId}`);
+            
+            setTimeout(() => {
+                toastElement.classList.add('show');
+                setTimeout(() => {
+                    toastElement.classList.remove('show');
+                    toastElement.addEventListener('transitionend', () => toastElement.remove());
+                }, duration);
+            }, 10);
+        };
+
+        const openModal = (title, content) => {
+            $('#modal-title').innerHTML = title;
+            $('#modal-body').innerHTML = content;
+            $('#modal-container').classList.remove('hidden');
+        };
+
+        const closeModal = () => {
+            $('#modal-container').classList.add('hidden');
+            $('#modal-title').innerHTML = '';
+            $('#modal-body').innerHTML = '';
+        };
+        
+        const triggerConfetti = () => {
+            const canvas = $('#confetti-canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            
             const particles = [];
-            for (let i = 0; i < 100; i++) {
+            const colors = ['#06b6d4', '#8b5cf6', '#22c55e', '#f97316', '#ec4899'];
+            
+            for (let i = 0; i < 150; i++) {
                 particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: Math.random() * 4 - 2,
-                    vy: Math.random() * 4 - 2,
-                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    size: Math.random() * 5 + 2
+                    x: Math.random() * canvas.width, y: -20,
+                    size: Math.random() * 10 + 5,
+                    speed: Math.random() * 3 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    angle: Math.random() * 360,
+                    rotation: Math.random() * 10
                 });
             }
-            function animate() {
+            
+            let animationFrame;
+            function animateConfetti() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.size *= 0.98;
+                particles.forEach((p, index) => {
+                    p.y += p.speed;
+                    p.x += Math.sin(p.angle * Math.PI / 180) * 2;
+                    p.angle += 2;
+                    
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
                     ctx.fillStyle = p.color;
-                    ctx.fillRect(p.x, p.y, p.size, p.size);
-                    if (p.size < 0.5) particles.splice(particles.indexOf(p), 1);
+                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+                    ctx.restore();
+                    p.rotation += 5;
+
+                    if (p.y > canvas.height) {
+                        particles.splice(index, 1);
+                    }
                 });
-                if (particles.length > 0) requestAnimationFrame(animate);
-                else canvas.style.display = 'none';
+                
+                if (particles.length > 0) {
+                    animationFrame = requestAnimationFrame(animateConfetti);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    cancelAnimationFrame(animationFrame);
+                }
             }
-            canvas.style.display = 'block';
-            animate();
-        }
+            animateConfetti();
+        };
 
-        /**
-         * Fetches crypto prices with caching and rate limit fallback.
-         */
-        async function getCryptoPrices(page = 1, perPage = 50, category = '', coinIds = '') {
-            const cacheKey = `crypto_${page}_${category}_${coinIds}_${perPage}`; // Tambah coinIds ke cacheKey
+        // --- API & DATA FETCHING ---
+        const apiFetch = async (url, cacheKey, cacheDurationMinutes = 5) => {
             const cached = localStorage.getItem(cacheKey);
-            let cachedData = null;
-            let cacheTimestamp = 0;
-
             if (cached) {
-                const parsedCache = JSON.parse(cached);
-                cachedData = parsedCache.data;
-                cacheTimestamp = parsedCache.timestamp;
-                // Gunakan cache jika masih valid (2 menit)
-                if (Date.now() - cacheTimestamp < 120000) {
-                    return cachedData;
-                }
+                try {
+                    const { data, timestamp } = JSON.parse(cached);
+                    if (Date.now() - timestamp < cacheDurationMinutes * 60 * 1000) return data;
+                } catch(e) { console.error("Gagal mem-parsing cache", e); }
             }
-
             try {
-                let url;
-                if (coinIds) { // Jika ada coinIds (hasil search), pakai endpoint spesifik
-                    url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&sparkline=true&ids=${coinIds}`;
-                } else { // Jika tidak ada coinIds, pakai filter kategori normal
-                    url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=${perPage}&page=${page}&sparkline=true`;
-                    if (category) {
-                        url += `&category=${category}`;
-                    }
-                }
                 const response = await fetch(url);
-                if (!response.ok) {
-                    // Jika API gagal, coba gunakan cache lama (sampai 1 jam)
-                    if (cachedData && Date.now() - cacheTimestamp < 3600000) {
-                        console.warn("API call failed, falling back to expired cache:", response.statusText);
-                        return cachedData;
-                    }
-                    throw new Error('API Gagal');
-                }
+                if (!response.ok) throw new Error(`API Error: ${response.status}`);
                 const data = await response.json();
                 localStorage.setItem(cacheKey, JSON.stringify({ data, timestamp: Date.now() }));
                 return data;
             } catch (error) {
-                console.error("Price fetch error:", error);
-                // Jika API benar-benar gagal dan tidak ada cache lama yang valid
+                console.error(`Gagal mengambil data dari ${url}:`, error);
+                if(cached) return JSON.parse(cached).data;
                 return null;
             }
-        }
-
-        // --- RENDER FUNCTIONS ---
-        function renderPage(pageId) {
-            // Hancurkan semua Chart aktif saat berpindah halaman
-            destroyAllActiveCharts();
-
-            const pageData = appData.find(p => p.id === pageId);
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            document.querySelector(`.nav-link[data-id="${pageId}"]`).classList.add('active');
-            document.getElementById('page-title').textContent = pageData.title;
-
-            const pageContentEl = document.getElementById('page-content');
-            // Kosongkan konten DOM untuk mencegah masalah dengan elemen lama
-            pageContentEl.innerHTML = `<div id="page-dynamic-content" class="animate-fadeIn space-y-6"></div>`;
-            const contentEl = document.getElementById('page-dynamic-content');
-
-            if (pageData.isLive) renderPriceTracker(contentEl);
-            else if (pageData.isDictionary) renderDictionary(contentEl);
-            else if (pageData.isQuiz) renderQuiz(contentEl);
-            else if (pageData.isTool) renderTools(contentEl);
-            else if (pageData.isNews) renderNews(contentEl);
-            else if (pageData.isPortfolio) renderPortfolio(contentEl);
-            else if (pageData.content) {
-                contentEl.innerHTML = pageData.content.map(item => `
-                <div class="card-item bg-white dark:bg-slate-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r">${item.term}</h3>
-                        <button title="Cetak" class="print-button no-print text-gray-400 hover:text-[var(--primary)]" aria-label="Cetak definisi ini">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                        </button>
-                    </div>
-                    <div class="definition-content text-slate-600 dark:text-slate-300 leading-relaxed">${item.definition}</div>
-                </div>
-            `).join('');
-            }
-
-            document.querySelectorAll('.print-button').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const card = btn.closest('.card-item');
-                    const printArea = document.createElement('div');
-                    printArea.className = 'print-area';
-                    printArea.innerHTML = card.innerHTML;
-                    document.body.appendChild(printArea);
-                    window.print();
-                    printArea.remove();
-                });
-            });
-        }
-
-        function renderDictionary(container) {
-            container.innerHTML = `
-            <div class="relative mb-6 no-print">
-                <input type="text" id="kamus-search" placeholder="Cari istilah (contoh: Blockchain)" class="w-full p-3 pl-10 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-[var(--primary)]" aria-label="Cari istilah kamus">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" aria-hidden="true"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                <div id="kamus-autocomplete" class="absolute w-full mt-1 bg-white dark:bg-slate-900 rounded-lg shadow-lg hidden z-10"></div>
-            </div>
-            <div id="kamus-accordion-container" class="space-y-4"></div>
-            <div id="kamus-search-results" class="hidden space-y-4"></div>
-        `;
-
-            const accordionContainer = document.getElementById('kamus-accordion-container');
-            accordionContainer.innerHTML = kamusContent.map(cat => `
-            <div class="glass-card rounded-lg border border-slate-200 dark:border-slate-800 overflow-hidden">
-                <button class="accordion-button w-full flex justify-between items-center p-4 text-left font-semibold text-lg text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-expanded="false" aria-controls="accordion-content-${cat.category.replace(/\s/g, '-')}-">
-                    <span>${cat.category}</span>
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </button>
-                <div id="accordion-content-${cat.category.replace(/\s/g, '-')}-" class="accordion-content px-4" role="region" aria-hidden="true">
-                    <div class="py-4 border-t border-gray-200 dark:border-gray-700 space-y-4">
-                        ${cat.items.map(item => `
-                            <div class="card-item">
-                                <h4 class="text-md font-semibold text-[var(--primary)]">${item.term}</h4>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">${item.definition}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            </div>
-        `).join('');
-
-            const searchInput = document.getElementById('kamus-search');
-            const autocompleteContainer = document.getElementById('kamus-autocomplete');
-
-            const performKamusSearch = (query) => {
-                const results = [];
-                kamusContent.forEach(cat => {
-                    cat.items.forEach(item => {
-                        if (item.term.toLowerCase().includes(query) || item.definition.toLowerCase().includes(query)) {
-                            results.push(item);
-                        }
-                    });
-                });
-
-                if (!query) {
-                    accordionContainer.classList.remove('hidden');
-                    resultsContainer.classList.add('hidden');
-                } else {
-                    accordionContainer.classList.add('hidden');
-                    resultsContainer.classList.remove('hidden');
-                    if (results.length > 0) {
-                        resultsContainer.innerHTML = results.map(item => `
-                        <div class="glass-card p-4 rounded-lg">
-                            <h4 class="text-md font-semibold text-[var(--primary)]">${item.term}</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">${item.definition.replace(new RegExp(query, 'gi'), match => `<span class="highlight">${match}</span>`)}</p>
-                        </div>
-                    `).join('');
-                    } else {
-                        resultsContainer.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Gak ketemu, bro! Coba keyword lain!</p>`;
-                    }
-                }
-            };
-
-            const updateKamusAutocomplete = (query) => {
-                if (!query) {
-                    autocompleteContainer.classList.add('hidden');
-                    return;
-                }
-
-                const suggestions = [];
-                kamusContent.forEach(cat => {
-                    cat.items.forEach(item => {
-                        if (item.term.toLowerCase().startsWith(query)) {
-                            suggestions.push(item.term);
-                        }
-                    });
-                });
-
-                if (suggestions.length > 0) {
-                    autocompleteContainer.classList.remove('hidden');
-                    autocompleteContainer.innerHTML = suggestions.slice(0, 5).map(s => `
-                    <div class="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer" role="option" data-autocomplete-value="${s}">${s}</div>
-                `).join('');
-                } else {
-                    autocompleteContainer.classList.add('hidden');
-                }
-            };
-
-            searchInput.addEventListener('input', debounce((e) => performKamusSearch(e.target.value.toLowerCase()), 300));
-            searchInput.addEventListener('input', (e) => updateKamusAutocomplete(e.target.value.toLowerCase()));
-
-            autocompleteContainer.addEventListener('click', (e) => {
-                if (e.target.dataset.autocompleteValue) {
-                    searchInput.value = e.target.dataset.autocompleteValue;
-                    performKamusSearch(searchInput.value.toLowerCase());
-                    autocompleteContainer.classList.add('hidden');
-                }
-            });
-
-            document.querySelectorAll('.accordion-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const content = button.nextElementSibling;
-                    const isOpen = content.style.maxHeight;
-                    document.querySelectorAll('.accordion-content').forEach(c => c.style.maxHeight = null);
-                    document.querySelectorAll('.accordion-button').forEach(b => {
-                        b.classList.remove('open');
-                        b.setAttribute('aria-expanded', 'false');
-                        b.nextElementSibling.setAttribute('aria-hidden', 'true');
-                    });
-
-                    if (!isOpen) {
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                        button.classList.add('open');
-                        button.setAttribute('aria-expanded', 'true');
-                        content.setAttribute('aria-hidden', 'false');
-                    }
-                });
-            });
-        }
-
-        async function renderPriceTracker(container) {
-            let currentPage = 1;
-            const perPage = 10;
-            let currentFilterCategory = '';
-            let currentSearchQuery = '';
-
-            container.innerHTML = `
-            <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
-                <div class="relative flex-1">
-                    <input type="text" id="crypto-search" placeholder="Cari token (e.g., Bitcoin)" class="w-full p-3 pl-10 bg-white dark:bg-gray-800 rounded-lg border border-gray-300 dark:border-gray-700 focus:ring-2 focus:ring-[var(--primary)]" aria-label="Cari token kripto">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" aria-hidden="true"><svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                </div>
-                <select id="crypto-filter" class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700" aria-label="Filter kripto berdasarkan kategori">
-                    <option value="">Semua</option>
-                    <option value="decentralized_finance_defi">DeFi</option>
-                    <option value="non_fungible_tokens_nft">NFT</option>
-                    <option value="stablecoins">Stablecoin</option>
-                    <option value="real_world_assets_rwa">RWA</option>
-                </select>
-            </div>
-            <div id="top-coins" class="mb-6">
-                <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Top 10 Coins</h3>
-                <div id="top-coins-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">${Array(10).fill('<div class="h-32 skeleton-loader"></div>').join('')}</div>
-            </div>
-            <div id="price-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">${Array(10).fill('<div class="h-48 skeleton-loader"></div>').join('')}</div>
-            <div class="mt-6 text-center"><button id="load-more" class="px-6 py-3 bg-gradient-to-r text-white rounded-lg hover:opacity-80 transition pulse-glow" aria-label="Muat lebih banyak koin">Load More</button></div>
-        `;
-
-            const renderCoins = (data, targetEl, isTop = false) => {
-                // Hancurkan Chart lama di dalam targetEl sebelum merender ulang
-                Array.from(targetEl.querySelectorAll('canvas')).forEach(canvasEl => {
-                    if (window.activeCharts[canvasEl.id]) {
-                        window.activeCharts[canvasEl.id].destroy();
-                        delete window.activeCharts[canvasEl.id];
-                    }
-                });
-
-                targetEl.innerHTML = ''; // Kosongkan elemen target
-
-                if (!data || data.length === 0) {
-                    targetEl.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 p-4 glass-card rounded-xl">Tidak ada data kripto ditemukan.</p>`;
-                    return;
-                }
-
-                // Bangun HTML terlebih dahulu
-                let cardsHtml = '';
-                data.forEach(coin => {
-                    const change = coin.price_change_percentage_24h;
-                    const changeClass = change >= 0 ? 'text-green-500' : 'text-red-500';
-                    const cardHeight = isTop ? 'h-32' : 'h-48';
-                    const canvasId = `sparkline-${coin.id}-${isTop ? 'top' : 'main'}`;
-
-                    cardsHtml += `
-                    <div class="flip-card ${cardHeight} rounded-xl cursor-pointer" data-coin-id="${coin.id}" role="button" tabindex="0" aria-label="Lihat detail ${coin.name}">
-                        <div class="flip-card-inner">
-                            <div class="flip-card-front glass-card p-4 rounded-xl flex flex-col justify-between">
-                                <div class="flex items-center gap-2">
-                                    <img src="${coin.image}" alt="${coin.name} logo" class="w-6 h-6 rounded-full">
-                                    <h4 class="text-sm font-semibold truncate">${coin.name} (${coin.symbol.toUpperCase()})</h4>
-                                </div>
-                                <div>
-                                    <p class="text-lg font-semibold">$${coin.current_price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
-                                    <p class="text-sm ${changeClass}">${change ? change.toFixed(2) : 'N/A'}%</p>
-                                </div>
-                            </div>
-                            <div class="flip-card-back glass-card p-4 rounded-xl flex flex-col justify-center" aria-hidden="true">
-                                <canvas id="${canvasId}" class="w-full h-20" aria-label="Grafik harga 7 hari untuk ${coin.name}"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                });
-                targetEl.innerHTML = cardsHtml; // Masukkan semua HTML sekaligus
-
-                // Inisialisasi Chart setelah elemen canvas ada di DOM
-                setTimeout(() => {
-                    data.forEach(coin => {
-                        const canvasId = `sparkline-${coin.id}-${isTop ? 'top' : 'main'}`;
-                        const ctx = document.getElementById(canvasId);
-                        if (ctx) {
-                            const newChart = new Chart(ctx.getContext('2d'), {
-                                type: 'line',
-                                data: {
-                                    labels: coin.sparkline_in_7d.price.map((_, i) => i),
-                                    datasets: [{
-                                        data: coin.sparkline_in_7d.price,
-                                        borderColor: coin.price_change_percentage_24h >= 0 ? '#22c55e' : '#ef4444',
-                                        borderWidth: 2,
-                                        fill: true,
-                                        backgroundColor: coin.price_change_percentage_24h >= 0 ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                                        tension: 0.4,
-                                        pointRadius: 0
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: { legend: { display: false } },
-                                    scales: { x: { display: false }, y: { display: false } }
-                                }
-                            });
-                            window.activeCharts[canvasId] = newChart; // Simpan instansi Chart
-                        }
-                    });
-                }, 0); // Gunakan setTimeout 0ms untuk memastikan DOM sudah dirender
-            };
-
-            const showCoinDetails = async (coinId) => {
-                const modal = document.getElementById('modal');
-                const modalTitle = document.getElementById('modal-title');
-                const modalContent = document.getElementById('modal-content');
-
-                // Hancurkan Chart detail sebelumnya jika ada
-                if (window.activeCharts['coin-detail-chart']) {
-                    window.activeCharts['coin-detail-chart'].destroy();
-                    delete window.activeCharts['coin-detail-chart'];
-                }
-
-                modalTitle.textContent = 'Loading...';
-                modalContent.innerHTML = `<div class="h-64 skeleton-loader"></div>`;
-                modal.style.display = 'flex';
-                modal.setAttribute('aria-modal', 'true');
-                modal.setAttribute('role', 'dialog');
-                try {
-                    const cacheKey = `coin_detail_${coinId}`;
-                    const cached = localStorage.getItem(cacheKey);
-                    let coin;
-                    if (cached) {
-                        const { data, timestamp } = JSON.parse(cached);
-                        // Gunakan cache jika masih valid (2 menit)
-                        if (Date.now() - timestamp < 120000) {
-                            coin = data;
-                        }
-                    }
-
-                    if (!coin) {
-                        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}`);
-                        if (!response.ok) {
-                            // Jika API gagal, coba gunakan cache lama (sampai 1 jam)
-                            if (cached && Date.now() - JSON.parse(cached).timestamp < 3600000) {
-                                console.warn("Coin detail API call failed, falling back to expired cache:", response.statusText);
-                                coin = JSON.parse(cached).data;
-                            } else {
-                                throw new Error('Gagal mengambil data koin. Coba cek koneksi internetmu!');
-                            }
-                        } else {
-                            coin = await response.json();
-                            localStorage.setItem(cacheKey, JSON.stringify({ data: coin, timestamp: Date.now() }));
-                        }
-                    }
-
-                    modalTitle.textContent = `${coin.name} (${coin.symbol.toUpperCase()})`;
-                    modalContent.innerHTML = `
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            <img src="${coin.image.large}" alt="${coin.name} logo" class="w-16 h-16 rounded-full">
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Rank #${coin.market_cap_rank || 'N/A'}</p>
-                                <p class="text-2xl font-bold">${coin.name}</p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Harga Sekarang:</p>
-                                <p class="font-semibold">$${coin.market_data.current_price.usd.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Perubahan (24j):</p>
-                                <p class="font-semibold ${coin.market_data.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500'}">${coin.market_data.price_change_percentage_24h ? coin.market_data.price_change_percentage_24h.toFixed(2) : 'N/A'}%</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Market Cap:</p>
-                                <p class="font-semibold">$${coin.market_data.market_cap.usd.toLocaleString()}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Volume (24j):</p>
-                                <p class="font-semibold">$${coin.market_data.total_volume.usd.toLocaleString()}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Total Supply:</p>
-                                <p class="font-semibold">${coin.market_data.total_supply ? coin.market_data.total_supply.toLocaleString() : 'N/A'}</p>
-                            </div>
-                            <div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Circulating Supply:</p>
-                                <p class="font-semibold">${coin.market_data.circulating_supply ? coin.market_data.circulating_supply.toLocaleString() : 'N/A'}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Deskripsi:</p>
-                            <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-4">${coin.description.en || 'Tidak ada deskripsi.'}</p>
-                        </div>
-                        <div class="mt-4">
-                            <canvas id="coin-detail-chart" class="h-48" aria-label="Grafik harga historis koin"></canvas>
-                        </div>
-                    </div>
-                `;
-
-                    // Render Chart detail setelah modal-content diupdate
-                    const chartDataResponse = await fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7`);
-                    if (!chartDataResponse.ok) throw new Error('Gagal mengambil data grafik');
-                    const prices = await chartDataResponse.json();
-                    const ctx = document.getElementById('coin-detail-chart');
-                    if (ctx) {
-                        const newChart = new Chart(ctx.getContext('2d'), {
-                            type: 'line',
-                            data: {
-                                labels: prices.prices.map((p) => new Date(p[0]).toLocaleDateString('id-ID')),
-                                datasets: [{
-                                    label: 'Harga ($)',
-                                    data: prices.prices.map(p => p[1]),
-                                    borderColor: 'var(--primary)',
-                                    backgroundColor: 'rgba(6, 182, 212, 0.2)',
-                                    tension: 0.4,
-                                    fill: true
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: { legend: { display: false } },
-                                scales: {
-                                    x: { ticks: { maxTicksLimit: 7 } },
-                                    y: { beginAtZero: false }
-                                }
-                            }
-                        });
-                        window.activeCharts['coin-detail-chart'] = newChart; // Simpan instansi Chart
-                    }
-
-                } catch (error) {
-                    console.error("Error fetching coin details:", error);
-                    modalTitle.textContent = 'Error';
-                    modalContent.innerHTML = `<p class="text-red-500 text-center">Gagal memuat detail koin. ${error.message}</p>`;
-                }
-            };
-
-            const loadPriceData = async (query = '') => {
-                // Hancurkan Chart di price-grid sebelum mengisi skeleton atau data baru
-                Array.from(document.getElementById('price-grid').querySelectorAll('canvas')).forEach(canvasEl => {
-                    if (window.activeCharts[canvasEl.id]) {
-                        window.activeCharts[canvasEl.id].destroy();
-                        delete window.activeCharts[canvasEl.id];
-                    }
-                });
-
-                document.getElementById('price-grid').innerHTML = Array(perPage).fill('<div class="h-48 skeleton-loader"></div>').join(''); // Show skeletons
-                let data;
-                if (query) {
-                    try {
-                        const searchResponse = await fetch(`https://api.coingecko.com/api/v3/search?query=${query}`);
-                        if (!searchResponse.ok) throw new Error('API pencarian gagal');
-                        const searchData = await searchResponse.json();
-                        const coinIds = searchData.coins.map(c => c.id).join(',');
-                        if (coinIds) {
-                            data = await getCryptoPrices(1, 50, '', coinIds); // Kirim coinIds ke fungsi getCryptoPrices
-                        } else {
-                            data = []; // Tidak ada koin ditemukan
-                        }
-                    } catch (error) {
-                        console.error("Search error:", error);
-                        data = null; // Indikasikan kegagalan
-                    }
-                    // Sembunyikan tombol "Load More" saat ada hasil pencarian
-                    document.getElementById('load-more').style.display = 'none';
-                } else {
-                    data = await getCryptoPrices(currentPage, perPage, currentFilterCategory);
-                    // Tampilkan tombol "Load More" kembali saat tidak ada pencarian
-                    document.getElementById('load-more').style.display = 'block';
-                }
-
-                const priceGrid = document.getElementById('price-grid');
-                if (data && data.length > 0) {
-                    // Jangan kosongkan jika data baru ditambahkan (load more), hanya untuk filter/search baru
-                    if (!query && currentPage === 1 && !currentFilterCategory) { // Tambahan: hanya clear jika initial load dan tanpa filter/search
-                        // do nothing, renderCoins will clear
-                    } else if (query || currentFilterCategory) { // Selalu clear jika ada query/filter baru
-                        priceGrid.innerHTML = '';
-                    }
-                    renderCoins(data, priceGrid);
-                } else {
-                    priceGrid.innerHTML = `<p class="col-span-full text-center text-red-500 p-4 glass-card rounded-xl">Gagal memuat data, bro! Coba cek koneksi atau ganti filter/pencarian!</p>`;
-                }
-            };
-
-            // Hancurkan Chart di top-coins-grid sebelum mengisi data top coins
-            Array.from(document.getElementById('top-coins-grid').querySelectorAll('canvas')).forEach(canvasEl => {
-                if (window.activeCharts[canvasEl.id]) {
-                    window.activeCharts[canvasEl.id].destroy();
-                    delete window.activeCharts[canvasEl.id];
-                }
-            });
-            const topCoinsData = await getCryptoPrices(1, 10);
-            if (topCoinsData) renderCoins(topCoinsData, document.getElementById('top-coins-grid'), true);
-
-            loadPriceData(); // Initial load for main grid
-
-            document.getElementById('load-more').addEventListener('click', () => {
-                currentPage++;
-                loadPriceData();
-            });
-
-            document.getElementById('crypto-search').addEventListener('input', debounce(async e => {
-                currentSearchQuery = e.target.value.toLowerCase();
-                currentPage = 1;
-                currentFilterCategory = ''; // Reset filter kategori saat mencari
-                document.getElementById('crypto-filter').value = '';
-                loadPriceData(currentSearchQuery);
-            }, 500));
-
-            document.getElementById('crypto-filter').addEventListener('change', e => {
-                currentFilterCategory = e.target.value;
-                currentPage = 1;
-                currentSearchQuery = ''; // Reset pencarian saat filter berubah
-                document.getElementById('crypto-search').value = '';
-                loadPriceData();
-            });
-
-            document.getElementById('price-grid').addEventListener('click', e => {
-                const card = e.target.closest('.flip-card');
-                if (card) {
-                    showCoinDetails(card.dataset.coinId);
-                }
-            });
-
-            document.getElementById('modal-close').addEventListener('click', () => {
-                document.getElementById('modal').style.display = 'none';
-                document.getElementById('modal').setAttribute('aria-modal', 'false');
-                document.getElementById('modal').setAttribute('role', 'dialog');
-                // Pastikan Chart detail dihancurkan saat modal ditutup
-                if (window.activeCharts['coin-detail-chart']) {
-                    window.activeCharts['coin-detail-chart'].destroy();
-                    delete window.activeCharts['coin-detail-chart'];
-                }
-            });
-
-            document.getElementById('modal').addEventListener('click', (e) => {
-                if (e.target.id === 'modal') {
-                    document.getElementById('modal').style.display = 'none';
-                    document.getElementById('modal').setAttribute('aria-modal', 'false');
-                    document.getElementById('modal').setAttribute('role', 'dialog');
-                    // Pastikan Chart detail dihancurkan saat modal ditutup
-                    if (window.activeCharts['coin-detail-chart']) {
-                        window.activeCharts['coin-detail-chart'].destroy();
-                        delete window.activeCharts['coin-detail-chart'];
-                    }
-                }
-            });
-        }
-
-        /**
-         * Extracts the first image URL from an HTML string (e.g., from RSS description).
-         */
-        const extractImageFromDescription = (description) => {
-            const imgMatch = description?.match(/<img[^>]+src=["'](.*?)["']/i);
-            return imgMatch ? imgMatch[1] : null; // Return null if no image found, so fallback chain can continue
         };
 
-        async function renderNews(container) {
-            const sources = [
-                { name: 'CoinTelegraph', url: 'https://api.rss2json.com/v1/api.json?rss_url=https://cointelegraph.com/rss' },
-                { name: 'CoinDesk', url: 'https://api.rss2json.com/v1/api.json?rss_url=https://www.coindesk.com/arc/outboundfeeds/rss/' }
-            ];
-            let allNews = []; // Data akan disimpan di sini
-            let currentFilter = { source: '', category: '', query: '' }; // Tambah query untuk pencarian
-            let newsPage = 1;
-            const newsPerPage = 12;
-
-            container.innerHTML = `
-            <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
-                <div class="relative flex-1">
-                    <input type="text" id="news-search" placeholder="Cari berita (e.g., Bitcoin)" class="w-full p-3 pl-10 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700 focus:ring-2 focus:ring-[var(--primary)]" aria-label="Cari berita">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" aria-hidden="true"><svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
-                </div>
-                <select id="news-source-filter" class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700" aria-label="Filter berita berdasarkan sumber">
-                    <option value="">Semua Sumber</option>
-                    ${sources.map(s => `<option value="${s.name}">${s.name}</option>`).join('')}
-                </select>
-                <select id="news-category-filter" class="p-3 bg-white dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-700" aria-label="Filter berita berdasarkan kategori">
-                    <option value="">Semua Kategori</option>
-                    <option value="DeFi">DeFi</option>
-                    <option value="NFT">NFT</option>
-                    <option value="Regulation">Regulation</option>
-                    <option value="Market">Market</option>
-                    <option value="Security">Security</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Bitcoin">Bitcoin</option>
-                    <option value="Ethereum">Ethereum</option>
-                    <option value="Umum">Umum</option>
-                    <option value="Error">Error</option>
-                </select>
-            </div>
-            <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">${Array(6).fill('<div class="h-64 skeleton-loader"></div>').join('')}</div>
-            <div class="mt-6 text-center">
-                <button id="load-more-news" class="px-6 py-3 bg-gradient-to-r text-white rounded-lg hover:opacity-80 pulse-glow" style="display: none;" aria-label="Muat lebih banyak berita">Load More</button>
-            </div>
-        `;
-
-            const newsGrid = document.getElementById('news-grid');
-            const loadMoreBtn = document.getElementById('load-more-news');
-
-            // Fetch all news initially (and only once, or on specific refresh)
-            const fetchAllNews = async () => {
-                newsGrid.innerHTML = Array(6).fill('<div class="h-64 skeleton-loader"></div>').join(''); // Show skeletons before fetching
-                const fetchPromises = sources.map(async (source) => {
-                    try {
-                        const cacheKey = `news_${source.name}`;
-                        const cached = localStorage.getItem(cacheKey);
-                        let newsData;
-                        let cacheTimestamp = 0;
-
-                        if (cached) {
-                            const parsedCache = JSON.parse(cached);
-                            newsData = parsedCache.data;
-                            cacheTimestamp = parsedCache.timestamp;
-                            if (Date.now() - cacheTimestamp < 600000) { // Valid for 10 minutes
-                                return newsData; // Return cached data
-                            }
-                        }
-
-                        const response = await fetch(source.url);
-                        const data = await response.json();
-                        if (data.status !== 'ok') {
-                            if (newsData && Date.now() - cacheTimestamp < 3600000) { // Fallback to 1 hour if API fails
-                                console.warn("News API call failed, falling back to expired cache:", response.statusText);
-                                return newsData;
-                            }
-                            throw new Error(`Gagal mengambil data dari ${source.name}`);
-                        }
-                        newsData = data.items;
-                        localStorage.setItem(cacheKey, JSON.stringify({ data: newsData, timestamp: Date.now() }));
-                        return newsData;
-                    } catch (error) {
-                        console.error(`Gagal load ${source.name}:`, error);
-                        return [{
-                            title: `Gagal memuat berita dari ${source.name}. Cek koneksi internetmu!`,
-                            link: '#',
-                            pubDate: new Date().toISOString(),
-                            thumbnail: 'https://placehold.co/600x400/0f172a/38bdf8?text=Error',
-                            source: source.name,
-                            category: 'Error',
-                            snippet: 'Coba cek koneksi internet atau coba lagi nanti.'
-                        }];
-                    }
-                });
-
-                const results = await Promise.all(fetchPromises);
-                allNews = results.flat().map(item => ({
-                    ...item,
-                    source: item.source || item.author || 'Unknown', // Fallback for source
-                    category: categorizeNews(item.title + (item.description || '')),
-                    snippet: (item.description || item.content || '').replace(/<[^>]*>?/gm, '').slice(0, 100) + '...',
-                    thumbnail: item.thumbnail || item.enclosure?.link || extractImageFromDescription(item.description) || 'https://placehold.co/600x400/0f172a/38bdf8?text=Berita'
-                })).sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-                filterAndRenderNews();
-            };
-
-            const categorizeNews = (text) => {
-                text = text.toLowerCase();
-                if (text.includes('defi') || text.includes('decentralized finance')) return 'DeFi';
-                if (text.includes('nft') || text.includes('non-fungible') || text.includes('art')) return 'NFT';
-                if (text.includes('regulation') || text.includes('sec') || text.includes('law') || text.includes('government') || text.includes('policy')) return 'Regulation';
-                if (text.includes('market') || text.includes('price') || text.includes('trading') || text.includes('economy') || text.includes('bull') || text.includes('bear')) return 'Market';
-                if (text.includes('hack') || text.includes('security') || text.includes('breach') || text.includes('exploit') || text.includes('scam')) return 'Security';
-                if (text.includes('blockchain') || text.includes('protocol') || text.includes('upgrade') || text.includes('technology') || text.includes('innovation') || text.includes('web3')) return 'Technology';
-                if (text.includes('ethereum') || text.includes('eth')) return 'Ethereum'; // New specific category
-                if (text.includes('bitcoin') || text.includes('btc')) return 'Bitcoin'; // New specific category
-                if (text.includes('halving')) return 'Bitcoin Halving'; // Specific event category
-                return 'Umum';
-            };
-
-            const filterAndRenderNews = () => {
-                const filtered = allNews.filter(item =>
-                    (!currentFilter.source || item.source === currentFilter.source) &&
-                    (!currentFilter.category || item.category === currentFilter.category) &&
-                    (!currentFilter.query || item.title.toLowerCase().includes(currentFilter.query) || item.snippet.toLowerCase().includes(currentFilter.query))
-                );
-                renderNewsItems(filtered);
-                newsGrid.scrollIntoView({ behavior: 'smooth', block: 'start' }); // Scroll ke atas setelah filter/search
-            };
-
-            const renderNewsItems = (items) => {
-                const itemsToRender = items.slice(0, newsPage * newsPerPage);
-
-                newsGrid.innerHTML = itemsToRender.length > 0 ? itemsToRender.map(item => `
-                <div class="glass-card p-4 rounded-xl cursor-pointer hover:shadow-lg transition-shadow" data-news-id="${item.link}" role="button" tabindex="0" aria-label="Baca berita: ${item.title}">
-                    <div class="h-full flex flex-col">
-                        <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-32 object-cover rounded-t-lg mb-3">
-                        <div class="flex-1 flex flex-col justify-between">
-                            <div>
-                                <span class="text-xs font-semibold text-[var(--primary)] bg-[var(--primary)]/10 px-2 py-1 rounded">${item.category}</span>
-                                <h4 class="text-md font-semibold mt-2 line-clamp-2">${item.title}</h4>
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">${item.snippet}</p>
-                            </div>
-                            <div class="flex justify-between items-center mt-3">
-                                <p class="text-xs text-gray-400">${item.source}</p>
-                                <p class="text-xs text-gray-400">${new Date(item.pubDate).toLocaleDateString('id-ID')}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('') : `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 p-4 glass-card rounded-xl">Gak ada berita, bro!</p>`;
-
-                loadMoreBtn.style.display = items.length > newsPage * newsPerPage ? 'block' : 'none';
-            };
-
-            const showNewsDetails = (item) => {
-                const modal = document.getElementById('modal');
-                const modalTitle = document.getElementById('modal-title');
-                const modalContent = document.getElementById('modal-content');
-                modalTitle.textContent = item.title;
-                modalContent.innerHTML = `
-                <div class="space-y-4">
-                    <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-48 object-cover rounded-lg">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs font-semibold text-[var(--primary)] bg-[var(--primary)]/10 px-2 py-1 rounded">${item.category}</span>
-                        <p class="text-xs text-gray-400">${new Date(item.pubDate).toLocaleDateString('id-ID')}</p>
-                    </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">${item.description || item.content || item.snippet}</p>
-                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="inline-block px-4 py-2 bg-gradient-to-r from-[var(--primary)] to-[var(--primary-dark)] text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Baca selengkapnya di ${item.source}">Baca di ${item.source}</a>
-                </div>
-            `;
-                modal.style.display = 'flex';
-                modal.setAttribute('aria-modal', 'true');
-                modal.setAttribute('role', 'dialog');
-            };
-
-            document.getElementById('news-search').addEventListener('input', debounce(e => {
-                currentFilter.query = e.target.value.toLowerCase();
-                newsPage = 1; // Reset page on search
-                filterAndRenderNews();
-            }, 300));
-
-            document.getElementById('news-source-filter').addEventListener('change', e => {
-                currentFilter.source = e.target.value;
-                newsPage = 1; // Reset page on filter change
-                filterAndRenderNews();
-            });
-
-            document.getElementById('news-category-filter').addEventListener('change', e => {
-                currentFilter.category = e.target.value;
-                newsPage = 1; // Reset page on filter change
-                filterAndRenderNews();
-            });
-
-            loadMoreBtn.addEventListener('click', () => {
-                newsPage++;
-                filterAndRenderNews();
-            });
-
-            document.getElementById('news-grid').addEventListener('click', e => {
-                const card = e.target.closest('[data-news-id]');
-                if (card) {
-                    const newsItem = allNews.find(item => item.link === card.dataset.newsId);
-                    if (newsItem) showNewsDetails(newsItem);
-                }
-            });
-
-            fetchAllNews();
-        }
-
-        function renderQuiz(container) {
-            let currentQuestionIndex = 0;
-            let score = 0;
-            let quizQuestions = [...fullQuizBank].sort(() => 0.5 - Math.random()).slice(0, 5); // 5 random questions
-
-            const renderQuestion = () => {
-                if (currentQuestionIndex >= quizQuestions.length) {
-                    container.innerHTML = `
-                    <div class="glass-card p-6 rounded-xl text-center">
-                        <h3 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Kuis Selesai!</h3>
-                        <p class="text-xl mb-4">Skor kamu: <span class="font-bold text-[var(--primary)]">${score} / ${quizQuestions.length}</span></p>
-                        <button id="restart-quiz" class="px-6 py-3 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Mulai lagi kuis">Mulai Lagi</button>
-                    </div>
-                `;
-                    document.getElementById('restart-quiz').addEventListener('click', () => {
-                        currentQuestionIndex = 0;
-                        score = 0;
-                        quizQuestions = [...fullQuizBank].sort(() => 0.5 - Math.random()).slice(0, 5);
-                        renderQuestion();
-                    });
-                    return;
-                }
-
-                const question = quizQuestions[currentQuestionIndex];
-                const shuffledOptions = [...question.o].sort(() => 0.5 - Math.random());
-
-                container.innerHTML = `
-                <div class="glass-card p-6 rounded-xl">
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Pertanyaan ${currentQuestionIndex + 1} dari ${quizQuestions.length}</p>
-                    <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">${question.q}</h3>
-                    <div id="options-container" class="space-y-3" role="radiogroup" aria-label="Pilihan jawaban">
-                        ${shuffledOptions.map((option, index) => `
-                            <button class="quiz-option w-full p-3 bg-slate-50 dark:bg-slate-800 rounded-lg text-left border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" data-answer="${option}" role="radio" aria-checked="false" tabindex="0">${option}</button>
-                        `).join('')}
-                    </div>
-                    <p id="quiz-feedback" class="text-center mt-4 h-6 text-sm font-semibold" aria-live="polite"></p>
-                </div>
-            `;
-
-                document.querySelectorAll('.quiz-option').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const selectedAnswer = this.dataset.answer;
-                        const feedbackEl = document.getElementById('quiz-feedback');
-
-                        document.querySelectorAll('.quiz-option').forEach(btn => {
-                            btn.disabled = true; // Disable all options
-                            btn.setAttribute('aria-checked', 'false');
-                        });
-                        this.setAttribute('aria-checked', 'true');
-
-                        if (selectedAnswer === question.a) {
-                            score++;
-                            this.classList.add('bg-green-500', 'text-white', 'border-green-600', 'correct'); // Add 'correct' class
-                            feedbackEl.textContent = 'Bener banget! GGWP!';
-                            feedbackEl.classList.remove('text-red-500');
-                            feedbackEl.classList.add('text-green-500');
-                            triggerConfetti();
-                        } else {
-                            this.classList.add('bg-red-500', 'text-white', 'border-red-600', 'incorrect'); // Add 'incorrect' class
-                            const correctAnswerButton = document.querySelector(`.quiz-option[data-answer="${question.a}"]`);
-                            if (correctAnswerButton) {
-                                correctAnswerButton.classList.add('bg-green-500', 'text-white', 'border-green-600', 'correct');
-                            }
-                            feedbackEl.textContent = `Salah, bro! Jawabannya: ${question.a}`;
-                            feedbackEl.classList.remove('text-green-500');
-                            feedbackEl.classList.add('text-red-500');
-                        }
-
-                        setTimeout(() => {
-                            currentQuestionIndex++;
-                            renderQuestion();
-                        }, 1500); // Next question after 1.5 seconds
-                    });
-                });
-            };
-
-            renderQuestion();
-        }
-
-        function renderTools(container) {
-            container.innerHTML = `
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-card p-6 rounded-xl">
-                    <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Kalkulator Profit</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label for="initial-investment" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Modal Awal ($)</label>
-                            <input type="number" id="initial-investment" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" value="1000" min="0" aria-label="Modal Awal">
-                        </div>
-                        <div>
-                            <label for="buy-price" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Harga Beli Coin ($)</label>
-                            <input type="number" id="buy-price" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" value="1" min="0.00000001" step="any" aria-label="Harga Beli Coin">
-                        </div>
-                        <div>
-                            <label for="sell-price" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Harga Jual Coin ($)</label>
-                            <input type="number" id="sell-price" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" value="1.5" min="0.00000001" step="any" aria-label="Harga Jual Coin">
-                        </div>
-                        <button id="calculate-profit" class="w-full px-4 py-2 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Hitung Profit">Hitung Profit</button>
-                        <p id="profit-result" class="text-center font-bold text-lg mt-4" aria-live="polite"></p>
-                    </div>
-                </div>
-
-                <div class="glass-card p-6 rounded-xl">
-                    <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Konverter Mata Uang</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label for="convert-amount" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Jumlah</label>
-                            <input type="number" id="convert-amount" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" value="1" min="0" aria-label="Jumlah untuk konversi">
-                        </div>
-                        <div>
-                            <label for="from-currency" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Dari</label>
-                            <select id="from-currency" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" aria-label="Mata uang asal">
-                                <option value="usd">USD</option>
-                                <option value="idr">IDR</option>
-                                <option value="btc">BTC</option>
-                                <option value="eth">ETH</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="to-currency" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Ke</label>
-                            <select id="to-currency" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" aria-label="Mata uang tujuan">
-                                <option value="idr">IDR</option>
-                                <option value="usd">USD</option>
-                                <option value="btc">BTC</option>
-                                <option value="eth">ETH</option>
-                            </select>
-                        </div>
-                        <button id="convert-currency" class="w-full px-4 py-2 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Konversi mata uang">Konversi</button>
-                        <p id="conversion-result" class="text-center font-bold text-lg mt-4" aria-live="polite"></p>
-                    </div>
-                </div>
-            </div>
-        `;
-
-            // Profit Calculator Logic
-            document.getElementById('calculate-profit').addEventListener('click', () => {
-                const initialInvestment = parseFloat(document.getElementById('initial-investment').value);
-                const buyPrice = parseFloat(document.getElementById('buy-price').value);
-                const sellPrice = parseFloat(document.getElementById('sell-price').value);
-                const profitResultEl = document.getElementById('profit-result');
-
-                if (isNaN(initialInvestment) || initialInvestment <= 0 || isNaN(buyPrice) || buyPrice <= 0 || isNaN(sellPrice) || sellPrice <= 0) {
-                    profitResultEl.textContent = 'Input tidak valid! Pastikan semua nilai adalah angka positif.';
-                    profitResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
-                    return;
-                }
-
-                const numCoins = initialInvestment / buyPrice;
-                const finalValue = numCoins * sellPrice;
-                const profit = finalValue - initialInvestment;
-                const percentageProfit = (profit / initialInvestment) * 100;
-
-                let resultText = `Jumlah Coin: ${numCoins.toFixed(8)}<br>Nilai Akhir: $${finalValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-                if (profit >= 0) {
-                    resultText += `<br>Profit: $${profit.toLocaleString(undefined, { minimumFractionDigits: 2 })} (+${percentageProfit.toFixed(2)}%)`;
-                    profitResultEl.className = 'text-center font-bold text-lg mt-4 text-green-500';
-                } else {
-                    resultText += `<br>Loss: $${profit.toLocaleString(undefined, { minimumFractionDigits: 2 })} (${percentageProfit.toFixed(2)}%)`;
-                    profitResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
-                }
-                profitResultEl.innerHTML = resultText;
-            });
-
-            // Currency Converter Logic
-            document.getElementById('convert-currency').addEventListener('click', async () => {
-                const amount = parseFloat(document.getElementById('convert-amount').value);
-                const fromCurrency = document.getElementById('from-currency').value.toLowerCase();
-                const toCurrency = document.getElementById('to-currency').value.toLowerCase();
-                const conversionResultEl = document.getElementById('conversion-result');
-
-                if (isNaN(amount) || amount <= 0) {
-                    conversionResultEl.textContent = 'Jumlah tidak valid! Harap masukkan angka positif.';
-                    conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
-                    return;
-                }
-                if (fromCurrency === toCurrency) {
-                    conversionResultEl.textContent = `${amount.toLocaleString()} ${fromCurrency.toUpperCase()} = ${amount.toLocaleString()} ${toCurrency.toUpperCase()}`;
-                    conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-slate-700 dark:text-slate-300';
-                    return;
-                }
-
-                conversionResultEl.textContent = 'Mengkonversi...';
-                conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-slate-500';
-
-                try {
-                    // CoinGecko uses 'indonesian-rupiah' as ID for IDR
-                    const currencyMapping = {
-                        'idr': 'indonesian-rupiah',
-                        'usd': 'usd', // This is just for completeness, not a real ID on /simple/price usually
-                        'btc': 'bitcoin',
-                        'eth': 'ethereum'
-                    };
-
-                    const fromId = currencyMapping[fromCurrency] || fromCurrency;
-                    const toId = currencyMapping[toCurrency] || toCurrency;
-
-                    // Fetch all needed rates in one go, including 'usd' itself
-                    const idsToFetch = new Set([fromId, toId, 'usd', 'bitcoin', 'ethereum', 'indonesian-rupiah']);
-                    const idsQuery = Array.from(idsToFetch).join(',');
-
-                    const cacheKey = `conversion_rates_${idsQuery}`;
-                    const cached = localStorage.getItem(cacheKey);
-                    let conversionData = null;
-                    let cacheTimestamp = 0;
-
-                    if (cached) {
-                        const parsedCache = JSON.parse(cached);
-                        conversionData = parsedCache.data;
-                        cacheTimestamp = parsedCache.timestamp;
-                        if (Date.now() - cacheTimestamp < 300000) { // Cache conversion rates for 5 minutes
-                            // Use cached data
-                        } else {
-                            conversionData = null; // Expired, refetch
-                        }
-                    }
-
-                    if (!conversionData) {
-                        const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${idsQuery}&vs_currencies=usd`);
-                        if (!response.ok) {
-                            if (cached && Date.now() - cacheTimestamp < 3600000) { // Cache up to 1 hour if API fails
-                                console.warn("Conversion API failed, falling back to expired cache for conversion:", response.statusText);
-                                conversionData = JSON.parse(cached).data;
-                            } else {
-                                throw new Error('Gagal mengambil data nilai tukar. Coba cek koneksi internetmu!');
-                            }
-                        } else {
-                            conversionData = await response.json();
-                            localStorage.setItem(cacheKey, JSON.stringify({ data: conversionData, timestamp: Date.now() }));
-                        }
-                    }
-
-                    if (!conversionData) {
-                        conversionResultEl.textContent = 'Gagal mengambil data nilai tukar. Coba lagi nanti.';
-                        conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
-                        return;
-                    }
-
-                    // Get rates from fetched data. Handle 'usd' as base currency if needed.
-                    let fromUsdRate = 1;
-                    if (fromCurrency !== 'usd') {
-                        fromUsdRate = conversionData[fromId]?.usd;
-                    }
-
-                    let toUsdRate = 1;
-                    if (toCurrency !== 'usd') {
-                        toUsdRate = conversionData[toId]?.usd;
-                    }
-
-                    if (fromUsdRate === undefined || toUsdRate === undefined || fromUsdRate === null || toUsdRate === null) {
-                        // Check if value is explicitly null or undefined, indicating data not found for that currency
-                        conversionResultEl.textContent = 'Tidak dapat menemukan nilai tukar untuk salah satu mata uang yang dipilih. Data mungkin tidak tersedia.';
-                        conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
-                        return;
-                    }
-
-                    const result = (amount * fromUsdRate) / toUsdRate;
-                    conversionResultEl.textContent = `${amount.toLocaleString()} ${fromCurrency.toUpperCase()} = ${result.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 8 })} ${toCurrency.toUpperCase()}`;
-                    conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-[var(--primary)]';
-
-                } catch (error) {
-                    console.error("Conversion error:", error);
-                    conversionResultEl.textContent = `Gagal melakukan konversi. ${error.message}.`;
-                    conversionResultEl.className = 'text-center font-bold text-lg mt-4 text-red-500';
-                }
-            });
-        }
-
-        // --- PORTOFOLIO (DUMMY/LOCALSTORAGE) ---
-        let portfolio = JSON.parse(localStorage.getItem('cryptoPortfolio')) || [];
-
-        function savePortfolio() {
-            localStorage.setItem('cryptoPortfolio', JSON.stringify(portfolio));
-        }
-
-        async function renderPortfolio(container) {
-            container.innerHTML = `
-            <div class="glass-card p-6 rounded-xl mb-6">
-                <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Tambah Aset Baru</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div>
-                        <label for="asset-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Nama Aset</label>
-                        <input type="text" id="asset-name" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" placeholder="Bitcoin / BTC" aria-label="Nama aset kripto">
-                    </div>
-                    <div>
-                        <label for="asset-amount" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Jumlah</label>
-                        <input type="number" id="asset-amount" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" min="0.00000001" step="any" value="0" aria-label="Jumlah aset yang dibeli">
-                    </div>
-                    <div>
-                        <label for="asset-buy-price" class="block text-sm font-medium text-slate-700 dark:text-slate-300">Harga Beli ($)</label>
-                        <input type="number" id="asset-buy-price" class="mt-1 block w-full p-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md focus:ring-[var(--primary)] focus:border-[var(--primary)]" min="0.00000001" step="any" value="0" aria-label="Harga beli aset per unit">
-                    </div>
-                </div>
-                <button id="add-asset" class="w-full px-4 py-2 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow" aria-label="Tambah aset ke portofolio">Tambah Aset</button>
-                <p id="portfolio-add-feedback" class="text-center mt-2 text-sm" aria-live="polite"></p>
-            </div>
-
-            <div class="glass-card p-6 rounded-xl">
-                <h3 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r mb-4">Ringkasan Portofolio</h3>
-                <div id="portfolio-summary" class="mb-4 space-y-2">
-                    <p>Total Modal: <span id="total-invested" class="font-bold"></span></p>
-                    <p>Nilai Sekarang: <span id="current-value" class="font-bold"></span></p>
-                    <p>Profit/Loss: <span id="overall-profit" class="font-bold"></span></p>
-                    <p>Persentase P/L: <span id="overall-percentage" class="font-bold"></span></p>
-                </div>
-                <div id="portfolio-list" class="space-y-4">
-                    </div>
-                <button id="clear-portfolio" class="w-full px-4 py-2 mt-4 bg-red-500 text-white rounded-lg hover:bg-red-600" aria-label="Bersihkan semua aset dari portofolio">Bersihkan Portofolio</button>
-            </div>
-        `;
-
-            const updatePortfolioSummary = async () => {
-                let totalInvested = 0;
-                let currentValue = 0;
-                const assetIds = portfolio.map(asset => asset.id).join(',');
-
-                // Fetch current prices for all assets in portfolio
-                let currentPrices = {};
-                if (assetIds) {
-                    try {
-                        const cacheKey = `portfolio_prices_${assetIds}`;
-                        const cached = localStorage.getItem(cacheKey);
-                        let fetchedPrices = null;
-                        let cacheTimestamp = 0;
-
-                        if (cached) {
-                            const parsedCache = JSON.parse(cached);
-                            fetchedPrices = parsedCache.data;
-                            cacheTimestamp = parsedCache.timestamp;
-                            if (Date.now() - cacheTimestamp < 120000) { // Cache prices for 2 minutes
-                                // Use cached data
-                            } else {
-                                fetchedPrices = null; // Expired, refetch
-                            }
-                        }
-
-                        if (!fetchedPrices) {
-                            const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${assetIds}&vs_currencies=usd`);
-                            if (!response.ok) {
-                                if (cached && Date.now() - cacheTimestamp < 3600000) { // Cache up to 1 hour if API fails
-                                    console.warn("Portfolio prices API failed, falling back to expired cache:", response.statusText);
-                                    fetchedPrices = JSON.parse(cached).data;
-                                } else {
-                                    throw new Error('Gagal mengambil harga aset portofolio. Coba cek koneksi internetmu!');
-                                }
-                            } else {
-                                fetchedPrices = await response.json();
-                                localStorage.setItem(cacheKey, JSON.stringify({ data: fetchedPrices, timestamp: Date.now() }));
-                            }
-                        }
-                        currentPrices = fetchedPrices;
-
-                    } catch (error) {
-                        console.error("Error fetching current prices for portfolio:", error);
-                        // Fallback: If API fails or cache not available, current price will be 0 for affected assets
-                    }
-                }
-
-                const portfolioListEl = document.getElementById('portfolio-list');
-                portfolioListEl.innerHTML = ''; // Clear existing list
-
-                if (portfolio.length === 0) {
-                    portfolioListEl.innerHTML = `<p class="text-center text-gray-500 dark:text-gray-400">Portofolio kamu masih kosong, yuk tambah aset!</p>`;
-                }
-
-                portfolio.forEach(asset => {
-                    const currentPrice = currentPrices[asset.id]?.usd || 0; // Use fetched price, default to 0 if not found
-                    const assetCurrentValue = asset.amount * currentPrice;
-                    const profitLoss = assetCurrentValue - (asset.amount * asset.buyPrice);
-                    const percentageChange = (profitLoss / (asset.amount * asset.buyPrice || 1)) * 100;
-
-                    totalInvested += (asset.amount * asset.buyPrice);
-                    currentValue += assetCurrentValue;
-
-                    const profitLossClass = profitLoss >= 0 ? 'text-green-500' : 'text-red-500';
-
-                    portfolioListEl.innerHTML += `
-                    <div class="glass-card p-4 rounded-lg flex items-center justify-between">
-                        <div>
-                            <h4 class="font-semibold text-[var(--primary)]">${asset.name.toUpperCase()} (${asset.symbol.toUpperCase()})</h4>
-                            <p class="text-sm text-slate-600 dark:text-slate-300">Jumlah: ${asset.amount.toLocaleString(undefined, { maximumFractionDigits: 8 })}</p>
-                            <p class="text-sm text-slate-600 dark:text-slate-300">Harga Beli: $${asset.buyPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
-                            <p class="text-sm text-slate-600 dark:text-slate-300">Harga Sekarang: $${currentPrice.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
-                            <p class="text-sm ${profitLossClass}">P/L: $${profitLoss.toLocaleString(undefined, { minimumFractionDigits: 2 })} (${percentageChange.toFixed(2)}%)</p>
-                        </div>
-                        <button class="remove-asset-btn px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600" data-id="${asset.id}" aria-label="Hapus aset ${asset.name} dari portofolio">Hapus</button>
-                    </div>
-                `;
-                });
-
-                const overallProfit = currentValue - totalInvested;
-                const overallPercentage = (overallProfit / (totalInvested || 1)) * 100;
-                const overallProfitClass = overallProfit >= 0 ? 'text-green-500' : 'text-red-500';
-
-                document.getElementById('total-invested').textContent = `$${totalInvested.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-                document.getElementById('current-value').textContent = `$${currentValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-                document.getElementById('overall-profit').innerHTML = `<span class="${overallProfitClass}">$${overallProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>`;
-                document.getElementById('overall-percentage').innerHTML = `<span class="${overallProfitClass}">${overallPercentage.toFixed(2)}%</span>`;
-
-                // Add event listeners for remove buttons
-                document.querySelectorAll('.remove-asset-btn').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const assetIdToRemove = this.dataset.id;
-                        portfolio = portfolio.filter(asset => asset.id !== assetIdToRemove);
-                        savePortfolio();
-                        updatePortfolioSummary();
-                    });
-                });
-            };
-
-            document.getElementById('add-asset').addEventListener('click', async () => {
-                const assetNameInput = document.getElementById('asset-name');
-                const assetAmountInput = document.getElementById('asset-amount');
-                const assetBuyPriceInput = document.getElementById('asset-buy-price');
-                const feedbackEl = document.getElementById('portfolio-add-feedback');
-
-                const name = assetNameInput.value.trim();
-                const amount = parseFloat(assetAmountInput.value);
-                const buyPrice = parseFloat(assetBuyPriceInput.value);
-
-                if (!name || isNaN(amount) || amount <= 0 || isNaN(buyPrice) || buyPrice <= 0) {
-                    feedbackEl.textContent = 'Harap isi semua kolom dengan angka yang valid dan positif.';
-                    feedbackEl.className = 'text-red-500';
-                    return;
-                }
-
-                feedbackEl.textContent = 'Mencari aset...';
-                feedbackEl.className = 'text-slate-500 dark:text-slate-400';
-
-                try {
-                    const searchResponse = await fetch(`https://api.coingecko.com/api/v3/search?query=${name}`);
-                    if (!searchResponse.ok) throw new Error('API pencarian gagal');
-                    const searchData = await searchResponse.json();
-
-                    if (!searchData.coins || searchData.coins.length === 0) {
-                        feedbackEl.textContent = 'Aset tidak ditemukan di CoinGecko. Coba nama lain atau periksa ejaan.';
-                        feedbackEl.className = 'text-red-500';
-                        return;
-                    }
-
-                    const foundCoin = searchData.coins[0]; // Take the first result
-                    const existingAsset = portfolio.find(a => a.id === foundCoin.id);
-
-                    if (existingAsset) {
-                        // Update existing asset
-                        // Calculate new weighted average buy price
-                        const totalOldCost = existingAsset.amount * existingAsset.buyPrice;
-                        const totalNewCost = amount * buyPrice;
-                        const newTotalAmount = existingAsset.amount + amount;
-                        existingAsset.buyPrice = (totalOldCost + totalNewCost) / newTotalAmount;
-                        existingAsset.amount = newTotalAmount; // Update the amount
-                        feedbackEl.textContent = `${foundCoin.name} berhasil diupdate di portofolio!`;
-                        feedbackEl.className = 'text-green-500';
+        const getAiSummary = async (text) => {
+            const prompt = `Ringkas artikel berita berikut dalam 3-4 poin utama menggunakan bahasa Indonesia yang santai dan mudah dimengerti. Fokus pada informasi paling penting yang relevan untuk investor atau peminat kripto. Berikut artikelnya:\n\n---\n\n${text}`;
+             try {
+                 let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                 const payload = { contents: chatHistory };
+                 const apiUrl = config.gemini.apiUrl(config.gemini.apiKey);
+                 const response = await fetch(apiUrl, {
+                     method: 'POST',
+                     headers: { 'Content-Type': 'application/json' },
+                     body: JSON.stringify(payload)
+                 });
+
+                 if (!response.ok) {
+                     const errorBody = await response.text();
+                     console.error("Gemini API Error:", response.status, errorBody);
+                     throw new Error(`AI Gagal merangkum, status: ${response.status}`);
+                 }
+
+                 const result = await response.json();
+                 
+                 if (result.candidates && result.candidates.length > 0 && result.candidates[0].content.parts.length > 0) {
+                     return result.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
+                 } else {
+                     console.error("Struktur respons API Gemini tidak terduga:", result);
+                     throw new Error("Format respons AI tidak valid.");
+                 }
+             } catch (error) {
+                 console.error("Gagal fetch ke Gemini:", error);
+                 return `<p class="text-red-500">Maaf, AI sedang istirahat. Gagal merangkum berita. ${error.message}</p>`;
+             }
+        };
+
+        // --- FIREBASE & AUTHENTICATION ---
+        const initAuth = async () => {
+            state.auth = state.firebase.getAuth(state.firebase.app);
+            state.db = state.firebase.getFirestore(state.firebase.app);
+
+            return new Promise((resolve) => {
+                state.firebase.onAuthStateChanged(state.auth, async (user) => {
+                    if (user) {
+                        state.userId = user.uid;
+                        $('#user-id-display').textContent = state.userId;
+                        state.isAuthReady = true;
+                        resolve(user);
                     } else {
-                        // Add new asset
-                        portfolio.push({
-                            id: foundCoin.id,
-                            name: foundCoin.name,
-                            symbol: foundCoin.symbol,
-                            amount: amount,
-                            buyPrice: buyPrice
-                        });
-                        feedbackEl.textContent = `${foundCoin.name} berhasil ditambahkan ke portofolio!`;
-                        feedbackEl.className = 'text-green-500';
+                        try {
+                            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                                await state.firebase.signInWithCustomToken(state.auth, __initial_auth_token);
+                            } else {
+                                await state.firebase.signInAnonymously(state.auth);
+                            }
+                        } catch (error) {
+                            console.error("Gagal login anonim:", error);
+                            state.userId = 'offline-' + Date.now();
+                            $('#user-id-display').textContent = 'Offline Mode';
+                            state.isAuthReady = true;
+                            resolve(null);
+                        }
                     }
-
-                    savePortfolio();
-                    updatePortfolioSummary();
-                    assetNameInput.value = '';
-                    assetAmountInput.value = '0';
-                    assetBuyPriceInput.value = '0';
-
-                } catch (error) {
-                    console.error("Error adding asset:", error);
-                    feedbackEl.textContent = `Gagal menambahkan aset. ${error.message}. Coba lagi!`;
-                    feedbackEl.className = 'text-red-500';
-                }
+                });
             });
+        };
 
-            document.getElementById('clear-portfolio').addEventListener('click', () => {
-                if (confirm('Yakin mau bersihin portofolio? Data kamu bakal ilang loh!')) {
-                    portfolio = [];
-                    savePortfolio();
-                    updatePortfolioSummary();
-                    document.getElementById('portfolio-add-feedback').textContent = 'Portofolio sudah bersih.';
-                    document.getElementById('portfolio-add-feedback').className = 'text-green-500';
-                }
-            });
-
-            updatePortfolioSummary(); // Initial load
+        // --- CHARTING FUNCTIONS ---
+        const destroyChart = (chartId) => {
+            if (state.activeCharts[chartId]) {
+                state.activeCharts[chartId].destroy();
+                delete state.activeCharts[chartId];
+            }
+        };
+        
+        // --- PAGE RENDER FUNCTIONS ---
+        
+        async function renderDashboard() {
+            const contentEl = $('#page-content');
+            contentEl.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-6 gap-6">
+                    <div class="lg:col-span-4 space-y-6">
+                         <div class="glass-card-pro p-4 md:p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold mb-4">Live Market</h3>
+                            <div id="price-table-container" class="overflow-x-auto"></div>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-2 space-y-6">
+                        <div id="fear-greed-widget" class="glass-card-pro p-6 rounded-2xl flex flex-col justify-center items-center h-48"></div>
+                        <div id="watchlist-widget" class="glass-card-pro p-6 rounded-2xl h-48"></div>
+                    </div>
+                </div>`;
+            
+            renderPriceTable();
+            renderFearGreed();
+            $('#watchlist-widget').innerHTML = `<h3 class="text-xl font-bold mb-4">Watchlist</h3><p class="text-slate-500 text-sm">Fitur watchlist akan segera hadir untuk memantau koin favoritmu!</p>`;
         }
-        // --- CORE APP LOGIC ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const passwordOverlay = document.getElementById('password-overlay');
-            const passwordInput = document.getElementById('password-input');
-            const passwordError = document.getElementById('password-error');
-            const passwordForm = document.getElementById('password-form');
-            const appContainer = document.getElementById('app-container');
+        
+        async function renderPriceTable() {
+            const container = $('#price-table-container');
+            container.innerHTML = `<div class="w-full h-96 skeleton-loader"></div>`;
+            const coins = await apiFetch(`${config.api.coingecko}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false`, 'market_data', 2);
+            if (!coins) {
+                container.innerHTML = `<p class="text-red-500">Gagal memuat data pasar.</p>`;
+                return;
+            }
+            container.innerHTML = `
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="border-b border-slate-200 dark:border-slate-800">
+                            <th class="p-2">#</th>
+                            <th class="p-2">Coin</th>
+                            <th class="p-2 text-right">Price</th>
+                            <th class="p-2 text-right">24h %</th>
+                            <th class="p-2 text-right hidden md:table-cell">Market Cap</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${coins.map(coin => `
+                            <tr class="hover:bg-slate-100/50 dark:hover:bg-slate-800/50 cursor-pointer" data-coin-id="${coin.id}">
+                                <td class="p-2">${coin.market_cap_rank}</td>
+                                <td class="p-2 flex items-center gap-3">
+                                    <img src="${coin.image}" class="w-6 h-6 rounded-full" alt="${coin.name}" loading="lazy" onerror="this.src='https://placehold.co/32x32/1e293b/ffffff?text=${coin.symbol.charAt(0).toUpperCase()}'">
+                                    <div>
+                                        <div class="font-semibold">${coin.name}</div>
+                                        <div class="text-xs text-slate-500">${coin.symbol.toUpperCase()}</div>
+                                    </div>
+                                </td>
+                                <td class="p-2 text-right font-semibold">$${coin.current_price.toLocaleString('en-US')}</td>
+                                <td class="p-2 text-right font-semibold ${coin.price_change_percentage_24h >= 0 ? 'price-up' : 'price-down'}">
+                                    ${coin.price_change_percentage_24h ? coin.price_change_percentage_24h.toFixed(2) : 'N/A'}%
+                                </td>
+                                <td class="p-2 text-right hidden md:table-cell">$${coin.market_cap.toLocaleString('en-US')}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>`;
+            $$('#price-table-container tr[data-coin-id]').forEach(row => {
+                row.addEventListener('click', () => showCoinDetails(row.dataset.coinId));
+            });
+        }
+        
+        async function renderFearGreed() {
+            const container = $('#fear-greed-widget');
+            container.innerHTML = `<div class="w-full h-full skeleton-loader"></div>`;
+            const fngData = await apiFetch(config.api.fearAndGreed, 'fng_data', 60);
+            if (!fngData || !fngData.data[0]) {
+                container.innerHTML = `<p class="text-red-500">Gagal memuat F&G Index.</p>`; return;
+            }
+            const { value, value_classification } = fngData.data[0];
+            const color = value > 50 ? 'text-green-500' : 'text-red-500';
+            container.innerHTML = `
+                <h3 class="text-xl font-bold mb-2">Fear & Greed Index</h3>
+                <p class="text-6xl font-extrabold ${color}">${value}</p>
+                <p class="text-xl font-semibold ${color}">${value_classification}</p>
+                <p class="text-xs text-slate-500 mt-2">Data dari alternative.me</p>`;
+        }
+        
+        async function showCoinDetails(coinId) {
+            openModal('Loading Details...', `<div class="h-96 skeleton-loader"></div>`);
+            const coin = await apiFetch(`${config.api.coingecko}/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`, `coin_${coinId}`, 5);
+            if(!coin) {
+                openModal('Error', `<p class="text-red-500">Gagal memuat detail koin.</p>`); return;
+            }
+            const chartData = await apiFetch(`${config.api.coingecko}/coins/${coinId}/market_chart?vs_currency=usd&days=7`, `chart_${coinId}`, 30);
+            
+            const title = `
+                <div class="flex items-center gap-3">
+                    <img src="${coin.image.small}" class="w-8 h-8 rounded-full" alt="${coin.name}">
+                    <span>${coin.name} <span class="text-slate-500">${coin.symbol.toUpperCase()}</span></span>
+                </div>`;
+                
+            let content = `
+                <div class="h-48 mb-4"><canvas id="coin-detail-chart"></canvas></div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                    <div class="glass-card-pro p-3 rounded-lg">
+                        <p class="text-xs text-slate-500">Harga</p>
+                        <p class="font-semibold text-lg">$${coin.market_data.current_price.usd.toLocaleString('en-US')}</p>
+                    </div>
+                    <div class="glass-card-pro p-3 rounded-lg">
+                        <p class="text-xs text-slate-500">Market Cap</p>
+                        <p class="font-semibold text-lg">$${coin.market_data.market_cap.usd.toLocaleString('en-US')}</p>
+                    </div>
+                    <div class="glass-card-pro p-3 rounded-lg">
+                        <p class="text-xs text-slate-500">24h Volume</p>
+                        <p class="font-semibold text-lg">$${coin.market_data.total_volume.usd.toLocaleString('en-US')}</p>
+                    </div>
+                    <div class="glass-card-pro p-3 rounded-lg">
+                        <p class="text-xs text-slate-500">24h Change</p>
+                        <p class="font-semibold text-lg ${coin.market_data.price_change_percentage_24h >= 0 ? 'price-up' : 'price-down'}">${coin.market_data.price_change_percentage_24h.toFixed(2)}%</p>
+                    </div>
+                    <div class="glass-card-pro p-3 rounded-lg">
+                        <p class="text-xs text-slate-500">Circulating Supply</p>
+                        <p class="font-semibold text-lg">${coin.market_data.circulating_supply.toLocaleString('en-US')}</p>
+                    </div>
+                    <div class="glass-card-pro p-3 rounded-lg">
+                        <p class="text-xs text-slate-500">All-Time High</p>
+                        <p class="font-semibold text-lg">$${coin.market_data.ath.usd.toLocaleString('en-US')}</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h4 class="font-bold mb-2">Tentang ${coin.name}</h4>
+                    <p class="text-sm text-slate-400 line-clamp-4">${coin.description.en || 'Tidak ada deskripsi.'}</p>
+                </div>`;
+            
+            openModal(title, content);
 
+            if(chartData?.prices) {
+                const labels = chartData.prices.map(p => p[0]);
+                const data = chartData.prices.map(p => p[1]);
+                const borderColor = data[0] <= data[data.length - 1] ? 'rgba(34, 197, 94, 1)' : 'rgba(239, 68, 68, 1)';
+                const bgColor = data[0] <= data[data.length - 1] ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+                
+                destroyChart('coin-detail-chart');
+                const ctx = document.getElementById('coin-detail-chart')?.getContext('2d');
+                if(ctx) {
+                    state.activeCharts['coin-detail-chart'] = new Chart(ctx, {
+                        type: 'line', data: { labels: labels, datasets: [{ label: 'Harga (USD)', data: data, borderColor: borderColor, backgroundColor: bgColor, borderWidth: 2, pointRadius: 0, fill: true }] },
+                        options: {
+                            responsive: true, maintainAspectRatio: false,
+                            scales: {
+                                x: { type: 'time', time: { unit: 'day' }, ticks: { color: '#94a3b8' } },
+                                y: { ticks: { callback: value => '$' + value.toLocaleString(), color: '#94a3b8' } }
+                            },
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+                }
+            }
+        }
+        
+        // --- PORTFOLIO FUNCTIONS (Cloud-based with Firebase) ---
+        function renderPortfolio() {
+            const contentEl = $('#page-content');
+            if(!state.isAuthReady) {
+                contentEl.innerHTML = `<div class="text-center p-8 glass-card-pro rounded-2xl"><p>Menghubungkan ke Firebase...</p></div>`; return;
+            }
+            contentEl.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-6">
+                        <div id="portfolio-summary-card" class="glass-card-pro p-6 rounded-2xl"></div>
+                        <div id="portfolio-list-card" class="glass-card-pro p-6 rounded-2xl">
+                             <h3 class="text-xl font-bold mb-4">Aset Saya</h3>
+                             <div id="portfolio-list" class="space-y-4"></div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                         <div id="add-asset-card" class="glass-card-pro p-6 rounded-2xl">
+                            <h3 class="text-xl font-bold mb-4">Tambah Aset</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="asset-name" class="text-sm font-medium">Nama Aset (e.g., Bitcoin)</label>
+                                    <input type="text" id="asset-name" class="mt-1 block w-full p-2 input-pro rounded-md" >
+                                </div>
+                                <div>
+                                    <label for="asset-amount" class="text-sm font-medium">Jumlah</label>
+                                    <input type="number" id="asset-amount" class="mt-1 block w-full p-2 input-pro rounded-md" min="0">
+                                </div>
+                                <div>
+                                    <label for="asset-buy-price" class="text-sm font-medium">Harga Beli per Koin ($)</label>
+                                    <input type="number" id="asset-buy-price" class="mt-1 block w-full p-2 input-pro rounded-md" min="0">
+                                </div>
+                                <button id="add-asset-btn" class="w-full btn-pro text-white font-semibold py-2 rounded-lg">Tambah Aset</button>
+                            </div>
+                        </div>
+                        <button id="clear-portfolio-btn" class="w-full bg-red-500/20 text-red-500 font-semibold py-2 rounded-lg hover:bg-red-600 hover:text-white transition-colors">Kosongkan Portofolio</button>
+                    </div>
+                </div>`;
+            
+            listenToPortfolio();
+            $('#add-asset-btn').addEventListener('click', handleAddAsset);
+            $('#clear-portfolio-btn').addEventListener('click', handleClearPortfolio);
+        }
+
+        function listenToPortfolio() {
+            if (state.portfolioListener) state.portfolioListener(); 
+            
+            const portfolioPath = `artifacts/${config.appId}/users/${state.userId}/portfolio`;
+            const q = state.firebase.query(state.firebase.collection(state.db, portfolioPath));
+            
+            $('#portfolio-list').innerHTML = `<div class="h-40 skeleton-loader"></div>`;
+
+            state.portfolioListener = state.firebase.onSnapshot(q, async (querySnapshot) => {
+                const portfolio = [];
+                querySnapshot.forEach((doc) => {
+                    portfolio.push({ firestoreId: doc.id, ...doc.data() });
+                });
+                await updatePortfolioView(portfolio);
+            }, (error) => {
+                console.error("Firestore snapshot error:", error);
+                $('#portfolio-list').innerHTML = `<p class="text-red-500">Gagal memuat portofolio. Coba refresh.</p>`;
+            });
+        }
+
+        async function updatePortfolioView(portfolio) {
+            const listEl = $('#portfolio-list');
+            const summaryEl = $('#portfolio-summary-card');
+
+            if (!listEl || !summaryEl) return;
+            
+            if (portfolio.length === 0) {
+                summaryEl.innerHTML = `<p class="text-center text-slate-500">Portofolio kosong.</p>`;
+                listEl.innerHTML = `<p class="text-center text-slate-500">Mulai dengan menambahkan aset baru.</p>`;
+                return;
+            }
+
+            const assetIds = portfolio.map(asset => asset.id).join(',');
+            const prices = await apiFetch(`${config.api.coingecko}/simple/price?ids=${assetIds}&vs_currencies=usd`, `portfolio_prices_${assetIds}`, 2);
+            
+            let totalInvested = 0, currentValue = 0;
+
+            listEl.innerHTML = portfolio.map(asset => {
+                const currentPrice = prices?.[asset.id]?.usd || 0;
+                const assetValue = asset.amount * currentPrice;
+                const investedValue = asset.amount * asset.buyPrice;
+                const pnl = assetValue - investedValue;
+                const pnlPercent = investedValue > 0 ? (pnl / investedValue) * 100 : 0;
+                const pnlClass = pnl >= 0 ? 'price-up' : 'price-down';
+
+                totalInvested += investedValue;
+                currentValue += assetValue;
+
+                return `
+                    <div class="border-b border-slate-200 dark:border-slate-800 pb-3 last:border-b-0">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold">${asset.name} (${asset.symbol.toUpperCase()})</h4>
+                            <button class="remove-asset-btn text-slate-400 hover:text-red-500" data-firestore-id="${asset.firestoreId}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                            </button>
+                        </div>
+                        <div class="flex justify-between text-sm mt-1">
+                            <span>Jumlah: ${asset.amount.toLocaleString('en-US', {maximumFractionDigits: 6})}</span>
+                            <span class="font-semibold">$${assetValue.toLocaleString('en-US', {maximumFractionDigits: 2})}</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-slate-500">
+                            <span>Avg. Buy: $${asset.buyPrice.toLocaleString('en-US', {maximumFractionDigits: 2})}</span>
+                            <span class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toLocaleString('en-US', {maximumFractionDigits: 2})} (${pnlPercent.toFixed(2)}%)</span>
+                        </div>
+                    </div>`;
+            }).join('');
+            
+            $$('.remove-asset-btn').forEach(btn => btn.addEventListener('click', () => handleRemoveAsset(btn.dataset.firestoreId)));
+
+            const totalPnl = currentValue - totalInvested;
+            const totalPnlPercent = totalInvested > 0 ? (totalPnl / totalInvested) * 100 : 0;
+            const totalPnlClass = totalPnl >= 0 ? 'price-up' : 'price-down';
+
+            summaryEl.innerHTML = `
+                <p class="text-sm text-slate-400">Nilai Portofolio</p>
+                <p class="text-4xl font-extrabold">$${currentValue.toLocaleString('en-US', {maximumFractionDigits: 2})}</p>
+                <p class="font-semibold ${totalPnlClass} mt-1">${totalPnl >= 0 ? '+' : ''}$${totalPnl.toLocaleString('en-US', {maximumFractionDigits: 2})} (${totalPnlPercent.toFixed(2)}%)</p>
+                <div class="text-xs text-slate-500 mt-2">Modal: $${totalInvested.toLocaleString('en-US', {maximumFractionDigits: 2})}</div>`;
+        }
+        
+        async function handleAddAsset() {
+            const name = $('#asset-name').value.trim();
+            const amount = parseFloat($('#asset-amount').value);
+            const buyPrice = parseFloat($('#asset-buy-price').value);
+
+            if (!name || isNaN(amount) || amount <= 0 || isNaN(buyPrice) || buyPrice < 0) {
+                showToast('Harap isi semua kolom dengan valid!', 'error'); return;
+            }
+
+            showToast('Mencari aset...', 'info');
+            const searchData = await apiFetch(`${config.api.coingecko}/search?query=${name}`, `search_${name}`, 1440);
+            if (!searchData?.coins?.length) {
+                showToast(`Aset "${name}" tidak ditemukan.`, 'error'); return;
+            }
+            
+            const coin = searchData.coins[0];
+            const assetData = {
+                id: coin.id, name: coin.name, symbol: coin.symbol, amount: amount, buyPrice: buyPrice,
+            };
+
+            try {
+                const portfolioPath = `artifacts/${config.appId}/users/${state.userId}/portfolio`;
+                await state.firebase.addDoc(state.firebase.collection(state.db, portfolioPath), assetData);
+                showToast(`${coin.name} berhasil ditambahkan!`, 'success');
+                $('#asset-name').value = ''; $('#asset-amount').value = ''; $('#asset-buy-price').value = '';
+            } catch (error) {
+                console.error("Error adding asset to Firestore:", error); showToast('Gagal menyimpan aset.', 'error');
+            }
+        }
+        
+        async function handleRemoveAsset(firestoreId) {
+             try {
+                const docPath = `artifacts/${config.appId}/users/${state.userId}/portfolio/${firestoreId}`;
+                await state.firebase.deleteDoc(state.firebase.doc(state.db, docPath));
+                showToast('Aset berhasil dihapus.', 'success');
+             } catch(error) {
+                console.error("Error removing asset:", error); showToast('Gagal menghapus aset.', 'error');
+             }
+        }
+        
+        async function handleClearPortfolio() {
+            openModal('Konfirmasi', `
+                <p>Yakin mau mengosongkan seluruh portofolio? Aksi ini tidak bisa dibatalkan.</p>
+                <div class="flex justify-end gap-4 mt-4">
+                    <button id="confirm-clear" class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700">Ya, Hapus Semua</button>
+                    <button id="cancel-clear" class="bg-slate-200 dark:bg-slate-700 font-semibold py-2 px-4 rounded-lg">Batal</button>
+                </div>`);
+            $('#cancel-clear').addEventListener('click', closeModal);
+            $('#confirm-clear').addEventListener('click', async () => {
+                closeModal(); showToast('Menghapus portofolio...', 'info');
+                try {
+                    const portfolioPath = `artifacts/${config.appId}/users/${state.userId}/portfolio`;
+                    const q = state.firebase.query(state.firebase.collection(state.db, portfolioPath));
+                    const snapshot = await state.firebase.getDocs(q);
+                    const batch = state.firebase.writeBatch(state.db);
+                    snapshot.docs.forEach(doc => batch.delete(doc.ref));
+                    await batch.commit();
+                    showToast('Portofolio berhasil dikosongkan.', 'success');
+                } catch(error) {
+                    console.error("Error clearing portfolio:", error); showToast('Gagal mengosongkan portofolio.', 'error');
+                }
+            });
+        }
+        
+        // --- NEWS & AI SUMMARY FUNCTIONS ---
+        async function renderNews() {
+            const contentEl = $('#page-content');
+            contentEl.innerHTML = `
+                <div class="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
+                    <select id="news-source-select" class="w-full sm:w-auto input-pro p-2 rounded-lg"></select>
+                    <button id="refresh-news-btn" class="w-full sm:w-auto btn-pro text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2">
+                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5M20 20v-5h-5M4 4l5 5M20 20l-5-5"></path></svg>
+                         <span>Refresh</span>
+                    </button>
+                </div>
+                <div id="news-list" class="space-y-6"></div>
+            `;
+            const sourceSelect = $('#news-source-select');
+            sourceSelect.innerHTML = config.api.newsSources.map(s => `<option value="${s.url}">${s.name}</option>`).join('');
+
+            const fetchAndRender = async () => {
+                const listEl = $('#news-list');
+                listEl.innerHTML = Array(5).fill('<div class="h-40 skeleton-loader"></div>').join('');
+                const sourceUrl = sourceSelect.value;
+                const newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, `news_${sourceUrl}`, 15);
+                
+                if(!newsData || newsData.status !== 'ok') {
+                    listEl.innerHTML = `<div class="glass-card-pro p-6 rounded-2xl text-red-500">Gagal memuat berita dari sumber ini.</div>`;
+                    return;
+                }
+
+                listEl.innerHTML = newsData.items.slice(0, 10).map((item, index) => `
+                    <div class="glass-card-pro p-4 md:p-6 rounded-2xl">
+                        <a href="${item.link}" target="_blank" class="text-lg font-bold hover:text-primary transition-colors">${item.title}</a>
+                        <p class="text-xs text-slate-500 my-2">Oleh ${item.author} pada ${new Date(item.pubDate).toLocaleDateString()}</p>
+                        <p class="text-sm line-clamp-3">${item.description.replace(/<[^>]+>/g, '')}</p>
+                        <div class="mt-4 flex gap-4">
+                            <button class="summarize-btn btn-pro text-white text-sm font-semibold py-2 px-4 rounded-lg flex items-center gap-2" data-index="${index}">
+                                <i class="fas fa-robot"></i> Ringkas dengan AI
+                            </button>
+                             <a href="${item.link}" target="_blank" class="bg-slate-200 dark:bg-slate-700 text-sm font-semibold py-2 px-4 rounded-lg flex items-center gap-2">Baca Selengkapnya</a>
+                        </div>
+                        <div class="summary-container mt-4 p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg hidden"></div>
+                    </div>
+                `).join('');
+
+                $$('.summarize-btn').forEach(btn => btn.addEventListener('click', async e => {
+                    const button = e.currentTarget;
+                    const index = button.dataset.index;
+                    const item = newsData.items[index];
+                    const summaryContainer = button.closest('.glass-card-pro').querySelector('.summary-container');
+                    
+                    summaryContainer.classList.remove('hidden');
+                    summaryContainer.innerHTML = `<div class="flex items-center gap-2 text-sm text-slate-500"><div class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div><span>AI sedang berpikir...</span></div>`;
+                    
+                    const summary = await getAiSummary(item.description.replace(/<[^>]+>/g, ''));
+                    summaryContainer.innerHTML = `<h4 class="font-bold mb-2">Ringkasan AI:</h4><div class="text-sm">${summary}</div>`;
+                }));
+            }
+
+            sourceSelect.addEventListener('change', fetchAndRender);
+            $('#refresh-news-btn').addEventListener('click', fetchAndRender);
+            fetchAndRender();
+        }
+
+        // --- DICTIONARY FEATURE (RENOVATED) ---
+        function renderDictionary() {
+            const contentEl = $('#page-content');
+            contentEl.innerHTML = `
+                <div class="mb-6 relative">
+                    <input type="text" id="dictionary-search" class="w-full p-3 pl-10 input-pro rounded-lg" placeholder="Cari istilah (misal: DeFi, HODL)...">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                </div>
+                <div id="dictionary-content" class="space-y-8"></div>`;
+            
+            const contentContainer = $('#dictionary-content');
+            const searchInput = $('#dictionary-search');
+
+            const renderContent = (filter = '') => {
+                contentContainer.innerHTML = '';
+                const lowerFilter = filter.toLowerCase();
+                
+                kamusContent.forEach(category => {
+                    const filteredItems = category.items.filter(item => 
+                        item.term.toLowerCase().includes(lowerFilter) || 
+                        item.definition.toLowerCase().includes(lowerFilter)
+                    );
+
+                    if (filteredItems.length > 0) {
+                        const categoryHtml = `
+                            <div class="category-section">
+                                <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-primary">
+                                    <i class="${category.icon}"></i>
+                                    ${category.category}
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    ${filteredItems.map(item => `
+                                        <div class="glass-card-pro p-5 rounded-xl">
+                                            <h4 class="text-lg font-semibold text-slate-800 dark:text-white">${item.term}</h4>
+                                            <p class="text-sm text-slate-600 dark:text-slate-300 mt-2">${item.definition}</p>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                        contentContainer.innerHTML += categoryHtml;
+                    }
+                });
+
+                if (contentContainer.innerHTML === '') {
+                    contentContainer.innerHTML = `<div class="glass-card-pro p-8 rounded-2xl text-center"><p class="text-slate-500">Istilah "${filter}" tidak ditemukan.</p></div>`;
+                }
+            };
+            
+            searchInput.addEventListener('input', debounce((e) => renderContent(e.target.value), 300));
+            
+            renderContent(); // Render awal
+        }
+
+        // --- OTHER PAGE STUBS ---
+        function renderTools() { $('#page-content').innerHTML = `<div class="glass-card-pro p-8 rounded-2xl text-center"><h3 class="text-xl font-bold">Segera Hadir</h3><p class="text-slate-400 mt-2">Fitur Alat Bantu sedang dalam pengembangan.</p></div>`; }
+        function renderSimulator() { $('#page-content').innerHTML = `<div class="glass-card-pro p-8 rounded-2xl text-center"><h3 class="text-xl font-bold">Segera Hadir</h3><p class="text-slate-400 mt-2">Fitur Simulator Trading sedang dalam pengembangan. Bersiaplah untuk trading tanpa risiko!</p></div>`; }
+        
+        // --- INITIALIZATION ---
+        async function main() {
+            // Setup UI (Theme, Navigasi, Event Listeners)
             const storedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.classList.toggle('dark', storedTheme === 'dark');
-            updateThemeToggleIcon(storedTheme);
+            $('#theme-toggle-dark-icon').classList.toggle('hidden', storedTheme !== 'dark');
+            $('#theme-toggle-light-icon').classList.toggle('hidden', storedTheme === 'dark');
 
             const storedPrimaryColor = localStorage.getItem('primaryColor') || 'cyan';
             document.documentElement.setAttribute('data-theme', storedPrimaryColor);
-            updateActiveColorButton(storedPrimaryColor);
+            $$('[data-theme]').forEach(btn => btn.classList.toggle('ring-primary', btn.dataset.theme === storedPrimaryColor));
 
-            const correctPassword = 'ggwp'; // Password sederhana
-
-            passwordForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (passwordInput.value === correctPassword) {
-                    passwordOverlay.style.display = 'none';
-                    appContainer.classList.remove('hidden');
-                    initializeApp();
-                } else {
-                    passwordInput.classList.add('animate-shake', 'border-red-500');
-                    passwordError.textContent = 'Password salah, coba lagi!';
-                    setTimeout(() => {
-                        passwordInput.classList.remove('animate-shake', 'border-red-500');
-                        passwordError.textContent = '';
-                    }, 500);
-                }
+            $('#theme-toggle').addEventListener('click', () => {
+                const isDarkMode = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                $('#theme-toggle-dark-icon').classList.toggle('hidden');
+                $('#theme-toggle-light-icon').classList.toggle('hidden');
+            });
+            
+            $$('[data-theme]').forEach(button => {
+                button.addEventListener('click', function () {
+                    const newTheme = this.dataset.theme;
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('primaryColor', newTheme);
+                    $$('[data-theme]').forEach(btn => btn.classList.remove('ring-primary'));
+                    this.classList.add('ring-primary');
+                });
             });
 
-            function initializeApp() {
-                const navList = document.querySelector('#navigation ul');
-                appData.forEach(page => {
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `
-                    <a href="#" class="nav-link flex items-center gap-3 p-3 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" data-id="${page.id}" aria-label="Navigasi ke ${page.title}">
-                        ${page.icon}
-                        <span class="font-medium">${page.title}</span>
-                    </a>
-                `;
-                    navList.appendChild(listItem);
-                });
-
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const pageId = link.dataset.id;
-                        renderPage(pageId);
-                        // Close mobile sidebar after clicking a link
-                        if (window.innerWidth < 768) {
-                            document.querySelector('.sidebar').classList.remove('open');
-                        }
-                    });
-                });
-
-                // Initial page load
-                renderPage('dasbor'); // Load Dasbor Harga by default
-
-                // Theme Toggle
-                document.getElementById('theme-toggle').addEventListener('click', () => {
-                    const isDarkMode = document.documentElement.classList.toggle('dark');
-                    const theme = isDarkMode ? 'dark' : 'light';
-                    localStorage.setItem('theme', theme);
-                    updateThemeToggleIcon(theme);
-                });
-
-                // Mobile Menu Toggle
-                document.getElementById('mobile-menu-toggle').addEventListener('click', () => {
-                    document.querySelector('.sidebar').classList.toggle('open');
-                });
-
-                // Close mobile sidebar when clicking outside (simple example, could be improved)
-                appContainer.addEventListener('click', (e) => {
-                    const sidebar = document.querySelector('.sidebar');
-                    const toggleButton = document.getElementById('mobile-menu-toggle');
-                    // Check if the click is outside the sidebar and the toggle button
-                    if (window.innerWidth < 768 && sidebar.classList.contains('open') && !sidebar.contains(e.target) && !toggleButton.contains(e.target)) {
-                        sidebar.classList.remove('open');
+            $('#mobile-menu-toggle').addEventListener('click', () => {
+                const sidebar = $('#sidebar');
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('-translate-x-full');
+            });
+            $('#modal-close').addEventListener('click', closeModal);
+            $('#modal-backdrop').addEventListener('click', closeModal);
+            
+            const navList = $('#navigation ul');
+            navList.innerHTML = appData.map(page => {
+                if(page.type === 'divider') return `<li class="px-3 pt-4 pb-2 text-xs font-semibold uppercase text-slate-400">${page.title}</li>`;
+                return `<li><a href="#" class="nav-link flex items-center gap-4 p-3 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors" data-id="${page.id}">${page.icon} <span class="font-medium">${page.title}</span></a></li>`;
+            }).join('');
+            
+            $$('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const pageId = link.dataset.id;
+                    if (!pageId || state.currentPage === pageId) return;
+                    
+                    state.currentPage = pageId;
+                    $$('.nav-link').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    const pageData = appData.find(p => p.id === pageId);
+                    $('#page-title').textContent = pageData.title;
+                    pageData.render();
+                    
+                    if (window.innerWidth < 768) {
+                        const sidebar = $('#sidebar');
+                        sidebar.classList.add('hidden');
+                        sidebar.classList.add('-translate-x-full');
                     }
                 });
+            });
 
-                // Focus Mode Toggle
-                document.getElementById('focus-mode-toggle').addEventListener('click', () => {
-                    document.body.classList.toggle('focus-mode');
-                });
+            // Inisialisasi Firebase dan muat halaman pertama
+            await initAuth();
+            $('.nav-link[data-id="dasbor"]').click();
+        }
 
-                // Primary Color Theme Selectors
-                document.querySelectorAll('[data-theme]').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const newTheme = this.dataset.theme;
-                        document.documentElement.setAttribute('data-theme', newTheme);
-                        localStorage.setItem('primaryColor', newTheme);
-                        updateActiveColorButton(newTheme);
-                        // Re-render current page to apply new color to dynamic elements if needed
-                        const currentPageId = document.querySelector('.nav-link.active')?.dataset.id;
-                        if (currentPageId) {
-                            renderPage(currentPageId);
-                        }
-                    });
-                });
-            }
-
-            function updateThemeToggleIcon(theme) {
-                const darkIcon = document.getElementById('theme-toggle-dark-icon');
-                const lightIcon = document.getElementById('theme-toggle-light-icon');
-                if (theme === 'dark') {
-                    darkIcon.classList.remove('hidden');
-                    lightIcon.classList.add('hidden');
-                } else {
-                    darkIcon.classList.add('hidden');
-                    lightIcon.classList.remove('hidden');
-                }
-            }
-
-            function updateActiveColorButton(activeTheme) {
-                document.querySelectorAll('[data-theme]').forEach(btn => {
-                    btn.classList.remove('ring-[var(--primary)]');
-                    btn.classList.add('ring-transparent');
-                    if (btn.dataset.theme === activeTheme) {
-                        btn.classList.add('ring-[var(--primary)]');
-                        btn.classList.remove('ring-transparent');
-                    }
-                });
-            }
-        });
+        document.addEventListener('DOMContentLoaded', main);
     </script>
 </body>
-
 </html>
