@@ -14,20 +14,14 @@
     <meta property="og:url" content="https://yourusername.github.io/cryptohub/">
     <meta property="og:image" content="https://placehold.co/1200x630/0f172a/38bdf8?text=Crypto+Hub+2.0+Dashboard">
 
-    <!-- PWA & Theme Manifest: Requires manifest.json in root and icons in /assets folder -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#06b6d4">
+    <!-- Removed PWA Manifest link as Service Worker registration is removed for this environment -->
 
-    <!-- Tailwind CSS: Reverted to CDN to fix "tailwind is not defined" error.
-         If you want to use a local build, you must remove the 'tailwind.config' script block below
-         and handle custom configurations entirely via your Tailwind CSS build process. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Chart.js: Changed from CDN to local asset. You need to download chart.js and save it in /assets folder -->
-    <script src="/assets/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- UPDATE: Replace UA-XXXXX-X with your actual Google Analytics ID -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-X"></script>
@@ -209,7 +203,8 @@
         const APP_VERSION = '2.0.1'; // NEW: Cache versioning
 
         const translations = {
-            id: { dasbor: 'Dasbor Harga', kamus: 'Kamus Lengkap', analisis: 'Analisis & Studi Kasus', tutorial: 'Tutorial Praktis', portofolio: 'My Portfolio', alat: 'Tools', berita: 'Latest News', kuis: 'Crypto Quiz' }
+            id: { dasbor: 'Dasbor Harga', kamus: 'Kamus Lengkap', analisis: 'Analisis & Studi Kasus', tutorial: 'Tutorial Praktis', portofolio: 'Portofolio Saya', alat: 'Alat Bantu', berita: 'Berita Terkini', kuis: 'Kuis Kripto' },
+            en: { dasbor: 'Price Dashboard', kamus: 'Glossary', analisis: 'Analysis & Case Studies', tutorial: 'Practical Tutorials', portofolio: 'My Portfolio', alat: 'Tools', berita: 'Latest News', kuis: 'Crypto Quiz' }
         };
         let currentLang = localStorage.getItem(`${APP_VERSION}_lang`) || 'id';
         
@@ -238,7 +233,7 @@
             { q: "Siapa pencipta Bitcoin?", o: ["Vitalik Buterin", "Satoshi Nakamoto", "Elon Musk", "CZ"], a: "Satoshi Nakamoto" }, { q: "Aset di atas blockchain lain?", o: ["Coin", "Fiat", "Token", "Fiyatt"], a: "Token" }, { q: "Konsensus pake mining?", o: ["PoS", "PoH", "PoW", "DPoS"], a: "PoW" }, { q: "Tahan crypto lama?", o: ["FOMO", "FUD", "Shill", "HODL"], a: "HODL" }, { q: "Fungsi Stablecoin?", o: ["Spekulasi", "Stabil", "Bunga", "Game"], a: "Stabil" }, { q: "NFT singkatan dari?", o: ["New Financial Token", "Non-Fungible Token", "National Fiat Token", "Network Fee Token"], a: "Non-Fungible Token" }, { q: "Keuangan tanpa bank?", o: ["CeFi", "TradFi", "DeFi", "FinTech"], a: "DeFi" }, { q: "Harga berhenti turun?", o: ["Resistance", "Breakout", "Support", "Trendline"], a: "Support" }, { q: "Gas Fee itu apa?", o: ["Biaya internet", "Biaya transaksi", "Pajak", "Listrik"], a: "Biaya transaksi" }, { q: "Bursa diretas 2014?", o: ["Binance", "Coinbase", "Mt. Gox", "Kraken"], a: "Mt. Gox" }
         ];
 
-        function createCandlestickSVG() { return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}</style></defs><g transform="translate(50 20)"><rect x="0" y="40" width="40" height="50" fill="#22c55e" title="Candlestick Hijau: Harga Naik"/><line x1="20" y1="0" x2="20" y2="40" stroke="#22c55e" stroke-width="2"/><line x1="20" y1="90" x2="20" y2="110" stroke="#22c55e" stroke-width="2"/><text x="65" y="10" class="label font-bold">High</text><line x1="42" y1="5" x2="60" y2="5" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="45" class="label">Open</text><line x1="42" y1="40" x2="60" y2="40" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="95" class="label">Close</text><line x1="42" y1="90" y2="60" y2="90" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="115" class="label font-bold">Low</text><line x1="42" y1="110" x2="60" y2="110" stroke="currentColor" stroke-dasharray="2 2"/></g><g transform="translate(180 20)"><rect x="0" y="25" width="40" height="50" fill="#ef4444" title="Candlestick Merah: Harga Turun"/><line x1="20" y1="0" x2="20" y2="25" stroke="#ef4444" stroke-width="2"/><line x1="20" y1="75" x2="20" y2="110" stroke="#ef4444" stroke-width="2"/></g></svg>`; }
+        function createCandlestickSVG() { return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}</style></defs><g transform="translate(50 20)"><rect x="0" y="40" width="40" height="50" fill="#22c55e" title="Candlestick Hijau: Harga Naik"/><line x1="20" y1="0" x2="20" y2="40" stroke="#22c55e" stroke-width="2"/><line x1="20" y1="90" x2="20" y2="110" stroke="#22c55e" stroke-width="2"/><text x="65" y="10" class="label font-bold">High</text><line x1="42" y1="5" x2="60" y2="5" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="45" class="label">Open</text><line x1="42" y1="40" x2="60" y2="40" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="95" class="label">Close</text><line x1="42" y1="90" x2="60" y2="90" stroke="currentColor" stroke-dasharray="2 2"/><text x="65" y="115" class="label font-bold">Low</text><line x1="42" y1="110" x2="60" y2="110" stroke="currentColor" stroke-dasharray="2 2"/></g><g transform="translate(180 20)"><rect x="0" y="25" width="40" height="50" fill="#ef4444" title="Candlestick Merah: Harga Turun"/><line x1="20" y1="0" x2="20" y2="25" stroke="#ef4444" stroke-width="2"/><line x1="20" y1="75" x2="20" y2="110" stroke="#ef4444" stroke-width="2"/></g></svg>`; }
         function createSupportResistanceSVG() { return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}</style></defs><path d="M20 120 C 60 40, 80 140, 120 80 S 180 20, 220 70 S 260 110, 280 80" stroke="#06b6d4" stroke-width="2.5" fill="none"/><line x1="10" y1="40" x2="290" y2="40" stroke="#ef4444" stroke-width="2" stroke-dasharray="4 4"/><text x="110" y="35" class="label font-bold text-red-500 fill-current">Resistance</text><line x1="10" y1="120" x2="290" y2="120" stroke="#22c55e" stroke-width="2" stroke-dasharray="4 4"/><text x="110" y="135" class="label font-bold text-green-500 fill-current">Support</text></svg>`; }
         function createEtherscanSVG() { return `<svg viewBox="0 0 300 150" class="w-full h-auto"><defs><style>.label{font-size:10px;fill:currentColor;font-family:Inter,sans-serif;}.box{fill:currentColor;fill-opacity:0.1;stroke:currentColor;stroke-width:0.5;}</style></defs><rect x="10" y="55" width="80" height="40" rx="8" class="box" title="Pengirim"/><text x="25" y="78" class="label font-bold">Pengirim</text><rect x="210" y="55" width="80" height="40" rx="8" class="box" title="Penerima"/><text x="225" y="78" class="label font-bold">Penerima</text><path d="M90 75 L 210 75" stroke="currentColor" stroke-width="2" marker-end="url(#arrow)"/><text x="150" y="65" class="label font-semibold">0.1 ETH</text><text x="150" y="85" class="label text-[var(--primary)]">Gas Fee</text><defs><marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/></marker></defs></svg>`; }
         const analisisContent = [ { term: 'Analisis Fundamental vs Teknikal', definition: `<strong>FA</strong>: Liat nilai proyek (tim, tech, tokenomics). <strong>TA</strong>: Analisis chart (harga, volume). <em>Contoh:</em> FA cek whitepaper, TA baca RSI.` }, { term: 'Membaca Candlestick Chart', definition: `Lilin tunjukin open, close, high, low. Hijau = naik, merah = turun. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createCandlestickSVG()}</div>` }, { term: 'Support & Resistance', definition: `<strong>Support:</strong> Lantai harga. <strong>Resistance:</strong> Atap harga. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createSupportResistanceSVG()}</div>` }, { term: 'Studi Kasus: Membedah Transaksi di Etherscan', definition: `Lacak transaksi pake Txn Hash, From, To, Value, Gas. <div class="mt-4 p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">${createEtherscanSVG()}</div>` } ];
@@ -406,7 +401,6 @@
             let currentPage = 1;
             const perPage = 10;
             let currentFilter = '';
-            let topCoinsData = []; // Store top coins data for intersection observer
 
             container.innerHTML = `
                 <div class="mb-6 flex flex-col md:flex-row gap-4 items-center">
@@ -438,60 +432,6 @@
                 </div>
             `;
             
-            // Intersection Observer for lazy loading sparklines
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const ctx = entry.target;
-                        // Extract coinId and isTop from the canvas ID
-                        const [_, coinId, chartType] = ctx.id.split('-');
-                        const isTop = chartType === 'top';
-                        
-                        // Find the corresponding coin data
-                        let coin;
-                        if (isTop) {
-                            coin = topCoinsData.find(c => c.id === coinId);
-                        } else {
-                            // For main grid, fetch current data, this assumes 'data' variable is available
-                            // This part might need refinement if 'data' is not globally accessible or fresh
-                            // For now, let's assume it's part of the `loadPage` scope or fetched again if needed.
-                            // To be precise, `loadPage` already re-renders. For actual lazy load, `data` from `loadPage`
-                            // should be passed or re-fetched. For this example, let's simulate.
-                            // A more robust solution would involve managing `allCoins` data for the main grid as well.
-                            // For simplicity, we'll refetch if needed or assume data is present.
-                            const currentPriceGridData = JSON.parse(localStorage.getItem(`crypto_list_${APP_VERSION}_${currentPage}_${perPage}_${currentFilter}`))?.data || [];
-                            coin = currentPriceGridData.find(c => c.id === coinId);
-                        }
-
-                        if (coin && coin.sparkline_in_7d && coin.sparkline_in_7d.price) {
-                            new Chart(ctx.getContext('2d'), {
-                                type: 'line',
-                                data: {
-                                    labels: coin.sparkline_in_7d.price.map((_, i) => i),
-                                    datasets: [{
-                                        data: coin.sparkline_in_7d.price,
-                                        borderColor: coin.price_change_percentage_24h >= 0 ? '#22c55e' : '#ef4444',
-                                        borderWidth: 2,
-                                        fill: true,
-                                        backgroundColor: coin.price_change_percentage_24h >= 0 ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                                        tension: 0.4,
-                                        pointRadius: 0
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                    plugins: { legend: { display: false } },
-                                    scales: { x: { display: false }, y: { display: false } }
-                                }
-                            });
-                        }
-                        observer.unobserve(entry.target); // Stop observing once loaded
-                    }
-                });
-            }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
-
-
             const renderCoins = (data, targetEl, isTop = false) => {
                 if (!data || data.length === 0) {
                     targetEl.innerHTML = `<p class="col-span-full text-center text-gray-500 dark:text-gray-400 p-4 glass-card rounded-xl">Tidak ada data kripto ditemukan.</p>`;
@@ -521,13 +461,15 @@
                     targetEl.insertAdjacentHTML('beforeend', content);
                 }
                 
-                // Observe the newly added canvases for lazy loading
-                setTimeout(() => { // Timeout to ensure canvases are in DOM
+                // Note: Lazy rendering charts with IntersectionObserver is a good next step for performance with many items.
+                setTimeout(() => {
                     data.forEach(coin => {
                         const ctx = document.getElementById(`sparkline-${coin.id}-${isTop ? 'top' : 'main'}`);
-                        if (ctx) observer.observe(ctx);
+                        if (ctx && coin.sparkline_in_7d && coin.sparkline_in_7d.price) {
+                            new Chart(ctx.getContext('2d'), { type: 'line', data: { labels: coin.sparkline_in_7d.price.map((_, i) => i), datasets: [{ data: coin.sparkline_in_7d.price, borderColor: coin.price_change_percentage_24h >= 0 ? '#22c55e' : '#ef4444', borderWidth: 2, fill: true, backgroundColor: coin.price_change_percentage_24h >= 0 ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)', tension: 0.4, pointRadius: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } } });
+                        }
                     });
-                }, 50); // Small delay
+                }, 100);
             };
 
             const loadPage = async (isLoadMore = false) => {
@@ -546,7 +488,7 @@
                 }
             };
             
-            topCoinsData = await getCryptoPrices(1, 10); // Store top coins data
+            const topCoinsData = await getCryptoPrices(1, 10);
             renderCoins(topCoinsData, document.getElementById('top-coins-grid'), true);
             loadPage();
 
@@ -600,7 +542,7 @@
                 newsGrid.innerHTML = itemsToRender.length > 0 ? itemsToRender.map(item => `
                     <div class="glass-card p-4 rounded-xl cursor-pointer hover:shadow-lg transition-shadow" data-news-link="${item.link}" tabindex="0" aria-label="Baca berita: ${item.title}">
                         <div class="h-full flex flex-col">
-                            <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-32 object-cover rounded-t-lg mb-3" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0f172a/38bdf8?text=Berita';">
+                            <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-32 object-cover rounded-t-lg mb-3" loading="lazy">
                             <div class="flex-1 flex flex-col justify-between">
                                 <h4 class="text-md font-semibold mt-2 line-clamp-2">${item.title}</h4>
                                 <div class="flex justify-between items-center mt-3">
@@ -625,7 +567,6 @@
                 } catch (error) {
                     console.error("News fetch error:", error);
                     document.getElementById('news-grid').innerHTML = `<div class="col-span-full glass-card p-4 text-center text-red-500"><p>Gagal memuat berita. Coba lagi nanti.</p><button id="retry-news" class="mt-2 text-[var(--primary)] font-bold">Coba Lagi</button></div>`;
-                    document.getElementById('retry-news')?.addEventListener('click', () => loadNews()); // Added retry button listener
                 }
             };
             
@@ -663,7 +604,7 @@
             document.getElementById('modal-title').textContent = item.title;
             document.getElementById('modal-content').innerHTML = `
                 <div class="space-y-4">
-                    <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-48 object-cover rounded-lg" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/600x400/0f172a/38bdf8?text=Berita';">
+                    <img src="${item.thumbnail}" alt="${item.title}" class="w-full h-48 object-cover rounded-lg" loading="lazy">
                     <p class="text-sm text-gray-600 dark:text-gray-300">${item.description || item.content}</p>
                     <div class="flex gap-2">
                         <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="inline-block px-4 py-2 bg-gradient-to-r text-white rounded-lg hover:opacity-90 pulse-glow">Baca di ${item.source}</a>
@@ -788,118 +729,15 @@
         }
 
         function renderQuiz(container) {
-            const questions = fullQuizBank.slice(0, 5); // Take first 5 questions
-            let score = 0;
-            
-            container.innerHTML = `
-                <div class="glass-card p-6 rounded-xl">
-                    <h3 class="text-xl font-bold mb-4">Kuis Kripto</h3>
-                    <div id="quiz-questions" class="space-y-4"></div>
-                    <button id="submit-quiz" class="w-full px-4 py-2 bg-gradient-to-r text-white rounded pulse-glow mt-4">Submit</button>
-                    <div id="quiz-result" class="mt-4 text-center text-lg font-bold"></div>
-                </div>
-            `;
-            
-            const quizEl = document.getElementById('quiz-questions');
-            quizEl.innerHTML = questions.map((q, i) => `
-                <div class="mb-4">
-                    <p class="font-semibold text-slate-800 dark:text-slate-200">${i + 1}. ${q.q}</p>
-                    <div class="mt-2 space-y-2">
-                        ${q.o.map(o => `
-                            <label class="block text-sm text-slate-600 dark:text-slate-300 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors">
-                                <input type="radio" name="q${i}" value="${o}" class="mr-2 accent-[var(--primary)]">
-                                ${o}
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>
-            `).join('');
-
-            document.getElementById('submit-quiz').addEventListener('click', () => {
-                let correctCount = 0;
-                questions.forEach((q, i) => {
-                    const selected = document.querySelector(`input[name="q${i}"]:checked`)?.value;
-                    if (selected === q.a) {
-                        correctCount++;
-                    }
-                });
-                score = correctCount;
-                
-                const resultEl = document.getElementById('quiz-result');
-                resultEl.innerHTML = `Skor Anda: <span class="text-[var(--primary)]">${score} dari ${questions.length}</span>`;
-                if (score === questions.length) {
-                    resultEl.innerHTML += `<p class="text-green-500 mt-2">Selamat, Anda Jenius Kripto!</p>`;
-                    triggerConfetti();
-                } else {
-                    resultEl.innerHTML += `<p class="text-red-500 mt-2">Terus belajar ya!</p>`;
-                }
-                
-                checkAchievements('quiz', { score, total: questions.length });
-                // Disable quiz after submission
-                document.getElementById('submit-quiz').disabled = true;
-                document.querySelectorAll('#quiz-questions input[type="radio"]').forEach(radio => radio.disabled = true);
-            });
+            container.innerHTML = `<p class="text-center">Fitur kuis sedang dalam pengembangan.</p>`;
         }
         
         function renderTools(container) {
-            container.innerHTML = `
-                <div class="glass-card p-6 rounded-xl text-center">
-                    <h3 class="text-xl font-bold mb-4">Alat Bantu Kripto</h3>
-                    <p class="text-slate-600 dark:text-slate-300">Fitur alat bantu sedang dalam pengembangan. Nantikan kalkulator profit/loss, konverter mata uang, dan lainnya!</p>
-                    <img src="https://placehold.co/400x200/0f172a/38bdf8?text=Tools+Coming+Soon" alt="Tools Coming Soon" class="mx-auto mt-6 rounded-lg shadow-md">
-                </div>
-            `;
+            container.innerHTML = `<p class="text-center">Fitur alat bantu sedang dalam pengembangan.</p>`;
         }
 
         function renderDictionary(container) {
-            container.innerHTML = `
-                <div id="dictionary-content" class="space-y-4">
-                    ${kamusContent.map((category, index) => `
-                        <div class="glass-card rounded-xl shadow-sm">
-                            <button class="accordion-button w-full flex justify-between items-center p-4 font-bold text-lg rounded-t-xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" data-accordion-index="${index}" aria-expanded="false" aria-controls="accordion-body-${index}">
-                                ${category.category}
-                                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                            <div id="accordion-body-${index}" class="accordion-content p-4 bg-white dark:bg-slate-900 rounded-b-xl">
-                                <div class="space-y-4">
-                                    ${category.items.map(item => `
-                                        <div>
-                                            <h4 class="font-semibold text-slate-900 dark:text-white">${item.term}</h4>
-                                            <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${item.definition}</p>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-
-            // Add event listeners for accordion functionality
-            document.querySelectorAll('.accordion-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const content = document.getElementById(`accordion-body-${button.dataset.accordionIndex}`);
-                    const isOpen = button.classList.contains('open');
-
-                    // Close all other open accordions
-                    document.querySelectorAll('.accordion-button.open').forEach(openButton => {
-                        if (openButton !== button) {
-                            openButton.classList.remove('open');
-                            document.getElementById(`accordion-body-${openButton.dataset.accordionIndex}`).style.maxHeight = 0;
-                        }
-                    });
-
-                    // Toggle current accordion
-                    button.classList.toggle('open');
-                    if (isOpen) {
-                        content.style.maxHeight = 0;
-                        button.setAttribute('aria-expanded', 'false');
-                    } else {
-                        content.style.maxHeight = content.scrollHeight + 'px';
-                        button.setAttribute('aria-expanded', 'true');
-                    }
-                });
-            });
+            container.innerHTML = `<p class="text-center">Fitur kamus sedang dalam pengembangan.</p>`;
         }
         
         // --- CORE APP LOGIC ---
@@ -930,30 +768,12 @@
         });
 
         function initializeApp() {
-            // PWA / Service Worker Registration
-            // IMPORTANT: For PWA features (offline mode, install prompt, push notifications)
-            // to work, you MUST serve this app via HTTP/HTTPS (e.g., using `npx serve` or GitHub Pages),
-            // and NOT directly via `file://` protocol.
-            // Ensure `sw.js` and `manifest.json` are in the root directory.
-            // Also ensure your icons (e.g., icon-192.png, icon-512.png) are in the /assets folder.
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('/sw.js').then(() => {
-                    console.log('Service Worker terdaftar & siap untuk PWA/Notifikasi!');
-                }).catch(error => {
-                    console.error('Pendaftaran Service Worker gagal:', error);
-                });
+            // Removed Service Worker registration as it causes issues in this environment.
+            // PWA features like "Install App" and background notifications will not be available.
+            // Local price alerts (setPriceAlert) will still function while the tab is active.
 
-                // Request notification permission for local alerts
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        console.log('Izin notifikasi diberikan.');
-                    } else {
-                        console.warn('Izin notifikasi tidak diberikan. Notifikasi harga tidak akan muncul.');
-                    }
-                });
-            } else {
-                console.warn('Browser tidak mendukung Service Worker. PWA tidak tersedia.');
-            }
+            // Removed Notification.requestPermission() as it's primarily for push notifications tied to service workers.
+            // Local price alerts (setPriceAlert) will still trigger a simple Notification API call if permission was previously granted.
 
             setLanguage(currentLang);
             document.getElementById('lang-switch').value = currentLang;
@@ -1019,12 +839,12 @@
                         if (Notification.permission === "granted") {
                             new Notification(`${coinId.toUpperCase()} Price Alert!`, {
                                 body: `Harga sekarang: $${currentPrice.toLocaleString()}`,
-                                icon: '/assets/icon-192.png' // Use your local icon
+                                icon: 'https://placehold.co/192x192/0f172a/38bdf8?text=CH' // Replace with your actual icon
                             });
-                            // In a real app, you'd clear this interval after it triggers once or store the alert status.
                         } else {
                             console.warn("Notification permission not granted. Cannot show price alert.");
                         }
+                        // In a real app, you'd clear this interval after it triggers once.
                     }
                 } catch (error) {
                     console.error('Error checking price alert:', error);
@@ -1040,7 +860,7 @@
                 const coins = trending.coins.slice(0, 3).map(c => c.item);
                 trendingEl.innerHTML = coins.map(c => `
                     <li class="flex items-center gap-2">
-                        <img src="${c.thumb}" alt="${c.name}" class="w-5 h-5 rounded-full" onerror="this.onerror=null;this.src='https://placehold.co/50x50/0f172a/38bdf8?text=C';">
+                        <img src="${c.thumb}" alt="${c.name}" class="w-5 h-5 rounded-full">
                         <a href="#" data-coin-id="${c.id}" class="hover:text-[var(--primary)] truncate">${c.name}</a>
                     </li>`).join('');
                 trendingEl.querySelectorAll('[data-coin-id]').forEach(link => {
