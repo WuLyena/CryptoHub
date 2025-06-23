@@ -12,7 +12,7 @@
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://placehold.co/1200x630/0f172a/38bdf8?text=Crypto+Hub+Ultimate">
 
-    <!-- External Libraries -->
+    <!-- External Libraries (Tailwind CSS, Fonts, Chart.js, Font Awesome) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,35 +21,41 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK (Version 11.6.1) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, addDoc, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
+        // Global Firebase variables for external access by our script
+        // These variables are provided by the Canvas environment.
+        // __firebase_config and __app_id are strings, parse them to JSON if needed.
+        // __initial_auth_token is a string.
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
 
-        window.firebase = {
-            app: initializeApp(firebaseConfig),
-            getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken,
+        // Expose Firebase modules globally (or directly use them in our script)
+        // For simplicity and direct integration, we'll use them directly in our main script.
+        // This 'window.firebase' block is removed and modules are imported directly below.
+        window.firebaseModules = {
+            initializeApp, getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken,
             getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, addDoc, getDocs, writeBatch
         };
+
+        // Initialize Firebase app early
+        window.firebaseApp = initializeApp(firebaseConfig);
     </script>
 
-    <!-- Tailwind Config -->
+    <!-- Tailwind CSS Custom Configuration -->
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { inter: ['Inter', 'sans-serif'], poppins: ['Poppins', 'sans-serif'] },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif']
+                    },
                     colors: {
                         primary: 'rgba(var(--primary-rgb), <alpha-value>)',
                         'primary-dark': 'rgba(var(--primary-dark-rgb), <alpha-value>)',
@@ -179,23 +185,24 @@
 </head>
 
 <body class="antialiased">
-    <!-- Toast Container -->
+    <!-- Toast Container for messages -->
     <div id="toast-container"></div>
 
-    <!-- Confetti Canvas -->
+    <!-- Confetti Canvas for success animations -->
     <canvas id="confetti-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[10000]"></canvas>
 
-    <!-- Mobile Menu Toggle -->
+    <!-- Mobile Menu Toggle Button -->
     <button id="mobile-menu-toggle" class="md:hidden p-2 fixed top-4 left-4 z-40 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm rounded-lg">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
     </button>
 
-    <!-- App Container -->
+    <!-- Main App Container -->
     <div id="app-container" class="flex flex-col md:flex-row min-h-screen">
-        <!-- Sidebar -->
+        <!-- Sidebar Navigation -->
         <aside id="sidebar" class="w-72 bg-white/80 dark:bg-black/50 border-r border-slate-200/80 dark:border-slate-800/80 backdrop-blur-lg md:sticky fixed top-0 h-screen flex-col p-4 z-30 hidden md:flex -translate-x-full md:translate-x-0 transition-transform duration-300">
             <div class="flex justify-between items-center mb-6 px-2">
                 <div class="flex items-center gap-3">
+                    <!-- App Logo SVG -->
                     <svg class="w-8 h-8 text-primary animate-float" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16.62,10.95c-1.32-1.32-3.48-1.32-4.8,0L10.3,12.47c-1.32,1.32-1.32,3.48,0,4.8c1.32,1.32,3.48,1.32,4.8,0l1.52-1.52C17.95,14.43,17.95,12.27,16.62,10.95Z" fill="currentColor"/>
                         <path d="M12.47,10.3l1.52-1.52c-1.32-1.32-1.32-3.48,0-4.8c-1.32-1.32-3.48-1.32-4.8,0L7.67,5.5c-1.32,1.32-1.32,3.48,0,4.8L12.47,10.3Z" fill="currentColor" fill-opacity="0.4"/>
@@ -203,19 +210,23 @@
                     <h1 class="text-xl font-extrabold">Crypto Hub <span class="text-xs font-medium text-primary">Ultimate</span></h1>
                 </div>
             </div>
+            <!-- Navigation Links will be populated by JS -->
             <nav id="navigation" class="flex-grow">
                 <ul class="space-y-1"></ul>
             </nav>
+            <!-- User Info and Theme Toggles -->
             <div class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800">
                 <div id="user-info" class="text-xs text-slate-500 mb-4 px-2">
                     <p>User ID:</p>
                     <p id="user-id-display" class="break-all font-mono">Loading...</p>
                 </div>
                 <div class="flex justify-around items-center gap-4">
+                    <!-- Theme (Dark/Light) Toggle -->
                     <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
                         <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                         <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
                     </button>
+                    <!-- Primary Color Theme Selectors -->
                     <div class="flex gap-2 justify-center" role="radiogroup" aria-label="Pilih tema warna">
                         <button data-theme="cyan" aria-label="Tema Sian" class="w-5 h-5 rounded-full bg-cyan-500 ring-2 ring-offset-2 ring-transparent ring-offset-white dark:ring-offset-pro-dark"></button>
                         <button data-theme="purple" aria-label="Tema Ungu" class="w-5 h-5 rounded-full bg-purple-500 ring-2 ring-offset-2 ring-transparent ring-offset-white dark:ring-offset-pro-dark"></button>
@@ -225,16 +236,18 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Main Content Area -->
         <main class="main-content flex-1 md:ml-72 p-4 sm:p-6 lg:p-8 overflow-y-auto">
             <div id="page-header" class="flex justify-between items-center mb-6">
                 <h2 id="page-title" class="text-3xl font-extrabold text-slate-900 dark:text-white"></h2>
             </div>
-            <div id="page-content" class="animate-fadeIn"></div>
+            <div id="page-content" class="animate-fadeIn">
+                <!-- Page content will be loaded here by JavaScript -->
+            </div>
         </main>
     </div>
 
-    <!-- Modal -->
+    <!-- Universal Modal for details and confirmations -->
     <div id="modal-container" class="hidden fixed inset-0 z-[9998] flex items-center justify-center p-4">
         <div id="modal-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm"></div>
         <div id="modal-content-box" class="relative z-10 bg-white/80 dark:bg-slate-900/80 p-6 rounded-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto glass-card-pro animate-fadeIn">
@@ -246,261 +259,74 @@
         </div>
     </div>
 
+    <!-- Main Application Logic (JavaScript) -->
     <script type="module">
-        // --- GLOBAL STATE & CONFIG (Tambahan untuk Simulator) ---
-const state = {
-    // ... (state yang udah ada tetap sama)
-    simulatorBalance: 10000,
-    simulatorPositions: {},
-    simulatorHistory: [],
-    simulatorPrices: {}, // Tambahan buat nyimpen harga real-time
-};
+        // Import Firebase modules directly from the exposed global object
+        const { initializeApp, getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken,
+                getFirestore, doc, getDoc, setDoc, deleteDoc, collection, onSnapshot, query, addDoc, getDocs, writeBatch } = window.firebaseModules;
+        const firebaseApp = window.firebaseApp; // Use the already initialized app
 
-// --- API & DATA FETCHING (Tambahan untuk Simulator) ---
-const fetchCoinPrices = async (coinIds) => {
-    try {
-        const data = await apiFetch(
-            `${config.api.coingecko}/simple/price?ids=${coinIds.join(',')}&vs_currencies=usd`,
-            `simulator_prices_${coinIds.join(',')}`,
-            1 // Cache 1 menit
-        );
-        return data || { bitcoin: { usd: 61000 }, ethereum: { usd: 3500 }, solana: { usd: 150 } }; // Fallback harga realistis
-    } catch (error) {
-        console.error('Gagal fetch harga koin:', error);
-        return { bitcoin: { usd: 61000 }, ethereum: { usd: 3500 }, solana: { usd: 150 } }; // Fallback kalo API gagal
-    }
-};
+        // --- GLOBAL STATE & CONFIGURATION ---
+        const config = {
+            // App ID and Firebase config are injected by the Canvas environment
+            appId: typeof __app_id !== 'undefined' ? __app_id : 'default-app-id',
+            firebaseConfig: typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {},
+            // API Endpoints
+            api: {
+                coingecko: 'https://api.coingecko.com/api/v3',
+                fearAndGreed: 'https://api.alternative.me/fng/?limit=1',
+                rss2json: 'https://api.rss2json.com/v1/api.json?rss_url=', // RSS to JSON proxy
+                gemini: {
+                    // Gemini API URL for text generation
+                    apiUrl: (apiKey) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+                    apiKey: "" // Canvas will inject API key at runtime if empty
+                }
+            },
+            newsSources: [
+                { name: 'CoinDesk', url: 'https://www.coindesk.com/feed/' },
+                { name: 'Decrypt', url: 'https://decrypt.co/feed' },
+                { name: 'CoinTelegraph', url: 'https://cointelegraph.com/rss' }
+            ],
+            // Simulator initial balance
+            initialSimulatorBalance: 10000,
+            // Coins available in simulator with their CoinGecko IDs
+            simulatorCoins: [
+                { id: 'bitcoin', name: 'Bitcoin', symbol: 'BTC' },
+                { id: 'ethereum', name: 'Ethereum', symbol: 'ETH' },
+                { id: 'solana', name: 'Solana', symbol: 'SOL' },
+                { id: 'dogecoin', name: 'Dogecoin', symbol: 'DOGE' }, // Added more for variety
+                { id: 'ripple', name: 'XRP', symbol: 'XRP' }
+            ]
+        };
 
-// --- SIMULATOR RENDER FUNCTION ---
-async function renderSimulator() {
-    // Fetch harga real-time untuk BTC, ETH, SOL
-    const coinIds = ['bitcoin', 'ethereum', 'solana'];
-    state.simulatorPrices = await fetchCoinPrices(coinIds);
-
-    $('#page-content').innerHTML = `
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2">
-                <div class="glass-card-pro p-6 rounded-2xl">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-bold">Simulator Trading</h3>
-                        <div id="simulator-balance" class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">Saldo: $${state.simulatorBalance.toLocaleString('en-US')}</div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="text-sm font-medium mb-2 block">Pilih Aset</label>
-                            <div class="relative">
-                                <input type="text" id="simulator-search" class="input-pro w-full p-2 pl-10 rounded-lg" placeholder="Cari koin...">
-                                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                            </div>
-                            <div class="mt-2 max-h-60 overflow-y-auto" id="coin-list">
-                                <div class="p-3 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer" data-coin="bitcoin">
-                                    <div class="coin-image"><img src="${getCoinImage('bitcoin', 'btc')}" alt="Bitcoin"></div>
-                                    <div><div class="font-medium">Bitcoin</div><div class="text-xs text-slate-500">BTC</div></div>
-                                </div>
-                                <div class="p-3 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer" data-coin="ethereum">
-                                    <div class="coin-image"><img src="${getCoinImage('ethereum', 'eth')}" alt="Ethereum"></div>
-                                    <div><div class="font-medium">Ethereum</div><div class="text-xs text-slate-500">ETH</div></div>
-                                </div>
-                                <div class="p-3 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer" data-coin="solana">
-                                    <div class="coin-image"><img src="${getCoinImage('solana', 'sol')}" alt="Solana"></div>
-                                    <div><div class="font-medium">Solana</div><div class="text-xs text-slate-500">SOL</div></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="flex justify-between items-center mb-4">
-                                <h4 class="font-bold text-lg" id="selected-coin">Bitcoin (BTC)</h4>
-                                <div class="text-xl font-bold" id="coin-price">$${state.simulatorPrices.bitcoin.usd.toLocaleString('en-US')}</div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <button id="buy-btn" class="btn-pro text-white font-semibold py-2 rounded-lg">Beli</button>
-                                <button id="sell-btn" class="bg-slate-200 dark:bg-slate-700 font-semibold py-2 rounded-lg">Jual</button>
-                            </div>
-                            <div class="mb-4">
-                                <label for="simulator-amount" class="text-sm font-medium block mb-2">Jumlah</label>
-                                <input type="number" id="simulator-amount" class="input-pro w-full p-2 rounded-lg" min="0" step="0.0001" value="0.1">
-                            </div>
-                            <div class="mb-4">
-                                <label for="simulator-price" class="text-sm font-medium block mb-2">Harga per Koin ($)</label>
-                                <input type="number" id="simulator-price" class="input-pro w-full p-2 rounded-lg" min="0" step="0.01" value="${state.simulatorPrices.bitcoin.usd}">
-                            </div>
-                            <button id="execute-order-btn" class="w-full btn-pro text-white font-semibold py-2 rounded-lg">Eksekusi Order</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card-pro p-6 rounded-2xl mt-6">
-                    <h3 class="text-xl font-bold mb-4">Riwayat Trading</h3>
-                    <div id="simulator-history" class="space-y-3 max-h-60 overflow-y-auto"></div>
-                </div>
-            </div>
-            <div>
-                <div class="glass-card-pro p-6 rounded-2xl">
-                    <h3 class="text-xl font-bold mb-4">Posisi Terbuka</h3>
-                    <div id="simulator-positions"></div>
-                </div>
-                <div class="glass-card-pro p-6 rounded-2xl mt-6">
-                    <h3 class="text-xl font-bold mb-4">Order Book</h3>
-                    <div class="order-book" id="order-book"></div>
-                </div>
-            </div>
-        </div>`;
-
-    // Event Listeners
-    $$('[data-coin]').forEach(el => el.addEventListener('click', async () => {
-        const coinId = el.dataset.coin;
-        const coinName = el.querySelector('.font-medium').textContent;
-        const coinSymbol = el.querySelector('.text-xs').textContent;
-        $('#selected-coin').textContent = `${coinName} (${coinSymbol})`;
-        $('#coin-price').textContent = `$${state.simulatorPrices[coinId].usd.toLocaleString('en-US')}`;
-        $('#simulator-price').value = state.simulatorPrices[coinId].usd;
-        updateOrderBook(coinId);
-    }));
-
-    $('#simulator-search').addEventListener('input', debounce((e) => {
-        const filter = e.target.value.toLowerCase();
-        $$('#coin-list > div').forEach(el => {
-            const name = el.querySelector('.font-medium').textContent.toLowerCase();
-            const symbol = el.querySelector('.text-xs').textContent.toLowerCase();
-            el.style.display = name.includes(filter) || symbol.includes(filter) ? '' : 'none';
-        });
-    }, 300));
-
-    $('#buy-btn').addEventListener('click', () => {
-        $('#buy-btn').classList.add('btn-pro', 'text-white');
-        $('#buy-btn').classList.remove('bg-slate-200', 'dark:bg-slate-700');
-        $('#sell-btn').classList.remove('btn-pro', 'text-white');
-        $('#sell-btn').classList.add('bg-slate-200', 'dark:bg-slate-700');
-    });
-
-    $('#sell-btn').addEventListener('click', () => {
-        $('#sell-btn').classList.add('btn-pro', 'text-white');
-        $('#sell-btn').classList.remove('bg-slate-200', 'dark:bg-slate-700');
-        $('#buy-btn').classList.remove('btn-pro', 'text-white');
-        $('#buy-btn').classList.add('bg-slate-200', 'dark:bg-slate-700');
-    });
-
-    $('#execute-order-btn').addEventListener('click', () => {
-        const type = $('#buy-btn').classList.contains('btn-pro') ? 'buy' : 'sell';
-        handleSimulatorOrder(type);
-    });
-
-    // Initial render
-    updateSimulatorUI();
-    updateOrderBook('bitcoin');
-}
-
-// --- ORDER BOOK DYNAMIC ---
-function updateOrderBook(coinId) {
-    const price = state.simulatorPrices[coinId].usd;
-    const spread = price * 0.002; // Spread 0.2%
-    const bids = [
-        { price: (price - spread * 0.5).toFixed(2), amount: (Math.random() * 3 + 1).toFixed(2) },
-        { price: (price - spread * 1.0).toFixed(2), amount: (Math.random() * 3 + 1).toFixed(2) },
-        { price: (price - spread * 1.5).toFixed(2), amount: (Math.random() * 3 + 1).toFixed(2) },
-    ];
-    const asks = [
-        { price: (price + spread * 0.5).toFixed(2), amount: (Math.random() * 3 + 1).toFixed(2) },
-        { price: (price + spread * 1.0).toFixed(2), amount: (Math.random() * 3 + 1).toFixed(2) },
-        { price: (price + spread * 1.5).toFixed(2), amount: (Math.random() * 3 + 1).toFixed(2) },
-    ];
-    const maxAmount = Math.max(...[...bids, ...asks].map(o => parseFloat(o.amount)));
-    $('#order-book').innerHTML = `
-        <div>
-            <h4 class="font-semibold text-center mb-2">Bid</h4>
-            <div>
-                ${bids.map(bid => `
-                    <div class="mb-2">
-                        <div class="flex justify-between text-sm"><span class="bid">${bid.price}</span><span>${bid.amount}</span></div>
-                        <div class="depth-bar bg-green-500/20" style="width: ${(parseFloat(bid.amount) / maxAmount * 100).toFixed(2)}%"></div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-        <div>
-            <h4 class="font-semibold text-center mb-2">Ask</h4>
-            <div>
-                ${asks.map(ask => `
-                    <div class="mb-2">
-                        <div class="flex justify-between text-sm"><span class="ask">${ask.price}</span><span>${ask.amount}</span></div>
-                        <div class="depth-bar bg-red-500/20" style="width: ${(parseFloat(ask.amount) / maxAmount * 100).toFixed(2)}%"></div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>`;
-}
-
-// --- SIMULATOR UI UPDATE ---
-function updateSimulatorUI() {
-    const positionsEl = $('#simulator-positions');
-    const historyEl = $('#simulator-history');
-    positionsEl.innerHTML = Object.keys(state.simulatorPositions).length > 0 ? Object.entries(state.simulatorPositions).map(([coin, data]) => {
-        const currentPrice = state.simulatorPrices[coin.toLowerCase()]?.usd || data.price;
-        const value = data.amount * currentPrice;
-        const pnl = value - (data.amount * data.price);
-        const pnlClass = pnl >= 0 ? 'price-up' : 'price-down';
-        return `
-            <div class="border-b border-slate-200 dark:border-slate-800 py-3">
-                <div class="flex justify-between"><div class="font-medium">${coin.toUpperCase()}</div><div class="font-semibold">${data.amount.toLocaleString('en-US', { maximumFractionDigits: 6 })}</div></div>
-                <div class="flex justify-between text-sm text-slate-500">
-                    <span>Avg. Buy: $${data.price.toLocaleString('en-US')}</span>
-                    <span class="${pnlClass}">Value: $${value.toLocaleString('en-US', { maximumFractionDigits: 2 })} (${pnl >= 0 ? '+' : ''}$${pnl.toLocaleString('en-US', { maximumFractionDigits: 2 })})</span>
-                </div>
-            </div>`;
-    }).join('') : '<p class="text-slate-500">Belum ada posisi, bro.</p>';
-    historyEl.innerHTML = state.simulatorHistory.length > 0 ? state.simulatorHistory.map(h => `
-        <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div class="flex justify-between"><div class="font-medium text-${h.type === 'buy' ? 'green' : 'red'}-500">${h.type.toUpperCase()} ${h.coin}</div><div class="font-semibold">${h.amount.toLocaleString('en-US', { maximumFractionDigits: 6 })}</div></div>
-            <div class="flex justify-between text-sm text-slate-500"><span>@ $${h.price.toLocaleString('en-US')}</span><span>Total: $${h.total.toLocaleString('en-US')}</span></div>
-            <div class="text-xs text-slate-400 mt-1">${h.date}</div>
-        </div>`).join('') : '<p class="text-slate-500">Belum ada riwayat, bro.</p>';
-}
-
-// --- HANDLE SIMULATOR ORDER ---
-function handleSimulatorOrder(type) {
-    const amount = parseFloat($('#simulator-amount').value);
-    const price = parseFloat($('#simulator-price').value);
-    const coin = $('#selected-coin').textContent.split(' (')[0];
-    const symbol = $('#selected-coin').textContent.match(/\(([^)]+)\)/)[1].toLowerCase();
-    const total = amount * price;
-    if (isNaN(amount) || isNaN(price) || amount <= 0 || price <= 0) {
-        showToast('Isi jumlah sama harga dengan bener, bro!', 'error');
-        return;
-    }
-    if (type === 'buy') {
-        if (total > state.simulatorBalance) {
-            showToast('Duit nggak cukup, bro!', 'error');
-            return;
-        }
-        state.simulatorBalance -= total;
-        state.simulatorPositions[symbol] = state.simulatorPositions[symbol] || { amount: 0, price: 0 };
-        state.simulatorPositions[symbol].amount += amount;
-        state.simulatorPositions[symbol].price = price;
-    } else {
-        if (!state.simulatorPositions[symbol] || state.simulatorPositions[symbol].amount < amount) {
-            showToast('Aset nggak cukup buat dijual, bro!', 'error');
-            return;
-        }
-        state.simulatorBalance += total;
-        state.simulatorPositions[symbol].amount -= amount;
-        if (state.simulatorPositions[symbol].amount <= 0) delete state.simulatorPositions[symbol];
-    }
-    state.simulatorHistory.unshift({ type, coin: symbol.toUpperCase(), amount, price, total, date: new Date().toLocaleString() });
-    showToast(`${type === 'buy' ? 'Beli' : 'Jual'} ${amount} ${symbol.toUpperCase()} sukses, bro!`, 'success');
-    triggerConfetti();
-    updateSimulatorUI();
-    $('#simulator-balance').textContent = `Saldo: $${state.simulatorBalance.toLocaleString('en-US')}`;
-    updateOrderBook(symbol.toLowerCase());
-}
+        const state = {
+            auth: null,
+            db: null,
+            userId: null,
+            isAuthReady: false,
+            currentPage: null,
+            portfolioListener: null, // Holds the unsubscribe function for Firestore listener
+            watchlist: [], // Stored in-memory for simplicity, can be moved to Firebase
+            simulatorBalance: config.initialSimulatorBalance,
+            simulatorPositions: {}, // { 'btc': { amount: 0.5, price: 60000 } }
+            simulatorHistory: [], // [{ type: 'buy', coin: 'BTC', amount: 0.1, price: 61000, total: 6100, date: '...' }]
+            simulatorPrices: {}, // { 'bitcoin': { usd: 61000 } } - Real-time prices for simulator coins
+        };
 
         // --- UTILITY FUNCTIONS ---
         const $ = (selector) => document.querySelector(selector);
         const $$ = (selector) => document.querySelectorAll(selector);
 
+        // Debounce function to limit how often a function is called
         const debounce = (func, wait) => {
             let timeout;
-            return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func.apply(this, args), wait); };
+            return (...args) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
         };
 
+        // Show a temporary toast notification
         const showToast = (message, type = 'success', duration = 3000) => {
             const container = $('#toast-container');
             const toastId = `toast-${Date.now()}`;
@@ -509,22 +335,28 @@ function handleSimulatorOrder(type) {
             const toastElement = $(`#${toastId}`);
             setTimeout(() => {
                 toastElement.classList.add('show');
-                setTimeout(() => { toastElement.classList.remove('show'); toastElement.addEventListener('transitionend', () => toastElement.remove()); }, duration);
+                setTimeout(() => {
+                    toastElement.classList.remove('show');
+                    toastElement.addEventListener('transitionend', () => toastElement.remove());
+                }, duration);
             }, 10);
         };
 
+        // Open the universal modal with custom title and content
         const openModal = (title, content) => {
             $('#modal-title').innerHTML = title;
             $('#modal-body').innerHTML = content;
             $('#modal-container').classList.remove('hidden');
         };
 
+        // Close the universal modal
         const closeModal = () => {
             $('#modal-container').classList.add('hidden');
             $('#modal-title').innerHTML = '';
             $('#modal-body').innerHTML = '';
         };
 
+        // Trigger a confetti animation
         const triggerConfetti = () => {
             const canvas = $('#confetti-canvas');
             const ctx = canvas.getContext('2d');
@@ -545,7 +377,6 @@ function handleSimulatorOrder(type) {
                     ctx.save();
                     ctx.translate(p.x, p.y);
                     ctx.rotate(p.rotation * Math.PI / 180);
-                    ctx.fillStyle = p.color;
                     ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
                     ctx.restore();
                     p.rotation += 5;
@@ -557,66 +388,139 @@ function handleSimulatorOrder(type) {
             animateConfetti();
         };
 
-        const getCoinImage = (coinId, symbol) => `https://cryptologos.cc/logos/${coinId}-${symbol.toLowerCase()}-logo.svg?v=024`;
+        // Get CoinGecko image URL, with a fallback placeholder
+        const getCoinImage = (coinId, symbol) => `https://assets.coingecko.com/coins/images/fallback/large/${coinId}.png` || `https://placehold.co/32x32/1e293b/ffffff?text=${symbol.charAt(0).toUpperCase()}`;
 
-        // --- API & DATA FETCHING ---
+
+        // --- API & DATA FETCHING UTILITIES ---
+
+        // Generic API fetch with localStorage caching
         const apiFetch = async (url, cacheKey, cacheDurationMinutes = 5) => {
             const cached = localStorage.getItem(cacheKey);
             if (cached) {
                 try {
                     const { data, timestamp } = JSON.parse(cached);
-                    if (Date.now() - timestamp < cacheDurationMinutes * 60 * 1000) return data;
-                } catch (e) { console.error("Gagal mem-parsing cache", e); }
+                    if (Date.now() - timestamp < cacheDurationMinutes * 60 * 1000) {
+                        // console.log(`Cache hit for ${cacheKey}`);
+                        return data;
+                    }
+                } catch (e) {
+                    console.warn(`Gagal mem-parsing cache untuk ${cacheKey}:`, e);
+                    localStorage.removeItem(cacheKey); // Clear corrupted cache
+                }
             }
+
             try {
+                // console.log(`Fetching ${url} (no cache or expired)...`);
                 const response = await fetch(url);
-                if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                if (!response.ok) {
+                    if (response.status === 429) {
+                        showToast('Terlalu banyak permintaan API. Coba lagi sebentar lagi!', 'error');
+                    }
+                    throw new Error(`API Error: ${response.status}`);
+                }
                 const data = await response.json();
                 localStorage.setItem(cacheKey, JSON.stringify({ data, timestamp: Date.now() }));
                 return data;
             } catch (error) {
                 console.error(`Gagal mengambil data dari ${url}:`, error);
-                if (cached) return JSON.parse(cached).data;
+                showToast(`Gagal memuat data dari API. Cek koneksi atau coba lagi nanti.`, 'error');
+                // Return cached data if available, even if expired, as a last resort
+                if (cached) {
+                    console.warn(`Menggunakan data cache yang kedaluwarsa untuk ${cacheKey} karena gagal fetch.`);
+                    return JSON.parse(cached).data;
+                }
                 return null;
             }
         };
 
+        // Fetch real-time prices for multiple coins from CoinGecko
+        const fetchCoinPrices = async (coinIds) => {
+            const ids = Array.isArray(coinIds) ? coinIds.join(',') : coinIds;
+            if (!ids) return {};
+
+            try {
+                const data = await apiFetch(
+                    `${config.api.coingecko}/simple/price?ids=${ids}&vs_currencies=usd`,
+                    `realtime_prices_${ids}`,
+                    0.5 // Cache for 30 seconds for simulator prices
+                );
+                // Ensure data structure is flat (e.g., { bitcoin: { usd: 61000 } })
+                return data || {};
+            } catch (error) {
+                console.error('Gagal fetch harga koin:', error);
+                return {}; // Return empty object on error
+            }
+        };
+
+        // Get AI summary using Gemini API
         const getAiSummary = async (text) => {
             const prompt = `Ringkas artikel berita berikut dalam 3-4 poin utama menggunakan bahasa Indonesia yang santai dan mudah dimengerti. Fokus pada informasi paling penting yang relevan untuk investor atau peminat kripto. Berikut artikelnya:\n\n---\n\n${text}`;
             try {
                 let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
                 const payload = { contents: chatHistory };
-                const apiUrl = config.gemini.apiUrl(config.gemini.apiKey);
-                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                if (!response.ok) throw new Error(`AI Gagal merangkum, status: ${response.status}`);
+                // Using the dynamically provided API key for Gemini
+                const apiKey = config.api.gemini.apiKey;
+                const apiUrl = config.api.gemini.apiUrl(apiKey);
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error(`AI Gagal merangkum, status: ${response.status}, error:`, errorData);
+                    throw new Error(`AI Gagal merangkum, status: ${response.status}`);
+                }
+
                 const result = await response.json();
-                if (result.candidates && result.candidates[0].content.parts.length > 0) return result.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
-                throw new Error("Format respons AI tidak valid.");
+                if (result.candidates && result.candidates[0]?.content?.parts?.length > 0) {
+                    return result.candidates[0].content.parts[0].text.replace(/\n/g, '<br>');
+                }
+                throw new Error("Format respons AI tidak valid atau kosong.");
             } catch (error) {
                 console.error("Gagal fetch ke Gemini:", error);
+                showToast('Maaf, AI sedang istirahat. Gagal merangkum berita.', 'error');
                 return `<p class="text-red-500">Maaf, AI sedang istirahat. Gagal merangkum berita.</p>`;
             }
         };
 
         // --- FIREBASE & AUTHENTICATION ---
         const initAuth = async () => {
-            state.auth = state.firebase.getAuth(state.firebase.app);
-            state.db = state.firebase.getFirestore(state.firebase.app);
+            // Get Firebase Auth and Firestore instances
+            state.auth = getAuth(firebaseApp);
+            state.db = getFirestore(firebaseApp);
+
             return new Promise((resolve) => {
-                state.firebase.onAuthStateChanged(state.auth, async (user) => {
+                // Listen for authentication state changes
+                onAuthStateChanged(state.auth, async (user) => {
                     if (user) {
+                        // User is signed in
                         state.userId = user.uid;
                         $('#user-id-display').textContent = state.userId;
                         state.isAuthReady = true;
+                        console.log("Firebase Authenticated. User ID:", state.userId);
                         resolve(user);
                     } else {
+                        // User is signed out, attempt to sign in anonymously or with custom token
                         try {
-                            await state.firebase.signInAnonymously(state.auth);
+                            const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : '';
+                            if (initialAuthToken) {
+                                await signInWithCustomToken(state.auth, initialAuthToken);
+                                console.log("Signed in with custom token.");
+                            } else {
+                                await signInAnonymously(state.auth);
+                                console.log("Signed in anonymously.");
+                            }
+                            // Re-evaluate onAuthStateChanged after sign-in attempt
                         } catch (error) {
-                            console.error("Gagal login anonim:", error);
-                            state.userId = 'offline-' + Date.now();
-                            $('#user-id-display').textContent = 'Offline Mode';
-                            state.isAuthReady = true;
+                            console.error("Gagal login Firebase:", error);
+                            state.userId = 'offline-' + crypto.randomUUID(); // Fallback to a random ID
+                            $('#user-id-display').textContent = 'Offline Mode (Anonim)';
+                            state.isAuthReady = true; // Mark as ready even if offline
+                            showToast('Gagal terhubung ke Firebase. Mode offline aktif.', 'error');
                             resolve(null);
                         }
                     }
@@ -625,6 +529,8 @@ function handleSimulatorOrder(type) {
         };
 
         // --- PAGE RENDER FUNCTIONS ---
+
+        // Renders the Dashboard page content
         async function renderDashboard() {
             $('#page-content').innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-6 gap-6">
@@ -648,18 +554,33 @@ function handleSimulatorOrder(type) {
             renderPriceTable();
             renderFearGreed();
             renderWatchlist();
+
+            // Event listener for coin search on Dashboard
+            $('#search-coin').addEventListener('input', debounce((e) => {
+                const filter = e.target.value.toLowerCase();
+                $$('#price-table-container tbody tr').forEach(row => {
+                    const coinName = row.querySelector('.font-semibold').textContent.toLowerCase();
+                    const coinSymbol = row.querySelector('.text-xs').textContent.toLowerCase();
+                    row.style.display = coinName.includes(filter) || coinSymbol.includes(filter) ? '' : 'none';
+                });
+            }, 300));
         }
 
+        // Renders the Live Market price table
         async function renderPriceTable() {
             const container = $('#price-table-container');
-            container.innerHTML = `<div class="w-full h-96 skeleton-loader"></div>`;
+            if (!container) return; // Ensure container exists
+            container.innerHTML = `<div class="w-full h-96 skeleton-loader flex items-center justify-center">Memuat data pasar...</div>`; // Loading indicator
+
             const coins = await apiFetch(`${config.api.coingecko}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false`, 'market_data', 2);
-            if (!coins) {
-                container.innerHTML = `<p class="text-red-500">Gagal memuat data pasar.</p>`;
+
+            if (!coins || coins.length === 0) {
+                container.innerHTML = `<p class="text-red-500 text-center py-8">Gagal memuat data pasar. Coba refresh halaman.</p>`;
                 return;
             }
+
             container.innerHTML = `
-                <table class="w-full text-left text-sm">
+                <table class="w-full text-left text-sm table-auto">
                     <thead>
                         <tr class="border-b border-slate-200 dark:border-slate-800">
                             <th class="p-2">#</th>
@@ -678,11 +599,11 @@ function handleSimulatorOrder(type) {
                                     <div class="coin-image"><img src="${coin.image}" alt="${coin.name}" onerror="this.src='https://placehold.co/32x32/1e293b/ffffff?text=${coin.symbol.charAt(0).toUpperCase()}'"></div>
                                     <div><div class="font-semibold">${coin.name}</div><div class="text-xs text-slate-500">${coin.symbol.toUpperCase()}</div></div>
                                 </td>
-                                <td class="p-2 text-right font-semibold">$${coin.current_price.toLocaleString('en-US')}</td>
+                                <td class="p-2 text-right font-semibold">$${coin.current_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                 <td class="p-2 text-right font-semibold ${coin.price_change_percentage_24h >= 0 ? 'price-up' : 'price-down'}">${coin.price_change_percentage_24h.toFixed(2)}%</td>
                                 <td class="p-2 text-right hidden md:table-cell">$${coin.market_cap.toLocaleString('en-US')}</td>
                                 <td class="p-2 text-right">
-                                    <button class="add-watchlist-btn p-1 text-slate-400 hover:text-primary" data-coin-id="${coin.id}" data-coin-name="${coin.name}" data-coin-symbol="${coin.symbol}">
+                                    <button class="add-watchlist-btn p-1 text-slate-400 hover:text-primary rounded-full" data-coin-id="${coin.id}" data-coin-name="${coin.name}" data-coin-symbol="${coin.symbol}">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                                     </button>
                                 </td>
@@ -690,27 +611,42 @@ function handleSimulatorOrder(type) {
                         `).join('')}
                     </tbody>
                 </table>`;
-            $$('#price-table-container tr[data-coin-id]').forEach(row => row.addEventListener('click', () => showCoinDetails(row.dataset.coinId)));
-            $$('.add-watchlist-btn').forEach(btn => btn.addEventListener('click', () => {
+
+            // Attach event listeners after content is loaded
+            $$('#price-table-container tbody tr[data-coin-id]').forEach(row => row.addEventListener('click', (e) => {
+                // Only trigger if click is not on the add-watchlist-btn
+                if (!e.target.closest('.add-watchlist-btn')) {
+                    showCoinDetails(row.dataset.coinId);
+                }
+            }));
+            $$('.add-watchlist-btn').forEach(btn => btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent row click from triggering
                 const coin = { id: btn.dataset.coinId, name: btn.dataset.coinName, symbol: btn.dataset.coinSymbol };
                 if (!state.watchlist.some(w => w.id === coin.id)) {
                     state.watchlist.push(coin);
                     showToast(`${coin.name} ditambahkan ke watchlist!`, 'success');
-                    renderWatchlist();
+                    renderWatchlist(); // Re-render watchlist widget
+                } else {
+                    showToast(`${coin.name} sudah ada di watchlist, bro!`, 'info');
                 }
             }));
         }
 
+        // Renders the Fear & Greed Index widget
         async function renderFearGreed() {
             const container = $('#fear-greed-widget');
-            container.innerHTML = `<div class="w-full h-full skeleton-loader"></div>`;
-            const fngData = await apiFetch(config.api.fearAndGreed, 'fng_data', 60);
-            if (!fngData || !fngData.data[0]) {
-                container.innerHTML = `<p class="text-red-500">Gagal memuat F&G Index.</p>`;
+            if (!container) return;
+            container.innerHTML = `<div class="w-full h-full skeleton-loader flex items-center justify-center">Memuat F&G Index...</div>`;
+
+            const fngData = await apiFetch(config.api.fearAndGreed, 'fng_data', 60); // Cache for 1 hour
+
+            if (!fngData || !fngData.data || fngData.data.length === 0) {
+                container.innerHTML = `<p class="text-red-500 text-center">Gagal memuat F&G Index.</p>`;
                 return;
             }
+
             const { value, value_classification } = fngData.data[0];
-            const color = value > 50 ? 'text-green-500' : 'text-red-500';
+            const color = value > 50 ? 'text-green-500' : (value < 50 ? 'text-red-500' : 'text-slate-500');
             container.innerHTML = `
                 <h3 class="text-xl font-bold mb-2">Fear & Greed Index</h3>
                 <p class="text-6xl font-extrabold ${color}">${value}</p>
@@ -718,54 +654,114 @@ function handleSimulatorOrder(type) {
                 <p class="text-xs text-slate-500 mt-2">Data dari alternative.me</p>`;
         }
 
-        function renderWatchlist() {
+        // Renders the Watchlist widget
+        async function renderWatchlist() {
             const container = $('#watchlist-widget');
+            if (!container) return;
+
             container.innerHTML = `
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-bold">Watchlist</h3>
-                    <button class="p-1 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                    <button id="clear-watchlist-btn" class="p-1 rounded-full text-red-500 hover:bg-slate-200 dark:hover:bg-slate-800" title="Bersihkan Watchlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                     </button>
                 </div>
-                <div class="space-y-3">
-                    ${state.watchlist.length > 0 ? state.watchlist.map(w => `
-                        <div class="flex items-center justify-between py-2 border-b border-slate-200 dark:border-slate-800">
-                            <div class="flex items-center gap-2">
-                                <span class="font-medium">${w.symbol.toUpperCase()}</span>
-                                <span class="text-xs text-slate-500">${w.name}</span>
-                            </div>
-                            <div class="text-right">
-                                <div class="font-semibold">-</div>
-                                <div class="text-xs">-</div>
-                            </div>
-                        </div>
-                    `).join('') : '<p class="text-slate-500 text-sm">Tambah koin ke watchlist!</p>'}
+                <div class="space-y-3" id="watchlist-list-container">
+                    <!-- Watchlist items will be loaded here -->
                 </div>`;
-        }
 
-        async function showCoinDetails(coinId) {
-            openModal('Loading Details...', `<div class="h-96 skeleton-loader"></div>`);
-            const coin = await apiFetch(`${config.api.coingecko}/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`, `coin_${coinId}`, 5);
-            if (!coin) {
-                openModal('Error', `<p class="text-red-500">Gagal memuat detail koin.</p>`);
+            const watchlistListContainer = $('#watchlist-list-container');
+
+            if (state.watchlist.length === 0) {
+                watchlistListContainer.innerHTML = '<p class="text-slate-500 text-sm text-center py-4">Tambah koin ke watchlist!</p>';
+                $('#clear-watchlist-btn').classList.add('hidden'); // Hide clear button if empty
                 return;
             }
-            const chartData = await apiFetch(`${config.api.coingecko}/coins/${coinId}/market_chart?vs_currency=usd&days=7`, `chart_${coinId}`, 30);
+
+            $('#clear-watchlist-btn').classList.remove('hidden');
+
+            const watchlistIds = state.watchlist.map(w => w.id).join(',');
+            const prices = await fetchCoinPrices(watchlistIds); // Use the dedicated fetcher
+
+            watchlistListContainer.innerHTML = state.watchlist.map(w => {
+                const currentPrice = prices?.[w.id]?.usd || 0;
+                const priceChange24h = prices?.[w.id]?.usd_24h_change || 0; // Requires different API call for 24h change
+                const priceClass = currentPrice >= 0 ? 'price-up' : 'price-down'; // Simplified, needs proper logic from comprehensive API
+
+                // Note: For actual 24h change, you'd need a more comprehensive CoinGecko API call
+                // (e.g., /coins/markets?ids=...&vs_currency=usd&price_change_percentage=24h)
+                // For simplicity here, just showing current price.
+                return `
+                    <div class="flex items-center justify-between py-2 border-b border-slate-200 dark:border-slate-800 last:border-b-0">
+                        <div class="flex items-center gap-2">
+                            <div class="coin-image"><img src="${getCoinImage(w.id, w.symbol)}" alt="${w.name}" onerror="this.src='https://placehold.co/24x24/1e293b/ffffff?text=${w.symbol.charAt(0).toUpperCase()}'"></div>
+                            <span class="font-medium">${w.symbol.toUpperCase()}</span>
+                            <span class="text-xs text-slate-500 hidden sm:inline">${w.name}</span>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-semibold">$${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                            <!-- <div class="text-xs ${priceClass}">${priceChange24h.toFixed(2)}%</div> -->
+                        </div>
+                        <button class="remove-watchlist-item-btn p-1 text-slate-400 hover:text-red-500 rounded-full" data-coin-id="${w.id}" title="Hapus dari Watchlist">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                        </button>
+                    </div>`;
+            }).join('');
+
+            // Attach event listener for removing watchlist items
+            $$('.remove-watchlist-item-btn').forEach(btn => btn.addEventListener('click', (e) => {
+                const coinIdToRemove = btn.dataset.coinId;
+                state.watchlist = state.watchlist.filter(w => w.id !== coinIdToRemove);
+                showToast('Koin dihapus dari watchlist.', 'info');
+                renderWatchlist(); // Re-render to reflect changes
+            }));
+
+            // Attach event listener for clearing all watchlist items
+            $('#clear-watchlist-btn').addEventListener('click', () => {
+                openModal('Konfirmasi', `<p>Yakin mau hapus semua koin dari watchlist?</p><div class="flex justify-end gap-4 mt-4"><button id="confirm-clear-watchlist" class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700">Ya, Hapus</button><button id="cancel-clear-watchlist" class="bg-slate-200 dark:bg-slate-700 font-semibold py-2 px-4 rounded-lg">Batal</button></div>`);
+                $('#cancel-clear-watchlist').addEventListener('click', closeModal);
+                $('#confirm-clear-watchlist').addEventListener('click', () => {
+                    state.watchlist = [];
+                    showToast('Watchlist dibersihkan!', 'success');
+                    renderWatchlist();
+                    closeModal();
+                });
+            });
+        }
+
+        // Shows detailed information for a selected cryptocurrency in a modal
+        async function showCoinDetails(coinId) {
+            openModal('Memuat Detail...', `<div class="h-96 skeleton-loader flex items-center justify-center"></div>`);
+
+            const coin = await apiFetch(`${config.api.coingecko}/coins/${coinId}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`, `coin_detail_${coinId}`, 5); // Cache for 5 minutes
+
+            if (!coin) {
+                openModal('Error', `<p class="text-red-500 text-center">Gagal memuat detail koin.</p>`);
+                return;
+            }
+
+            const chartData = await apiFetch(`${config.api.coingecko}/coins/${coinId}/market_chart?vs_currency=usd&days=7`, `chart_data_${coinId}`, 30); // Cache for 30 minutes
+
             const title = `<div class="flex items-center gap-3"><img src="${coin.image.small}" class="w-8 h-8 rounded-full" alt="${coin.name}"><span>${coin.name} <span class="text-slate-500">${coin.symbol.toUpperCase()}</span></span></div>`;
             let content = `
-                <div class="h-48 mb-4"><canvas id="coin-detail-chart"></canvas></div>
+                <div class="h-48 mb-4">
+                    ${chartData?.prices ? '<canvas id="coin-detail-chart"></canvas>' : '<div class="h-full skeleton-loader flex items-center justify-center">Tidak ada data grafik.</div>'}
+                </div>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
-                    <div class="glass-card-pro p-3 rounded-lg"><p class="text-xs text-slate-500">Harga</p><p class="font-semibold text-lg">$${coin.market_data.current_price.usd.toLocaleString('en-US')}</p></div>
+                    <div class="glass-card-pro p-3 rounded-lg"><p class="text-xs text-slate-500">Harga</p><p class="font-semibold text-lg">$${coin.market_data.current_price.usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
                     <div class="glass-card-pro p-3 rounded-lg"><p class="text-xs text-slate-500">Market Cap</p><p class="font-semibold text-lg">$${coin.market_data.market_cap.usd.toLocaleString('en-US')}</p></div>
                     <div class="glass-card-pro p-3 rounded-lg"><p class="text-xs text-slate-500">24h Volume</p><p class="font-semibold text-lg">$${coin.market_data.total_volume.usd.toLocaleString('en-US')}</p></div>
                     <div class="glass-card-pro p-3 rounded-lg"><p class="text-xs text-slate-500">24h Change</p><p class="font-semibold text-lg ${coin.market_data.price_change_percentage_24h >= 0 ? 'price-up' : 'price-down'}">${coin.market_data.price_change_percentage_24h.toFixed(2)}%</p></div>
                     <div class="glass-card-pro p-3 rounded-lg"><p class="text-xs text-slate-500">Circulating Supply</p><p class="font-semibold text-lg">${coin.market_data.circulating_supply.toLocaleString('en-US')}</p></div>
                     <div class="glass-card-pro p-3 rounded-lg"><p class="text-xs text-slate-500">All-Time High</p><p class="font-semibold text-lg">$${coin.market_data.ath.usd.toLocaleString('en-US')}</p></div>
                 </div>
-                <div class="mt-4"><h4 class="font-bold mb-2">Tentang ${coin.name}</h4><p class="text-sm text-slate-400 line-clamp-4">${coin.description.en || 'Tidak ada deskripsi.'}</p></div>`;
+                <div class="mt-4"><h4 class="font-bold mb-2">Tentang ${coin.name}</h4><p class="text-sm text-slate-400 line-clamp-4">${coin.description.en || 'Tidak ada deskripsi yang tersedia.'}</p></div>`;
+
             openModal(title, content);
-            if (chartData?.prices) {
-                const labels = chartData.prices.map(p => p[0]);
+
+            // Render chart if data is available
+            if (chartData?.prices && chartData.prices.length > 0) {
+                const labels = chartData.prices.map(p => new Date(p[0]));
                 const data = chartData.prices.map(p => p[1]);
                 const borderColor = data[0] <= data[data.length - 1] ? 'rgba(34, 197, 94, 1)' : 'rgba(239, 68, 68, 1)';
                 const bgColor = data[0] <= data[data.length - 1] ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)';
@@ -773,169 +769,281 @@ function handleSimulatorOrder(type) {
                 if (ctx) {
                     new Chart(ctx, {
                         type: 'line',
-                        data: { labels, datasets: [{ label: 'Harga (USD)', data, borderColor, backgroundColor: bgColor, borderWidth: 2, pointRadius: 0, fill: true }] },
-                        options: { responsive: true, maintainAspectRatio: false, scales: { x: { type: 'time', time: { unit: 'day' }, ticks: { color: '#94a3b8' } }, y: { ticks: { callback: value => '$' + value.toLocaleString(), color: '#94a3b8' } } }, plugins: { legend: { display: false } } }
+                        data: {
+                            labels,
+                            datasets: [{
+                                label: 'Harga (USD)',
+                                data,
+                                borderColor,
+                                backgroundColor: bgColor,
+                                borderWidth: 2,
+                                pointRadius: 0,
+                                fill: true,
+                                tension: 0.1 // Smooth out the line
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    type: 'time',
+                                    time: { unit: 'day' },
+                                    ticks: { color: document.documentElement.classList.contains('dark') ? '#94a3b8' : '#64748b' },
+                                    grid: { color: document.documentElement.classList.contains('dark') ? 'rgba(80,80,80,0.2)' : 'rgba(200,200,200,0.2)' }
+                                },
+                                y: {
+                                    ticks: {
+                                        callback: value => '$' + value.toLocaleString('en-US', { maximumFractionDigits: 2 }),
+                                        color: document.documentElement.classList.contains('dark') ? '#94a3b8' : '#64748b'
+                                    },
+                                    grid: { color: document.documentElement.classList.contains('dark') ? 'rgba(80,80,80,0.2)' : 'rgba(200,200,200,0.2)' }
+                                }
+                            },
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return `Harga: $${context.parsed.y.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     });
                 }
             }
         }
 
+        // Renders the Portfolio management page
         function renderPortfolio() {
             $('#page-content').innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2 space-y-6">
-                        <div id="portfolio-summary-card" class="glass-card-pro p-6 rounded-2xl"></div>
+                        <div id="portfolio-summary-card" class="glass-card-pro p-6 rounded-2xl">
+                            <!-- Summary will be populated by JS -->
+                            <div class="h-24 skeleton-loader"></div>
+                        </div>
                         <div id="portfolio-list-card" class="glass-card-pro p-6 rounded-2xl">
                             <h3 class="text-xl font-bold mb-4">Aset Saya</h3>
-                            <div id="portfolio-list" class="space-y-4"></div>
+                            <div id="portfolio-list" class="space-y-4">
+                                <!-- Asset list will be populated by JS -->
+                                <div class="h-40 skeleton-loader"></div>
+                            </div>
                         </div>
                     </div>
                     <div class="space-y-6">
                         <div class="glass-card-pro p-6 rounded-2xl">
                             <h3 class="text-xl font-bold mb-4">Tambah Aset</h3>
                             <div class="space-y-4">
-                                <div><label for="asset-name" class="text-sm font-medium">Nama Aset</label><input type="text" id="asset-name" class="mt-1 block w-full p-2 input-pro rounded-md"></div>
-                                <div><label for="asset-amount" class="text-sm font-medium">Jumlah</label><input type="number" id="asset-amount" class="mt-1 block w-full p-2 input-pro rounded-md" min="0"></div>
-                                <div><label for="asset-buy-price" class="text-sm font-medium">Harga Beli ($)</label><input type="number" id="asset-buy-price" class="mt-1 block w-full p-2 input-pro rounded-md" min="0"></div>
+                                <div><label for="asset-name" class="text-sm font-medium">Nama Aset (e.g. Bitcoin)</label><input type="text" id="asset-name" class="mt-1 block w-full p-2 input-pro rounded-md"></div>
+                                <div><label for="asset-amount" class="text-sm font-medium">Jumlah</label><input type="number" id="asset-amount" class="mt-1 block w-full p-2 input-pro rounded-md" min="0" step="0.000001"></div>
+                                <div><label for="asset-buy-price" class="text-sm font-medium">Harga Beli ($)</label><input type="number" id="asset-buy-price" class="mt-1 block w-full p-2 input-pro rounded-md" min="0" step="0.01"></div>
                                 <button id="add-asset-btn" class="w-full btn-pro text-white font-semibold py-2 rounded-lg">Tambah Aset</button>
                             </div>
                         </div>
                         <button id="clear-portfolio-btn" class="w-full bg-red-500/20 text-red-500 font-semibold py-2 rounded-lg hover:bg-red-600 hover:text-white transition-colors">Kosongkan Portofolio</button>
                     </div>
                 </div>`;
-            listenToPortfolio();
+            listenToPortfolio(); // Start listening to Firebase portfolio changes
+            // Attach event listeners for add/clear buttons
             $('#add-asset-btn').addEventListener('click', handleAddAsset);
             $('#clear-portfolio-btn').addEventListener('click', handleClearPortfolio);
         }
 
+        // Sets up real-time listener for user's portfolio in Firestore
         function listenToPortfolio() {
-            if (state.portfolioListener) state.portfolioListener();
-            if (!state.isAuthReady) return;
+            // Unsubscribe from previous listener if exists
+            if (state.portfolioListener) {
+                state.portfolioListener();
+                console.log("Unsubscribed from previous portfolio listener.");
+            }
+
+            if (!state.isAuthReady || !state.userId) {
+                // If not authenticated or userId is not set, don't set up listener
+                console.warn("Firebase Auth not ready or User ID is null. Cannot listen to portfolio.");
+                $('#portfolio-list').innerHTML = `<p class="text-red-500 text-center py-4">Tidak dapat memuat portofolio. Pastikan Anda terhubung.</p>`;
+                $('#portfolio-summary-card').innerHTML = `<p class="text-red-500 text-center py-4">Tidak dapat memuat ringkasan portofolio.</p>`;
+                return;
+            }
+
             const portfolioPath = `artifacts/${config.appId}/users/${state.userId}/portfolio`;
-            const q = state.firebase.query(state.firebase.collection(state.db, portfolioPath));
-            $('#portfolio-list').innerHTML = `<div class="h-40 skeleton-loader"></div>`;
-            state.portfolioListener = state.firebase.onSnapshot(q, async (snapshot) => {
+            const q = query(collection(state.db, portfolioPath));
+
+            console.log("Setting up new portfolio listener for path:", portfolioPath);
+
+            state.portfolioListener = onSnapshot(q, async (snapshot) => {
                 const portfolio = [];
                 snapshot.forEach(doc => portfolio.push({ firestoreId: doc.id, ...doc.data() }));
-                await updatePortfolioView(portfolio);
+                console.log("Portfolio data received:", portfolio);
+                await updatePortfolioView(portfolio); // Update UI with fetched portfolio data
             }, (error) => {
-                console.error("Firestore error:", error);
-                $('#portfolio-list').innerHTML = `<p class="text-red-500">Gagal memuat portofolio.</p>`;
+                console.error("Firestore error listening to portfolio:", error);
+                showToast('Gagal memuat portofolio. Error koneksi.', 'error');
+                $('#portfolio-list').innerHTML = `<p class="text-red-500 text-center py-4">Gagal memuat portofolio.</p>`;
+                $('#portfolio-summary-card').innerHTML = `<p class="text-red-500 text-center py-4">Gagal memuat ringkasan portofolio.</p>`;
             });
         }
 
+        // Updates the portfolio UI elements (summary and list)
         async function updatePortfolioView(portfolio) {
             const listEl = $('#portfolio-list');
             const summaryEl = $('#portfolio-summary-card');
-            if (!listEl || !summaryEl) return;
+            if (!listEl || !summaryEl) return; // Ensure elements exist
+
             if (portfolio.length === 0) {
                 summaryEl.innerHTML = `<p class="text-center text-slate-500">Portofolio kosong.</p>`;
                 listEl.innerHTML = `<p class="text-center text-slate-500">Mulai dengan menambahkan aset baru.</p>`;
                 return;
             }
+
+            // Fetch current prices for all assets in the portfolio
             const assetIds = portfolio.map(asset => asset.id).join(',');
-            const prices = await apiFetch(`${config.api.coingecko}/simple/price?ids=${assetIds}&vs_currencies=usd`, `portfolio_prices_${assetIds}`, 2);
-            let totalInvested = 0, currentValue = 0;
+            const prices = await fetchCoinPrices(assetIds); // Use the dedicated fetcher
+
+            let totalInvested = 0;
+            let currentValue = 0;
+
             listEl.innerHTML = portfolio.map(asset => {
-                const currentPrice = prices?.[asset.id]?.usd || 0;
+                const currentPrice = prices?.[asset.id]?.usd || 0; // Get current price, fallback to 0
                 const assetValue = asset.amount * currentPrice;
                 const investedValue = asset.amount * asset.buyPrice;
                 const pnl = assetValue - investedValue;
                 const pnlPercent = investedValue > 0 ? (pnl / investedValue) * 100 : 0;
                 const pnlClass = pnl >= 0 ? 'price-up' : 'price-down';
+
                 totalInvested += investedValue;
                 currentValue += assetValue;
+
                 return `
                     <div class="border-b border-slate-200 dark:border-slate-800 pb-3 last:border-b-0">
                         <div class="flex justify-between items-center">
                             <h4 class="font-bold">${asset.name} (${asset.symbol.toUpperCase()})</h4>
-                            <button class="remove-asset-btn text-slate-400 hover:text-red-500" data-firestore-id="${asset.firestoreId}">
+                            <button class="remove-asset-btn text-slate-400 hover:text-red-500 rounded-full" data-firestore-id="${asset.firestoreId}" title="Hapus Aset">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                             </button>
                         </div>
                         <div class="flex justify-between text-sm mt-1">
                             <span>Jumlah: ${asset.amount.toLocaleString('en-US', { maximumFractionDigits: 6 })}</span>
-                            <span class="font-semibold">$${assetValue.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
+                            <span class="font-semibold">$${assetValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                         </div>
                         <div class="flex justify-between text-xs text-slate-500">
-                            <span>Avg. Buy: $${asset.buyPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })}</span>
-                            <span class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toLocaleString('en-US', { maximumFractionDigits: 2 })} (${pnlPercent.toFixed(2)}%)</span>
+                            <span>Avg. Beli: $${asset.buyPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pnlPercent.toFixed(2)}%)</span>
                         </div>
                     </div>`;
             }).join('');
+
+            // Attach event listeners for remove buttons
             $$('.remove-asset-btn').forEach(btn => btn.addEventListener('click', () => handleRemoveAsset(btn.dataset.firestoreId)));
+
             const totalPnl = currentValue - totalInvested;
             const totalPnlPercent = totalInvested > 0 ? (totalPnl / totalInvested) * 100 : 0;
             const totalPnlClass = totalPnl >= 0 ? 'price-up' : 'price-down';
+
             summaryEl.innerHTML = `
                 <p class="text-sm text-slate-400">Nilai Portofolio</p>
-                <p class="text-4xl font-extrabold">$${currentValue.toLocaleString('en-US', { maximumFractionDigits: 2 })}</p>
-                <p class="font-semibold ${totalPnlClass} mt-1">${totalPnl >= 0 ? '+' : ''}$${totalPnl.toLocaleString('en-US', { maximumFractionDigits: 2 })} (${totalPnlPercent.toFixed(2)}%)</p>
-                <div class="text-xs text-slate-500 mt-2">Modal: $${totalInvested.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div>`;
+                <p class="text-4xl font-extrabold">$${currentValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p class="font-semibold ${totalPnlClass} mt-1">${totalPnl >= 0 ? '+' : ''}$${totalPnl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${totalPnlPercent.toFixed(2)}%)</p>
+                <div class="text-xs text-slate-500 mt-2">Modal: $${totalInvested.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>`;
         }
 
+        // Handles adding a new asset to the portfolio
         async function handleAddAsset() {
             const name = $('#asset-name').value.trim();
             const amount = parseFloat($('#asset-amount').value);
             const buyPrice = parseFloat($('#asset-buy-price').value);
+
             if (!name || isNaN(amount) || amount <= 0 || isNaN(buyPrice) || buyPrice < 0) {
-                showToast('Isi semua kolom dengan benar, bro!', 'error');
+                showToast('Isi semua kolom dengan benar (Jumlah dan Harga harus positif)!', 'error');
                 return;
             }
-            showToast('Nyari aset...', 'info');
-            const searchData = await apiFetch(`${config.api.coingecko}/search?query=${name}`, `search_${name}`, 1440);
+
+            if (!state.isAuthReady || !state.userId) {
+                showToast('Tidak dapat menambahkan aset. Autentikasi Firebase belum siap.', 'error');
+                return;
+            }
+
+            showToast('Mencari aset...', 'info');
+            // Search for the coin by name to get its CoinGecko ID and symbol
+            const searchData = await apiFetch(`${config.api.coingecko}/search?query=${name}`, `search_${name.replace(/\s/g, '_')}`, 1440); // Cache for 24 hours
+
             if (!searchData?.coins?.length) {
-                showToast(`Aset "${name}" nggak ketemu.`, 'error');
+                showToast(`Aset "${name}" tidak ditemukan di database CoinGecko.`, 'error');
                 return;
             }
-            const coin = searchData.coins[0];
+
+            const coin = searchData.coins[0]; // Take the first result
             const assetData = { id: coin.id, name: coin.name, symbol: coin.symbol, amount, buyPrice };
+
             try {
                 const portfolioPath = `artifacts/${config.appId}/users/${state.userId}/portfolio`;
-                await state.firebase.addDoc(state.firebase.collection(state.db, portfolioPath), assetData);
-                showToast(`${coin.name} masuk portofolio, bro!`, 'success');
-                triggerConfetti();
+                await addDoc(collection(state.db, portfolioPath), assetData);
+                showToast(`${coin.name} berhasil ditambahkan ke portofolio!`, 'success');
+                triggerConfetti(); // Celebrate success!
+                // Clear input fields
                 $('#asset-name').value = '';
                 $('#asset-amount').value = '';
                 $('#asset-buy-price').value = '';
             } catch (error) {
-                console.error("Error adding asset:", error);
-                showToast('Gagal nyimpan aset.', 'error');
+                console.error("Error adding asset to Firestore:", error);
+                showToast('Gagal menyimpan aset ke portofolio.', 'error');
             }
         }
 
+        // Handles removing an asset from the portfolio
         async function handleRemoveAsset(firestoreId) {
+            if (!state.isAuthReady || !state.userId) {
+                showToast('Tidak dapat menghapus aset. Autentikasi Firebase belum siap.', 'error');
+                return;
+            }
             try {
                 const docPath = `artifacts/${config.appId}/users/${state.userId}/portfolio/${firestoreId}`;
-                await state.firebase.deleteDoc(state.firebase.doc(state.db, docPath));
-                showToast('Aset kehapus, bro.', 'success');
+                await deleteDoc(doc(state.db, docPath));
+                showToast('Aset berhasil dihapus.', 'success');
             } catch (error) {
-                console.error("Error removing asset:", error);
-                showToast('Gagal hapus aset.', 'error');
+                console.error("Error removing asset from Firestore:", error);
+                showToast('Gagal menghapus aset.', 'error');
             }
         }
 
+        // Handles clearing the entire portfolio
         async function handleClearPortfolio() {
-            openModal('Konfirmasi', `<p>Yakin mau hapus semua portofolio? Nggak bisa balik, bro!</p><div class="flex justify-end gap-4 mt-4"><button id="confirm-clear" class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700">Ya, Hapus</button><button id="cancel-clear" class="bg-slate-200 dark:bg-slate-700 font-semibold py-2 px-4 rounded-lg">Batal</button></div>`);
+            if (!state.isAuthReady || !state.userId) {
+                showToast('Tidak dapat mengosongkan portofolio. Autentikasi Firebase belum siap.', 'error');
+                return;
+            }
+
+            openModal('Konfirmasi Penghapusan', `<p>Anda yakin ingin menghapus semua aset dari portofolio Anda? Tindakan ini tidak dapat dibatalkan!</p><div class="flex justify-end gap-4 mt-4"><button id="confirm-clear" class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700">Ya, Hapus Semua</button><button id="cancel-clear" class="bg-slate-200 dark:bg-slate-700 font-semibold py-2 px-4 rounded-lg">Batal</button></div>`);
             $('#cancel-clear').addEventListener('click', closeModal);
             $('#confirm-clear').addEventListener('click', async () => {
                 closeModal();
-                showToast('Hapus portofolio...', 'info');
+                showToast('Mengosongkan portofolio...', 'info');
                 try {
                     const portfolioPath = `artifacts/${config.appId}/users/${state.userId}/portfolio`;
-                    const q = state.firebase.query(state.firebase.collection(state.db, portfolioPath));
-                    const snapshot = await state.firebase.getDocs(q);
-                    const batch = state.firebase.writeBatch(state.db);
-                    snapshot.docs.forEach(doc => batch.delete(doc.ref));
-                    await batch.commit();
-                    showToast('Portofolio kosong sekarang, bro.', 'success');
+                    const q = query(collection(state.db, portfolioPath));
+                    const snapshot = await getDocs(q); // Get all documents
+                    const batch = writeBatch(state.db); // Use a batch write for efficiency
+
+                    if (snapshot.empty) {
+                        showToast('Portofolio sudah kosong, bro.', 'info');
+                        return;
+                    }
+
+                    snapshot.docs.forEach(doc => {
+                        batch.delete(doc.ref); // Add each document to the batch for deletion
+                    });
+                    await batch.commit(); // Commit the batch delete operation
+                    showToast('Portofolio berhasil dikosongkan.', 'success');
                 } catch (error) {
                     console.error("Error clearing portfolio:", error);
-                    showToast('Gagal kosongin portofolio.', 'error');
+                    showToast('Gagal mengosongkan portofolio.', 'error');
                 }
             });
         }
 
+        // Renders the News page content
         async function renderNews() {
             $('#page-content').innerHTML = `
                 <div class="mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
@@ -946,45 +1054,68 @@ function handleSimulatorOrder(type) {
                     </button>
                 </div>
                 <div id="news-list" class="space-y-6"></div>`;
+
             const sourceSelect = $('#news-source-select');
             sourceSelect.innerHTML = config.api.newsSources.map(s => `<option value="${s.url}">${s.name}</option>`).join('');
+
             const fetchAndRender = async () => {
                 const listEl = $('#news-list');
-                listEl.innerHTML = Array(5).fill('<div class="h-40 skeleton-loader"></div>').join('');
+                listEl.innerHTML = Array(5).fill('<div class="h-40 skeleton-loader flex items-center justify-center">Memuat berita...</div>').join(''); // Loading skeletons
+
                 const sourceUrl = sourceSelect.value;
-                const newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, `news_${sourceUrl}`, 15);
-                if (!newsData || newsData.status !== 'ok') {
-                    listEl.innerHTML = `<div class="glass-card-pro p-6 rounded-2xl text-red-500">Gagal muat berita, bro.</div>`;
+                const newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, `news_${sourceUrl.replace(/[^a-zA-Z0-9]/g, '_')}`, 15); // Cache for 15 minutes, sanitize key
+
+                if (!newsData || newsData.status !== 'ok' || !newsData.items || newsData.items.length === 0) {
+                    listEl.innerHTML = `<div class="glass-card-pro p-6 rounded-2xl text-red-500 text-center">Gagal memuat berita dari sumber ini. Coba sumber lain atau refresh.</div>`;
                     return;
                 }
-                listEl.innerHTML = newsData.items.slice(0, 10).map((item, index) => `
-                    <div class="glass-card-pro p-4 md:p-6 rounded-2xl">
-                        <a href="${item.link}" target="_blank" class="text-lg font-bold hover:text-primary transition-colors">${item.title}</a>
-                        <p class="text-xs text-slate-500 my-2">Oleh ${item.author || 'Unknown'} pada ${new Date(item.pubDate).toLocaleDateString()}</p>
-                        <p class="text-sm line-clamp-3">${item.description.replace(/<[^>]+>/g, '')}</p>
-                        <div class="mt-4 flex gap-4">
-                            <button class="summarize-btn btn-pro text-white text-sm font-semibold py-2 px-4 rounded-lg flex items-center gap-2" data-index="${index}">
-                                <i class="fas fa-robot"></i> Ringkas AI
-                            </button>
-                            <a href="${item.link}" target="_blank" class="bg-slate-200 dark:bg-slate-700 text-sm font-semibold py-2 px-4 rounded-lg flex items-center gap-2">Baca Full</a>
-                        </div>
-                        <div class="summary-container mt-4 p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg hidden"></div>
-                    </div>`).join('');
+
+                // Filter out items with very short or empty descriptions as they might not summarize well
+                const filteredNews = newsData.items.filter(item => item.description && item.description.length > 50).slice(0, 10);
+
+                if (filteredNews.length === 0) {
+                    listEl.innerHTML = `<div class="glass-card-pro p-6 rounded-2xl text-slate-500 text-center">Tidak ada berita yang relevan dari sumber ini.</div>`;
+                    return;
+                }
+
+                listEl.innerHTML = filteredNews.map((item, index) => {
+                    // Sanitize description to remove HTML tags before display/summary
+                    const cleanDescription = item.description.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+                    return `
+                        <div class="glass-card-pro p-4 md:p-6 rounded-2xl">
+                            <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="text-lg font-bold hover:text-primary transition-colors">${item.title}</a>
+                            <p class="text-xs text-slate-500 my-2">Oleh ${item.author || 'Anonim'} pada ${new Date(item.pubDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            <p class="text-sm line-clamp-3 text-slate-600 dark:text-slate-300">${cleanDescription}</p>
+                            <div class="mt-4 flex flex-wrap gap-4">
+                                <button class="summarize-btn btn-pro text-white text-sm font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2" data-index="${index}">
+                                    <i class="fas fa-robot"></i> Ringkas AI
+                                </button>
+                                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="bg-slate-200 dark:bg-slate-700 text-sm font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2">Baca Selengkapnya</a>
+                            </div>
+                            <div class="summary-container mt-4 p-4 bg-slate-100 dark:bg-slate-800/50 rounded-lg hidden"></div>
+                        </div>`;
+                }).join('');
+
+                // Attach event listeners for summarize buttons
                 $$('.summarize-btn').forEach(btn => btn.addEventListener('click', async e => {
-                    const index = e.currentTarget.dataset.index;
-                    const item = newsData.items[index];
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    const item = filteredNews[index]; // Use filteredNews
                     const summaryContainer = e.currentTarget.closest('.glass-card-pro').querySelector('.summary-container');
                     summaryContainer.classList.remove('hidden');
-                    summaryContainer.innerHTML = `<div class="flex items-center gap-2 text-sm text-slate-500"><div class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div><span>AI kerja...</span></div>`;
-                    const summary = await getAiSummary(item.description.replace(/<[^>]+>/g, ''));
+                    summaryContainer.innerHTML = `<div class="flex items-center gap-2 text-sm text-slate-500"><div class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div><span>AI sedang merangkum...</span></div>`;
+
+                    const cleanDescription = item.description.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+                    const summary = await getAiSummary(cleanDescription);
                     summaryContainer.innerHTML = `<h4 class="font-bold mb-2">Ringkasan AI:</h4><div class="text-sm">${summary}</div>`;
                 }));
             };
+
             sourceSelect.addEventListener('change', fetchAndRender);
             $('#refresh-news-btn').addEventListener('click', fetchAndRender);
-            fetchAndRender();
+            fetchAndRender(); // Initial fetch and render
         }
 
+        // Renders the Crypto Dictionary page
         function renderDictionary() {
             $('#page-content').innerHTML = `
                 <div class="mb-6 relative">
@@ -992,40 +1123,52 @@ function handleSimulatorOrder(type) {
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                 </div>
                 <div id="dictionary-content" class="space-y-8"></div>`;
+
             const contentContainer = $('#dictionary-content');
             const searchInput = $('#dictionary-search');
+
+            // Hardcoded dictionary content (can be fetched from API/Firebase in a real app)
             const kamusContent = [
                 { category: 'Konsep Dasar', icon: 'fa-solid fa-cubes', items: [
-                    { term: 'Blockchain', definition: 'Buku besar digital terdesentralisasi yang nyatet semua transaksi permanen dan transparan.' },
-                    { term: 'Cryptocurrency', definition: 'Aset digital pake kriptografi buat secure transaksi.' },
-                    { term: 'Desentralisasi', definition: 'Bagi kekuasaan dari pusat ke banyak titik di jaringan.' },
-                    { term: 'Wallet', definition: 'Software atau hardware buat nyimpan kunci publik dan privat.' },
+                    { term: 'Blockchain', definition: 'Buku besar digital terdesentralisasi yang mencatat semua transaksi secara permanen dan transparan. Dasar dari sebagian besar cryptocurrency.' },
+                    { term: 'Cryptocurrency', definition: 'Aset digital atau mata uang virtual yang diamankan oleh kriptografi, membuatnya hampir tidak mungkin untuk dipalsukan atau digandakan secara ganda.' },
+                    { term: 'Desentralisasi', definition: 'Prinsip mendistribusikan kekuasaan atau kendali dari satu titik pusat ke banyak titik dalam suatu jaringan, mengurangi ketergantungan pada otoritas tunggal.' },
+                    { term: 'Wallet', definition: 'Software atau hardware yang digunakan untuk menyimpan kunci publik dan privat yang diperlukan untuk berinteraksi dengan blockchain dan mengelola cryptocurrency Anda.' },
                 ]},
                 { category: 'DeFi & NFT', icon: 'fa-solid fa-hand-holding-dollar', items: [
-                    { term: 'DeFi', definition: 'Ekosistem finansial di blockchain tanpa bank.' },
-                    { term: 'NFT', definition: 'Token unik buat aset digital kayak seni atau game.' },
-                    { term: 'Smart Contract', definition: 'Program otomatis di blockchain.' },
-                    { term: 'Yield Farming', definition: 'Cari untung dari staking di DeFi.' },
+                    { term: 'DeFi', definition: 'Singkatan dari Decentralized Finance. Ekosistem aplikasi keuangan yang dibangun di atas teknologi blockchain tanpa perantara tradisional seperti bank.' },
+                    { term: 'NFT', definition: 'Non-Fungible Token. Token unik dan tidak dapat diganti yang mewakili kepemilikan aset digital atau fisik, seperti seni, musik, atau item game.' },
+                    { term: 'Smart Contract', definition: 'Kontrak yang tersimpan di blockchain yang secara otomatis mengeksekusi perjanjian ketika kondisi tertentu terpenuhi, tanpa perlu perantara.' },
+                    { term: 'Yield Farming', definition: 'Strategi di DeFi di mana investor mengunci atau meminjamkan aset kripto mereka untuk mendapatkan imbal hasil (bunga) atau hadiah dalam bentuk kripto lain.' },
                 ]},
                 { category: 'Trading & Investasi', icon: 'fa-solid fa-chart-line', items: [
-                    { term: 'HODL', definition: 'Tahan aset jangka panjang.' },
-                    { term: 'ATH', definition: 'Harga tertinggi sepanjang masa.' },
-                    { term: 'FOMO', definition: 'Takut ketinggalan profit.' },
-                    { term: 'Whale', definition: 'Pemain besar yang gerakin pasar.' },
+                    { term: 'HODL', definition: 'Istilah slang di komunitas kripto yang berarti "Hold On for Dear Life". Mengacu pada tindakan menahan cryptocurrency dalam jangka panjang terlepas dari fluktuasi pasar.' },
+                    { term: 'ATH', definition: 'All-Time High. Harga tertinggi yang pernah dicapai oleh suatu aset kripto sejak pertama kali diperdagangkan.' },
+                    { term: 'FOMO', definition: 'Fear Of Missing Out. Ketakutan akan melewatkan peluang investasi yang menguntungkan, sering kali menyebabkan keputusan impulsif.' },
+                    { term: 'Whale', definition: 'Individu atau entitas yang memiliki sejumlah besar cryptocurrency, sehingga pergerakan trading mereka dapat memengaruhi harga pasar.' },
                 ]},
                 { category: 'Teknologi & Keamanan', icon: 'fa-solid fa-shield-halved', items: [
-                    { term: 'Private Key', definition: 'Kode rahasia buat akses aset.' },
-                    { term: 'Seed Phrase', definition: 'Kata-kata buat recovery dompet.' },
-                    { term: 'Layer 2', definition: 'Solusi buat cepetin blockchain.' },
-                    { term: 'Gas Fee', definition: 'Biaya transaksi di blockchain.' },
+                    { term: 'Private Key', definition: 'Kode rahasia (seperti sandi yang sangat panjang) yang memberikan akses penuh ke aset kripto di dompet Anda. Harus dijaga kerahasiaannya.' },
+                    { term: 'Seed Phrase', definition: 'Serangkaian 12 atau 24 kata yang berfungsi sebagai cadangan untuk memulihkan dompet kripto Anda. Mirip dengan master password.' },
+                    { term: 'Layer 2', definition: 'Solusi penskalaan yang dibangun di atas blockchain utama (Layer 1) untuk meningkatkan kecepatan transaksi dan mengurangi biaya, contohnya Polygon di atas Ethereum.' },
+                    { term: 'Gas Fee', definition: 'Biaya transaksi yang dibayarkan kepada validator jaringan blockchain (terutama Ethereum) untuk memproses dan memvalidasi transaksi.' },
                 ]},
             ];
+
+            // Renders the dictionary content based on a filter string
             const renderContent = (filter = '') => {
-                contentContainer.innerHTML = '';
+                contentContainer.innerHTML = ''; // Clear previous content
                 const lowerFilter = filter.toLowerCase();
+
+                let hasResults = false;
                 kamusContent.forEach(category => {
-                    const filteredItems = category.items.filter(item => item.term.toLowerCase().includes(lowerFilter) || item.definition.toLowerCase().includes(lowerFilter));
+                    const filteredItems = category.items.filter(item =>
+                        item.term.toLowerCase().includes(lowerFilter) ||
+                        item.definition.toLowerCase().includes(lowerFilter)
+                    );
+
                     if (filteredItems.length > 0) {
+                        hasResults = true;
                         contentContainer.innerHTML += `
                             <div class="category-section">
                                 <h3 class="text-2xl font-bold mb-4 flex items-center gap-3 text-primary"><i class="${category.icon}"></i>${category.category}</h3>
@@ -1039,59 +1182,56 @@ function handleSimulatorOrder(type) {
                             </div>`;
                     }
                 });
-                if (contentContainer.innerHTML === '') contentContainer.innerHTML = `<div class="glass-card-pro p-8 rounded-2xl text-center"><p class="text-slate-500">"${filter}" nggak ketemu, bro.</p></div>`;
+
+                if (!hasResults) {
+                    contentContainer.innerHTML = `<div class="glass-card-pro p-8 rounded-2xl text-center"><p class="text-slate-500">Istilah "${filter}" tidak ditemukan dalam kamus.</p></div>`;
+                }
             };
+
+            // Attach debounce event listener to search input
             searchInput.addEventListener('input', debounce((e) => renderContent(e.target.value), 300));
-            renderContent();
+
+            renderContent(); // Initial render of all content
         }
 
-        function renderSimulator() {
+
+        // Renders the Trading Simulator page
+        async function renderSimulator() {
             $('#page-content').innerHTML = `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2">
                         <div class="glass-card-pro p-6 rounded-2xl">
                             <div class="flex justify-between items-center mb-6">
                                 <h3 class="text-xl font-bold">Simulator Trading</h3>
-                                <div class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">Saldo: $${state.simulatorBalance.toLocaleString('en-US')}</div>
+                                <div id="simulator-balance" class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">Saldo: $${state.simulatorBalance.toLocaleString('en-US')}</div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="text-sm font-medium mb-2 block">Pilih Aset</label>
                                     <div class="relative">
-                                        <input type="text" class="input-pro w-full p-2 pl-10 rounded-lg" placeholder="Cari koin...">
+                                        <input type="text" id="simulator-search" class="input-pro w-full p-2 pl-10 rounded-lg" placeholder="Cari koin...">
                                         <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
                                     </div>
-                                    <div class="mt-2 max-h-60 overflow-y-auto">
-                                        <div class="p-3 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer" data-coin="bitcoin">
-                                            <div class="coin-image"><img src="${getCoinImage('bitcoin', 'btc')}" alt="Bitcoin"></div>
-                                            <div><div class="font-medium">Bitcoin</div><div class="text-xs text-slate-500">BTC</div></div>
-                                        </div>
-                                        <div class="p-3 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer" data-coin="ethereum">
-                                            <div class="coin-image"><img src="${getCoinImage('ethereum', 'eth')}" alt="Ethereum"></div>
-                                            <div><div class="font-medium">Ethereum</div><div class="text-xs text-slate-500">ETH</div></div>
-                                        </div>
-                                        <div class="p-3 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer" data-coin="solana">
-                                            <div class="coin-image"><img src="${getCoinImage('solana', 'sol')}" alt="Solana"></div>
-                                            <div><div class="font-medium">Solana</div><div class="text-xs text-slate-500">SOL</div></div>
-                                        </div>
+                                    <div class="mt-2 max-h-60 overflow-y-auto custom-scrollbar" id="coin-list">
+                                        <!-- Coin list will be populated by JS -->
                                     </div>
                                 </div>
                                 <div>
                                     <div class="flex justify-between items-center mb-4">
                                         <h4 class="font-bold text-lg" id="selected-coin">Bitcoin (BTC)</h4>
-                                        <div class="text-xl font-bold" id="coin-price">$61,245.32</div>
+                                        <div class="text-xl font-bold" id="coin-price">$${(state.simulatorPrices.bitcoin?.usd || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
                                     </div>
                                     <div class="grid grid-cols-2 gap-4 mb-4">
                                         <button id="buy-btn" class="btn-pro text-white font-semibold py-2 rounded-lg">Beli</button>
                                         <button id="sell-btn" class="bg-slate-200 dark:bg-slate-700 font-semibold py-2 rounded-lg">Jual</button>
                                     </div>
                                     <div class="mb-4">
-                                        <label for="simulator-amount" class="text-sm font-medium block mb-2">Jumlah</label>
+                                        <label for="simulator-amount" class="text-sm font-medium block mb-2">Jumlah Koin</label>
                                         <input type="number" id="simulator-amount" class="input-pro w-full p-2 rounded-lg" min="0" step="0.0001" value="0.1">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="simulator-price" class="text-sm font-medium block mb-2">Harga per Koin ($)</label>
-                                        <input type="number" id="simulator-price" class="input-pro w-full p-2 rounded-lg" min="0" step="0.01" value="61245.32">
+                                        <label for="simulator-price-input" class="text-sm font-medium block mb-2">Harga per Koin ($)</label>
+                                        <input type="number" id="simulator-price-input" class="input-pro w-full p-2 rounded-lg" min="0" step="0.01" value="${(state.simulatorPrices.bitcoin?.usd || 0).toFixed(2)}">
                                     </div>
                                     <button id="execute-order-btn" class="w-full btn-pro text-white font-semibold py-2 rounded-lg">Eksekusi Order</button>
                                 </div>
@@ -1099,7 +1239,7 @@ function handleSimulatorOrder(type) {
                         </div>
                         <div class="glass-card-pro p-6 rounded-2xl mt-6">
                             <h3 class="text-xl font-bold mb-4">Riwayat Trading</h3>
-                            <div id="simulator-history" class="space-y-3 max-h-60 overflow-y-auto"></div>
+                            <div id="simulator-history" class="space-y-3 max-h-60 overflow-y-auto custom-scrollbar"></div>
                         </div>
                     </div>
                     <div>
@@ -1108,108 +1248,310 @@ function handleSimulatorOrder(type) {
                             <div id="simulator-positions"></div>
                         </div>
                         <div class="glass-card-pro p-6 rounded-2xl mt-6">
-                            <h3 class="text-xl font-bold mb-4">Order Book</h3>
-                            <div class="order-book">
-                                <div>
-                                    <h4 class="font-semibold text-center mb-2">Bid</h4>
-                                    <div>
-                                        <div class="mb-2"><div class="flex justify-between text-sm"><span class="bid">61,230.50</span><span>2.5</span></div><div class="depth-bar bg-green-500/20" style="width: 80%"></div></div>
-                                        <div class="mb-2"><div class="flex justify-between text-sm"><span class="bid">61,228.75</span><span>1.8</span></div><div class="depth-bar bg-green-500/20" style="width: 65%"></div></div>
-                                        <div class="mb-2"><div class="flex justify-between text-sm"><span class="bid">61,225.25</span><span>3.2</span></div><div class="depth-bar bg-green-500/20" style="width: 90%"></div></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-center mb-2">Ask</h4>
-                                    <div>
-                                        <div class="mb-2"><div class="flex justify-between text-sm"><span class="ask">61,235.75</span><span>1.2</span></div><div class="depth-bar bg-red-500/20" style="width: 50%"></div></div>
-                                        <div class="mb-2"><div class="flex justify-between text-sm"><span class="ask">61,238.50</span><span>0.8</span></div><div class="depth-bar bg-red-500/20" style="width: 40%"></div></div>
-                                        <div class="mb-2"><div class="flex justify-between text-sm"><span class="ask">61,242.25</span><span>2.1</span></div><div class="depth-bar bg-red-500/20" style="width: 70%"></div></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <h3 class="text-xl font-bold mb-4">Order Book (Simulasi)</h3>
+                            <div class="order-book" id="order-book"></div>
                         </div>
                     </div>
                 </div>`;
-            updateSimulatorUI();
-            $$('[data-coin]').forEach(el => el.addEventListener('click', () => {
-                $('#selected-coin').textContent = `${el.querySelector('.font-medium').textContent} (${el.querySelector('.text-xs').textContent})`;
-                $('#coin-price').textContent = '$61,245.32'; // Dummy price
+
+            // Populate coin list in simulator
+            const coinListEl = $('#coin-list');
+            coinListEl.innerHTML = config.simulatorCoins.map(coin => `
+                <div class="p-3 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg cursor-pointer" data-coin="${coin.id}" data-coin-name="${coin.name}" data-coin-symbol="${coin.symbol}">
+                    <div class="coin-image"><img src="${getCoinImage(coin.id, coin.symbol)}" alt="${coin.name}" onerror="this.src='https://placehold.co/24x24/1e293b/ffffff?text=${coin.symbol.charAt(0).toUpperCase()}'"></div>
+                    <div><div class="font-medium">${coin.name}</div><div class="text-xs text-slate-500">${coin.symbol.toUpperCase()}</div></div>
+                </div>
+            `).join('');
+
+            // Fetch initial prices for simulator coins
+            await refreshSimulatorPrices();
+
+            // Set initial selected coin to Bitcoin
+            const initialCoinId = 'bitcoin';
+            const initialCoin = config.simulatorCoins.find(c => c.id === initialCoinId);
+            if (initialCoin) {
+                $('#selected-coin').textContent = `${initialCoin.name} (${initialCoin.symbol})`;
+                $('#coin-price').textContent = `$${(state.simulatorPrices[initialCoinId]?.usd || 0).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                $('#simulator-price-input').value = (state.simulatorPrices[initialCoinId]?.usd || 0).toFixed(2);
+                updateOrderBook(initialCoinId);
+            }
+
+            // Event Listeners for simulator
+            $$('#coin-list > div').forEach(el => el.addEventListener('click', async () => {
+                const coinId = el.dataset.coin;
+                const coinName = el.dataset.coinName;
+                const coinSymbol = el.dataset.coinSymbol;
+                $('#selected-coin').textContent = `${coinName} (${coinSymbol.toUpperCase()})`;
+                const currentPrice = state.simulatorPrices[coinId]?.usd || 0;
+                $('#coin-price').textContent = `$${currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                $('#simulator-price-input').value = currentPrice.toFixed(2);
+                updateOrderBook(coinId);
             }));
-            $('#buy-btn').addEventListener('click', () => handleSimulatorOrder('buy'));
-            $('#sell-btn').addEventListener('click', () => handleSimulatorOrder('sell'));
-            $('#execute-order-btn').addEventListener('click', () => handleSimulatorOrder($('#buy-btn').classList.contains('btn-pro') ? 'buy' : 'sell'));
+
+            $('#simulator-search').addEventListener('input', debounce((e) => {
+                const filter = e.target.value.toLowerCase();
+                $$('#coin-list > div').forEach(el => {
+                    const name = el.dataset.coinName.toLowerCase();
+                    const symbol = el.dataset.coinSymbol.toLowerCase();
+                    el.style.display = name.includes(filter) || symbol.includes(filter) ? '' : 'none';
+                });
+            }, 300));
+
+            $('#buy-btn').addEventListener('click', () => {
+                $('#buy-btn').classList.add('btn-pro', 'text-white');
+                $('#buy-btn').classList.remove('bg-slate-200', 'dark:bg-slate-700');
+                $('#sell-btn').classList.remove('btn-pro', 'text-white');
+                $('#sell-btn').classList.add('bg-slate-200', 'dark:bg-slate-700');
+            });
+
+            $('#sell-btn').addEventListener('click', () => {
+                $('#sell-btn').classList.add('btn-pro', 'text-white');
+                $('#sell-btn').classList.remove('bg-slate-200', 'dark:bg-slate-700');
+                $('#buy-btn').classList.remove('btn-pro', 'text-white');
+                $('#buy-btn').classList.add('bg-slate-200', 'dark:bg-slate-700');
+            });
+
+            $('#execute-order-btn').addEventListener('click', () => {
+                const type = $('#buy-btn').classList.contains('btn-pro') ? 'buy' : 'sell';
+                handleSimulatorOrder(type);
+            });
+
+            // Initial UI updates for simulator
+            updateSimulatorUI();
+            updateOrderBook(initialCoinId); // Update order book for initial coin
+
+            // Set up interval to refresh simulator prices periodically
+            if (state.priceRefreshInterval) clearInterval(state.priceRefreshInterval); // Clear existing interval if any
+            state.priceRefreshInterval = setInterval(refreshSimulatorPrices, 60 * 1000); // Refresh every 1 minute
         }
 
+        // Refreshes the prices for simulator coins and updates the simulator prices state
+        async function refreshSimulatorPrices() {
+            const coinIds = config.simulatorCoins.map(c => c.id);
+            const prices = await fetchCoinPrices(coinIds);
+            state.simulatorPrices = prices; // Update state with new prices
+            console.log("Simulator prices refreshed:", state.simulatorPrices);
+
+            // Update displayed price for the currently selected coin
+            const selectedCoinElement = $('#selected-coin');
+            if (selectedCoinElement) {
+                const selectedCoinSymbolMatch = selectedCoinElement.textContent.match(/\(([^)]+)\)/);
+                if (selectedCoinSymbolMatch && selectedCoinSymbolMatch[1]) {
+                    const selectedCoinSymbol = selectedCoinSymbolMatch[1].toLowerCase();
+                    const selectedCoinId = config.simulatorCoins.find(c => c.symbol.toLowerCase() === selectedCoinSymbol)?.id;
+                    if (selectedCoinId && state.simulatorPrices[selectedCoinId]?.usd) {
+                        $('#coin-price').textContent = `$${state.simulatorPrices[selectedCoinId].usd.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                        $('#simulator-price-input').value = state.simulatorPrices[selectedCoinId].usd.toFixed(2);
+                        updateOrderBook(selectedCoinId); // Update order book as well
+                    }
+                }
+            }
+            updateSimulatorUI(); // Re-render positions to reflect new PnL
+        }
+
+        // Dynamically generates and updates the order book display
+        function updateOrderBook(coinId) {
+            const price = state.simulatorPrices[coinId]?.usd;
+            const orderBookEl = $('#order-book');
+
+            if (!price || !orderBookEl) {
+                orderBookEl.innerHTML = `<p class="text-slate-500 text-center col-span-2">Data Order Book tidak tersedia.</p>`;
+                return;
+            }
+
+            const spread = price * 0.002; // 0.2% spread for simulation
+            const bids = [];
+            const asks = [];
+
+            // Generate some realistic-looking bid prices and amounts
+            for (let i = 0; i < 5; i++) {
+                bids.push({
+                    price: (price - spread * (0.5 + i * 0.2)).toFixed(2),
+                    amount: (Math.random() * 3 + 1).toFixed(3)
+                });
+            }
+            // Sort bids descending by price
+            bids.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+
+            // Generate some realistic-looking ask prices and amounts
+            for (let i = 0; i < 5; i++) {
+                asks.push({
+                    price: (price + spread * (0.5 + i * 0.2)).toFixed(2),
+                    amount: (Math.random() * 3 + 1).toFixed(3)
+                });
+            }
+            // Sort asks ascending by price
+            asks.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+
+            const allAmounts = [...bids, ...asks].map(o => parseFloat(o.amount));
+            const maxAmount = allAmounts.length > 0 ? Math.max(...allAmounts) : 1; // Avoid division by zero
+
+            orderBookEl.innerHTML = `
+                <div>
+                    <h4 class="font-semibold text-center mb-2">Bid (Beli)</h4>
+                    <div class="max-h-40 overflow-y-auto custom-scrollbar">
+                        ${bids.map(bid => `
+                            <div class="mb-2">
+                                <div class="flex justify-between text-sm"><span class="bid">$${bid.price}</span><span>${bid.amount}</span></div>
+                                <div class="depth-bar bg-green-500/20" style="width: ${(parseFloat(bid.amount) / maxAmount * 100).toFixed(2)}%"></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-center mb-2">Ask (Jual)</h4>
+                    <div class="max-h-40 overflow-y-auto custom-scrollbar">
+                        ${asks.map(ask => `
+                            <div class="mb-2">
+                                <div class="flex justify-between text-sm"><span class="ask">$${ask.price}</span><span>${ask.amount}</span></div>
+                                <div class="depth-bar bg-red-500/20" style="width: ${(parseFloat(ask.amount) / maxAmount * 100).toFixed(2)}%"></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+        }
+
+
+        // Updates the simulator's positions and history display
         function updateSimulatorUI() {
             const positionsEl = $('#simulator-positions');
             const historyEl = $('#simulator-history');
-            positionsEl.innerHTML = Object.keys(state.simulatorPositions).length > 0 ? Object.entries(state.simulatorPositions).map(([coin, data]) => `
-                <div class="border-b border-slate-200 dark:border-slate-800 py-3">
-                    <div class="flex justify-between"><div class="font-medium">${coin}</div><div class="font-semibold">${data.amount}</div></div>
-                    <div class="flex justify-between text-sm text-slate-500"><span>Avg. Buy: $${data.price.toLocaleString('en-US')}</span><span>Total: $${(data.amount * data.price).toLocaleString('en-US')}</span></div>
-                </div>`).join('') : '<p class="text-slate-500">Belum ada posisi, bro.</p>';
+            if (!positionsEl || !historyEl) return;
+
+            // Render Open Positions
+            const openPositions = Object.entries(state.simulatorPositions).filter(([, data]) => data.amount > 0);
+            positionsEl.innerHTML = openPositions.length > 0 ? openPositions.map(([coinSymbol, data]) => {
+                const currentCoinId = config.simulatorCoins.find(c => c.symbol.toLowerCase() === coinSymbol.toLowerCase())?.id;
+                const currentPrice = state.simulatorPrices[currentCoinId]?.usd || data.price; // Use fetched price if available, else initial buy price
+                const value = data.amount * currentPrice;
+                const pnl = value - (data.amount * data.price);
+                const pnlClass = pnl >= 0 ? 'price-up' : 'price-down';
+                return `
+                    <div class="border-b border-slate-200 dark:border-slate-800 py-3">
+                        <div class="flex justify-between"><div class="font-medium">${coinSymbol.toUpperCase()}</div><div class="font-semibold">${data.amount.toLocaleString('en-US', { maximumFractionDigits: 6 })}</div></div>
+                        <div class="flex justify-between text-sm text-slate-500">
+                            <span>Harga Beli Rata-rata: $${data.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                            <span class="${pnlClass}">Nilai Sekarang: $${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pnl >= 0 ? '+' : ''}$${pnl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})</span>
+                        </div>
+                    </div>`;
+            }).join('') : '<p class="text-slate-500">Belum ada posisi terbuka.</p>';
+
+            // Render Trading History
             historyEl.innerHTML = state.simulatorHistory.length > 0 ? state.simulatorHistory.map(h => `
                 <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
-                    <div class="flex justify-between"><div class="font-medium text-${h.type === 'buy' ? 'green' : 'red'}-500">${h.type.toUpperCase()} ${h.coin}</div><div class="font-semibold">${h.amount}</div></div>
-                    <div class="flex justify-between text-sm text-slate-500"><span>@ $${h.price.toLocaleString('en-US')}</span><span>Total: $${h.total.toLocaleString('en-US')}</span></div>
+                    <div class="flex justify-between"><div class="font-medium text-${h.type === 'buy' ? 'green' : 'red'}-500">${h.type.toUpperCase()} ${h.coin.toUpperCase()}</div><div class="font-semibold">${h.amount.toLocaleString('en-US', { maximumFractionDigits: 6 })}</div></div>
+                    <div class="flex justify-between text-sm text-slate-500"><span>@ $${h.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span><span>Total: $${h.total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
                     <div class="text-xs text-slate-400 mt-1">${h.date}</div>
-                </div>`).join('') : '<p class="text-slate-500">Belum ada riwayat, bro.</p>';
+                </div>`).join('') : '<p class="text-slate-500">Belum ada riwayat trading.</p>';
+
+            // Update simulator balance display
+            $('#simulator-balance').textContent = `Saldo: $${state.simulatorBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         }
 
+        // Handles buy/sell orders in the simulator
         function handleSimulatorOrder(type) {
             const amount = parseFloat($('#simulator-amount').value);
-            const price = parseFloat($('#simulator-price').value);
-            const coin = $('#selected-coin').textContent.split(' (')[0];
-            const symbol = $('#selected-coin').textContent.match(/\(([^)]+)\)/)[1];
-            const total = amount * price;
-            if (isNaN(amount) || isNaN(price) || amount <= 0 || price <= 0) {
-                showToast('Isi jumlah sama harga dengan bener, bro!', 'error');
+            const price = parseFloat($('#simulator-price-input').value);
+            const selectedCoinText = $('#selected-coin').textContent;
+            const coinMatch = selectedCoinText.match(/(.*) \((.*)\)/); // e.g., "Bitcoin (BTC)"
+
+            if (!coinMatch || coinMatch.length < 3) {
+                showToast('Pilih aset yang valid terlebih dahulu.', 'error');
                 return;
             }
+
+            const coinName = coinMatch[1].trim();
+            const coinSymbol = coinMatch[2].trim().toLowerCase();
+
+            const total = amount * price;
+
+            if (isNaN(amount) || isNaN(price) || amount <= 0 || price <= 0) {
+                showToast('Masukkan jumlah dan harga yang valid (harus positif).', 'error');
+                return;
+            }
+
             if (type === 'buy') {
                 if (total > state.simulatorBalance) {
-                    showToast('Duit nggak cukup, bro!', 'error');
+                    showToast('Saldo tidak cukup untuk melakukan pembelian ini!', 'error');
                     return;
                 }
                 state.simulatorBalance -= total;
-                state.simulatorPositions[symbol] = state.simulatorPositions[symbol] || { amount: 0, price: 0 };
-                state.simulatorPositions[symbol].amount += amount;
-                state.simulatorPositions[symbol].price = price;
-            } else {
-                if (!state.simulatorPositions[symbol] || state.simulatorPositions[symbol].amount < amount) {
-                    showToast('Aset nggak cukup buat dijual, bro!', 'error');
+                // Update position: if coin exists, add amount and re-calculate avg price
+                if (state.simulatorPositions[coinSymbol]) {
+                    const existingAmount = state.simulatorPositions[coinSymbol].amount;
+                    const existingTotalCost = existingAmount * state.simulatorPositions[coinSymbol].price;
+                    state.simulatorPositions[coinSymbol].amount += amount;
+                    state.simulatorPositions[coinSymbol].price = (existingTotalCost + total) / state.simulatorPositions[coinSymbol].amount; // New average price
+                } else {
+                    state.simulatorPositions[coinSymbol] = { amount, price };
+                }
+                showToast(`Berhasil membeli ${amount.toLocaleString()} ${coinSymbol.toUpperCase()} seharga $${price.toLocaleString()} per koin!`, 'success');
+            } else { // type === 'sell'
+                if (!state.simulatorPositions[coinSymbol] || state.simulatorPositions[coinSymbol].amount < amount) {
+                    showToast('Anda tidak memiliki cukup aset ini untuk dijual!', 'error');
                     return;
                 }
                 state.simulatorBalance += total;
-                state.simulatorPositions[symbol].amount -= amount;
-                if (state.simulatorPositions[symbol].amount <= 0) delete state.simulatorPositions[symbol];
+                state.simulatorPositions[coinSymbol].amount -= amount;
+                if (state.simulatorPositions[coinSymbol].amount <= 0.0000001) { // Use a small threshold for floating point comparison
+                    delete state.simulatorPositions[coinSymbol]; // Remove position if amount is zero or near zero
+                }
+                showToast(`Berhasil menjual ${amount.toLocaleString()} ${coinSymbol.toUpperCase()} seharga $${price.toLocaleString()} per koin!`, 'success');
             }
-            state.simulatorHistory.unshift({ type, coin: symbol, amount, price, total, date: new Date().toLocaleString() });
-            showToast(`${type === 'buy' ? 'Beli' : 'Jual'} ${amount} ${symbol} sukses, bro!`, 'success');
-            triggerConfetti();
-            updateSimulatorUI();
-            $('#simulator-balance').textContent = `Saldo: $${state.simulatorBalance.toLocaleString('en-US')}`;
+
+            // Add to history
+            state.simulatorHistory.unshift({
+                type,
+                coin: coinSymbol,
+                amount,
+                price,
+                total,
+                date: new Date().toLocaleString('id-ID', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            });
+
+            triggerConfetti(); // Celebrate transaction success
+            updateSimulatorUI(); // Re-render simulator UI
+            updateOrderBook(coinSymbol); // Update order book
         }
 
-        function renderTools() {
+
+        // Renders the Tools page content
+        async function renderTools() {
             $('#page-content').innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="glass-card-pro p-6 rounded-2xl">
                         <div class="flex items-center gap-3 mb-4"><i class="fas fa-exchange-alt text-2xl text-primary"></i><h3 class="text-xl font-bold">Konversi Mata Uang</h3></div>
                         <div class="space-y-4">
-                            <div><label class="text-sm font-medium block mb-2">Dari</label><div class="grid grid-cols-3 gap-2"><input type="number" value="1" class="input-pro col-span-2 p-2 rounded-lg" id="convert-from"><select class="input-pro p-2 rounded-lg" id="convert-from-currency"><option value="btc">BTC</option><option value="eth">ETH</option><option value="usd">USD</option></select></div></div>
-                            <div class="flex justify-center"><button class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg></button></div>
-                            <div><label class="text-sm font-medium block mb-2">Ke</label><div class="grid grid-cols-3 gap-2"><input type="number" class="input-pro col-span-2 p-2 rounded-lg" id="convert-to" readonly><select class="input-pro p-2 rounded-lg" id="convert-to-currency"><option value="usd">USD</option><option value="btc">BTC</option><option value="eth">ETH</option></select></div></div>
+                            <div>
+                                <label class="text-sm font-medium block mb-2">Dari</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <input type="number" value="1" class="input-pro col-span-2 p-2 rounded-lg" id="convert-from" min="0" step="any">
+                                    <select class="input-pro p-2 rounded-lg" id="convert-from-currency"></select>
+                                </div>
+                            </div>
+                            <div class="flex justify-center">
+                                <button id="swap-currencies-btn" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                                </button>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium block mb-2">Ke</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <input type="number" class="input-pro col-span-2 p-2 rounded-lg" id="convert-to" readonly>
+                                    <select class="input-pro p-2 rounded-lg" id="convert-to-currency"></select>
+                                </div>
+                            </div>
                             <button id="convert-btn" class="w-full btn-pro text-white font-semibold py-2 rounded-lg">Konversi</button>
+                            <div id="conversion-result" class="text-center mt-2 text-sm text-slate-500"></div>
                         </div>
                     </div>
                     <div class="glass-card-pro p-6 rounded-2xl">
                         <div class="flex items-center gap-3 mb-4"><i class="fas fa-calculator text-2xl text-primary"></i><h3 class="text-xl font-bold">Kalkulator Profit/Loss</h3></div>
                         <div class="space-y-4">
-                            <div><label class="text-sm font-medium block mb-2">Harga Beli</label><input type="number" value="50000" class="input-pro w-full p-2 rounded-lg" id="pl-buy-price"></div>
-                            <div><label class="text-sm font-medium block mb-2">Harga Jual</label><input type="number" value="61245.32" class="input-pro w-full p-2 rounded-lg" id="pl-sell-price"></div>
-                            <div><label class="text-sm font-medium block mb-2">Jumlah</label><input type="number" value="0.5" class="input-pro w-full p-2 rounded-lg" id="pl-amount"></div>
-                            <div><label class="text-sm font-medium block mb-2">Biaya (%)</label><input type="number" value="0.1" class="input-pro w-full p-2 rounded-lg" step="0.01" id="pl-fee"></div>
+                            <div><label class="text-sm font-medium block mb-2">Harga Beli ($)</label><input type="number" value="50000" class="input-pro w-full p-2 rounded-lg" id="pl-buy-price" min="0" step="0.01"></div>
+                            <div><label class="text-sm font-medium block mb-2">Harga Jual ($)</label><input type="number" value="61245.32" class="input-pro w-full p-2 rounded-lg" id="pl-sell-price" min="0" step="0.01"></div>
+                            <div><label class="text-sm font-medium block mb-2">Jumlah Aset</label><input type="number" value="0.5" class="input-pro w-full p-2 rounded-lg" id="pl-amount" min="0" step="0.0001"></div>
+                            <div><label class="text-sm font-medium block mb-2">Biaya Transaksi (%)</label><input type="number" value="0.1" class="input-pro w-full p-2 rounded-lg" min="0" step="0.01" id="pl-fee"></div>
                             <button id="calculate-pl-btn" class="w-full btn-pro text-white font-semibold py-2 rounded-lg">Hitung</button>
                             <div id="pl-result" class="text-center p-4 rounded-lg"></div>
                         </div>
@@ -1217,55 +1559,209 @@ function handleSimulatorOrder(type) {
                     <div class="glass-card-pro p-6 rounded-2xl">
                         <div class="flex items-center gap-3 mb-4"><i class="fas fa-gas-pump text-2xl text-primary"></i><h3 class="text-xl font-bold">Estimasi Gas Fee</h3></div>
                         <div class="space-y-4">
-                            <div><label class="text-sm font-medium block mb-2">Jaringan</label><select class="input-pro w-full p-2 rounded-lg" id="gas-network"><option value="ethereum">Ethereum</option><option value="bsc">BSC</option><option value="polygon">Polygon</option></select></div>
-                            <div><label class="text-sm font-medium block mb-2">Tipe</label><select class="input-pro w-full p-2 rounded-lg" id="gas-type"><option value="standard">Standar</option><option value="fast">Cepat</option><option value="instant">Instan</option></select></div>
-                            <div><label class="text-sm font-medium block mb-2">Kegiatan</label><select class="input-pro w-full p-2 rounded-lg" id="gas-activity"><option value="swap">Swap</option><option value="nft">NFT</option><option value="transfer">Transfer</option></select></div>
+                            <div><label class="text-sm font-medium block mb-2">Jaringan</label><select class="input-pro w-full p-2 rounded-lg" id="gas-network"></select></div>
+                            <div><label class="text-sm font-medium block mb-2">Prioritas</label><select class="input-pro w-full p-2 rounded-lg" id="gas-priority"><option value="standard">Standar</option><option value="fast">Cepat</option><option value="instant">Instan</option></select></div>
+                            <div><label class="text-sm font-medium block mb-2">Jenis Transaksi</label><select class="input-pro w-full p-2 rounded-lg" id="gas-activity"></select></div>
                             <button id="estimate-gas-btn" class="w-full btn-pro text-white font-semibold py-2 rounded-lg">Estimasi</button>
                             <div id="gas-result" class="text-center p-4 rounded-lg"></div>
                         </div>
                     </div>
                 </div>`;
-            $('#convert-btn').addEventListener('click', () => {
+
+            // Populate currency converter options with popular cryptos + USD
+            const allCoins = await apiFetch(`${config.api.coingecko}/coins/list`, 'coin_list_full', 1440); // Cache for 24 hours
+            const popularCurrencies = [
+                { id: 'usd', symbol: 'USD', name: 'US Dollar' },
+                ...config.simulatorCoins // Use the simulator coins as popular choices
+            ].map(c => `<option value="${c.id}">${c.symbol.toUpperCase()} (${c.name})</option>`).join('');
+
+            $('#convert-from-currency').innerHTML = popularCurrencies;
+            $('#convert-to-currency').innerHTML = popularCurrencies;
+            $('#convert-to-currency').value = 'usd'; // Default to USD
+
+            // Populate Gas Fee Network & Activity options
+            const gasNetworks = [
+                { id: 'ethereum', name: 'Ethereum' },
+                { id: 'binance-smart-chain', name: 'BNB Smart Chain (BSC)' },
+                { id: 'polygon', name: 'Polygon' },
+                { id: 'arbitrum', name: 'Arbitrum' },
+                { id: 'optimism', name: 'Optimism' }
+            ];
+            const gasActivities = [
+                { id: 'transfer', name: 'Transfer Token' },
+                { id: 'swap', name: 'Swap Token' },
+                { id: 'nft_mint', name: 'Mint NFT' },
+                { id: 'defi_interact', name: 'Interaksi DeFi' }
+            ];
+            $('#gas-network').innerHTML = gasNetworks.map(n => `<option value="${n.id}">${n.name}</option>`).join('');
+            $('#gas-activity').innerHTML = gasActivities.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+
+
+            // Event Listeners for Tools
+            $('#convert-btn').addEventListener('click', async () => {
                 const amount = parseFloat($('#convert-from').value);
-                const from = $('#convert-from-currency').value;
-                const to = $('#convert-to-currency').value;
-                const rates = { btc: 61245.32, eth: 3415.67, usd: 1 }; // Dummy rates
-                if (from === to) $('#convert-to').value = amount;
-                else $('#convert-to').value = (amount * rates[from] / rates[to]).toFixed(6);
+                const fromCoinId = $('#convert-from-currency').value;
+                const toCoinId = $('#convert-to-currency').value;
+                const conversionResultEl = $('#conversion-result');
+
+                if (isNaN(amount) || amount <= 0) {
+                    showToast('Jumlah yang akan dikonversi tidak valid.', 'error');
+                    conversionResultEl.textContent = 'Masukkan jumlah yang valid.';
+                    return;
+                }
+
+                if (fromCoinId === toCoinId) {
+                    $('#convert-to').value = amount.toFixed(6);
+                    conversionResultEl.textContent = `1 ${fromCoinId.toUpperCase()} = 1 ${toCoinId.toUpperCase()}`;
+                    return;
+                }
+
+                conversionResultEl.textContent = 'Mengkonversi...';
+
+                // Fetch conversion rates
+                const rates = await fetchCoinPrices([fromCoinId, toCoinId]); // Fetch prices for both currencies
+
+                if (!rates || !rates[fromCoinId]?.usd || !rates[toCoinId]?.usd) {
+                    showToast('Gagal mendapatkan nilai tukar. Coba lagi.', 'error');
+                    conversionResultEl.textContent = 'Gagal memuat nilai tukar.';
+                    $('#convert-to').value = '';
+                    return;
+                }
+
+                const fromUsdRate = rates[fromCoinId].usd;
+                const toUsdRate = rates[toCoinId].usd;
+
+                const convertedValue = (amount * fromUsdRate) / toUsdRate;
+                $('#convert-to').value = convertedValue.toFixed(6);
+                conversionResultEl.textContent = `1 ${fromCoinId.toUpperCase()} = ${(fromUsdRate / toUsdRate).toFixed(6)} ${toCoinId.toUpperCase()}`;
             });
+
+            $('#swap-currencies-btn').addEventListener('click', () => {
+                const fromVal = $('#convert-from-currency').value;
+                const toVal = $('#convert-to-currency').value;
+                $('#convert-from-currency').value = toVal;
+                $('#convert-to-currency').value = fromVal;
+                // Trigger conversion after swap
+                $('#convert-btn').click();
+            });
+
+
             $('#calculate-pl-btn').addEventListener('click', () => {
                 const buyPrice = parseFloat($('#pl-buy-price').value);
                 const sellPrice = parseFloat($('#pl-sell-price').value);
                 const amount = parseFloat($('#pl-amount').value);
                 const fee = parseFloat($('#pl-fee').value) / 100;
-                const profit = (sellPrice - buyPrice) * amount - (sellPrice * amount * fee);
-                const percent = (profit / (buyPrice * amount)) * 100;
-                $('#pl-result').innerHTML = `<div class="text-xl font-bold ${profit >= 0 ? 'text-green-500' : 'text-red-500'}">${profit >= 0 ? '+' : ''}$${profit.toLocaleString('en-US', { maximumFractionDigits: 2 })}</div><div class="text-sm">(${percent.toFixed(2)}%)</div>`;
+                const plResultEl = $('#pl-result');
+
+                if (isNaN(buyPrice) || isNaN(sellPrice) || isNaN(amount) || isNaN(fee) || amount <= 0) {
+                    showToast('Isi semua kolom kalkulator Profit/Loss dengan angka yang valid.', 'error');
+                    plResultEl.innerHTML = `<div class="text-red-500">Masukkan nilai yang valid.</div>`;
+                    return;
+                }
+
+                const buyCost = buyPrice * amount;
+                const sellRevenueBeforeFee = sellPrice * amount;
+                const totalFee = sellRevenueBeforeFee * fee; // Fee applied on selling price
+                const sellRevenue = sellRevenueBeforeFee - totalFee;
+
+                const profit = sellRevenue - buyCost;
+                const percent = buyCost > 0 ? (profit / buyCost) * 100 : 0;
+
+                plResultEl.innerHTML = `
+                    <div class="text-xl font-bold ${profit >= 0 ? 'text-green-500' : 'text-red-500'}">
+                        ${profit >= 0 ? '+' : ''}$${profit.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </div>
+                    <div class="text-sm">(${percent.toFixed(2)}%)</div>`;
             });
-            $('#estimate-gas-btn').addEventListener('click', () => {
-                const gasCosts = { ethereum: { standard: 10, fast: 15, instant: 20 }, bsc: { standard: 2, fast: 3, instant: 5 }, polygon: { standard: 1, fast: 2, instant: 3 } };
+
+            $('#estimate-gas-btn').addEventListener('click', async () => {
                 const network = $('#gas-network').value;
-                const type = $('#gas-type').value;
-                const cost = gasCosts[network][type];
-                $('#gas-result').innerHTML = `<div class="text-xl font-bold">$${cost.toLocaleString('en-US')}</div><div class="text-sm">Perkiraan waktu: 1-5 menit</div>`;
+                const priority = $('#gas-priority').value;
+                const activity = $('#gas-activity').value;
+                const gasResultEl = $('#gas-result');
+
+                gasResultEl.innerHTML = `<div class="flex items-center justify-center gap-2 text-sm text-slate-500"><div class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div><span>Mencari estimasi...</span></div>`;
+
+                // Simplified dummy gas costs and times based on network, priority, and activity
+                // In a real app, this would come from a live gas tracker API (e.g., Etherscan, Polygonscan API)
+                const dummyGasData = {
+                    ethereum: {
+                        standard: { base: 20, swap: 80, nft: 150, transfer: 30, time: '5-15 menit' },
+                        fast: { base: 40, swap: 120, nft: 200, transfer: 50, time: '1-5 menit' },
+                        instant: { base: 60, swap: 180, nft: 300, transfer: 80, time: '<1 menit' }
+                    },
+                    'binance-smart-chain': { // BSC
+                        standard: { base: 0.1, swap: 0.5, nft: 0.8, transfer: 0.2, time: '20-60 detik' },
+                        fast: { base: 0.2, swap: 0.8, nft: 1.2, transfer: 0.3, time: '10-20 detik' },
+                        instant: { base: 0.3, swap: 1.2, nft: 1.8, transfer: 0.4, time: '5-10 detik' }
+                    },
+                    polygon: {
+                        standard: { base: 0.01, swap: 0.05, nft: 0.08, transfer: 0.02, time: '5-15 detik' },
+                        fast: { base: 0.02, swap: 0.08, nft: 0.12, transfer: 0.03, time: '2-5 detik' },
+                        instant: { base: 0.03, swap: 0.12, nft: 0.18, transfer: 0.04, time: '<2 detik' }
+                    },
+                     arbitrum: { // Dummy values for Arbitrum
+                        standard: { base: 0.5, swap: 2, nft: 3, transfer: 0.8, time: '1-3 menit' },
+                        fast: { base: 1, swap: 3, nft: 5, transfer: 1.5, time: '30-60 detik' },
+                        instant: { base: 1.5, swap: 4.5, nft: 7.5, transfer: 2.5, time: '<30 detik' }
+                    },
+                    optimism: { // Dummy values for Optimism
+                        standard: { base: 0.3, swap: 1.5, nft: 2.5, transfer: 0.6, time: '1-3 menit' },
+                        fast: { base: 0.6, swap: 2.5, nft: 4, transfer: 1, time: '30-60 detik' },
+                        instant: { base: 0.9, swap: 3.5, nft: 6, transfer: 1.5, time: '<30 detik' }
+                    }
+                };
+
+                const networkData = dummyGasData[network];
+                if (!networkData) {
+                    gasResultEl.innerHTML = `<div class="text-red-500">Estimasi tidak tersedia untuk jaringan ini.</div>`;
+                    return;
+                }
+
+                const selectedPriorityData = networkData[priority];
+                const costMultiplier = selectedPriorityData[activity] || selectedPriorityData.base; // Use activity-specific cost or base
+                const estimatedCost = costMultiplier; // Simplified: already in USD for ETH, or native token equivalent
+                const estimatedTime = selectedPriorityData.time;
+
+                gasResultEl.innerHTML = `
+                    <div class="text-xl font-bold">$${estimatedCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}</div>
+                    <div class="text-sm">Perkiraan waktu: ${estimatedTime}</div>`;
             });
         }
 
-        // --- INITIALIZATION ---
+        // --- APPLICATION INITIALIZATION ---
+        // Defines the navigation structure and associated rendering functions
+        const appData = [
+            { id: 'dasbor', title: 'Dasbor', icon: `<i class="fas fa-home w-5 h-5"></i>`, render: renderDashboard },
+            { id: 'portofolio', title: 'Portofolio', icon: `<i class="fas fa-wallet w-5 h-5"></i>`, render: renderPortfolio },
+            { id: 'simulator', title: 'Simulator Trading', icon: `<i class="fas fa-chart-line w-5 h-5"></i>`, render: renderSimulator },
+            { id: 'berita', title: 'Berita Kripto', icon: `<i class="fas fa-newspaper w-5 h-5"></i>`, render: renderNews },
+            { id: 'kamus', title: 'Kamus Kripto', icon: `<i class="fas fa-book w-5 h-5"></i>`, render: renderDictionary },
+            { type: 'divider', title: 'Alat & Edukasi' },
+            { id: 'alat', title: 'Alat Kripto', icon: `<i class="fas fa-tools w-5 h-5"></i>`, render: renderTools },
+        ];
+
+        // Main function to initialize the application
         async function main() {
+            // Apply saved theme and primary color
             const storedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.classList.toggle('dark', storedTheme === 'dark');
             $('#theme-toggle-dark-icon').classList.toggle('hidden', storedTheme !== 'dark');
             $('#theme-toggle-light-icon').classList.toggle('hidden', storedTheme === 'dark');
+
             const storedPrimaryColor = localStorage.getItem('primaryColor') || 'cyan';
             document.documentElement.setAttribute('data-theme', storedPrimaryColor);
             $$('[data-theme]').forEach(btn => btn.classList.toggle('ring-primary', btn.dataset.theme === storedPrimaryColor));
+
+            // Theme toggle event listener
             $('#theme-toggle').addEventListener('click', () => {
                 const isDarkMode = document.documentElement.classList.toggle('dark');
                 localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
                 $('#theme-toggle-dark-icon').classList.toggle('hidden');
                 $('#theme-toggle-light-icon').classList.toggle('hidden');
             });
+
+            // Primary color selection event listener
             $$('[data-theme]').forEach(button => button.addEventListener('click', function () {
                 const newTheme = this.dataset.theme;
                 document.documentElement.setAttribute('data-theme', newTheme);
@@ -1273,35 +1769,66 @@ function handleSimulatorOrder(type) {
                 $$('[data-theme]').forEach(btn => btn.classList.remove('ring-primary'));
                 this.classList.add('ring-primary');
             }));
+
+            // Mobile menu toggle event listener
             $('#mobile-menu-toggle').addEventListener('click', () => {
                 const sidebar = $('#sidebar');
                 sidebar.classList.toggle('hidden');
                 sidebar.classList.toggle('-translate-x-full');
             });
+
+            // Modal close event listeners
             $('#modal-close').addEventListener('click', closeModal);
             $('#modal-backdrop').addEventListener('click', closeModal);
+
+            // Populate navigation links dynamically
             const navList = $('#navigation ul');
-            navList.innerHTML = appData.map(page => page.type === 'divider' ? `<li class="px-3 pt-4 pb-2 text-xs font-semibold uppercase text-slate-400">${page.title}</li>` : `<li><a href="#" class="nav-link flex items-center gap-4 p-3 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors" data-id="${page.id}">${page.icon} <span class="font-medium">${page.title}</span></a></li>`).join('');
+            navList.innerHTML = appData.map(page => page.type === 'divider' ?
+                `<li class="px-3 pt-4 pb-2 text-xs font-semibold uppercase text-slate-400">${page.title}</li>` :
+                `<li><a href="#" class="nav-link flex items-center gap-4 p-3 rounded-lg hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-colors" data-id="${page.id}">${page.icon} <span class="font-medium">${page.title}</span></a></li>`
+            ).join('');
+
+            // Attach event listeners to navigation links
             $$('.nav-link').forEach(link => link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const pageId = link.dataset.id;
-                if (!pageId || state.currentPage === pageId) return;
+
+                // Prevent re-rendering the same page
+                if (state.currentPage === pageId) return;
+
                 state.currentPage = pageId;
+
+                // Update active link styling
                 $$('.nav-link').forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
+
+                // Find the corresponding page data and render its content
                 const pageData = appData.find(p => p.id === pageId);
-                $('#page-title').textContent = pageData.title;
-                pageData.render();
+                if (pageData) {
+                    $('#page-title').textContent = pageData.title;
+                    pageData.render(); // Call the render function for the selected page
+                } else {
+                    console.error("Page not found:", pageId);
+                    $('#page-content').innerHTML = `<p class="text-red-500 text-center py-8">Halaman tidak ditemukan.</p>`;
+                }
+
+                // Hide sidebar on mobile after selection
                 if (window.innerWidth < 768) {
                     const sidebar = $('#sidebar');
                     sidebar.classList.add('hidden');
                     sidebar.classList.add('-translate-x-full');
                 }
             }));
+
+            // Initialize Firebase authentication and wait for it to be ready
             await initAuth();
+
+            // After auth is ready, load the default page (Dashboard)
+            // Trigger a click on the dashboard link to load it
             $('.nav-link[data-id="dasbor"]').click();
         }
 
+        // Run the main initialization function when the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', main);
     </script>
 </body>
