@@ -285,6 +285,8 @@
                 coingecko: 'https://api.coingecko.com/api/v3',
                 fearAndGreed: 'https://api.alternative.me/fng/?limit=1',
                 rss2json: 'https://api.rss2json.com/v1/api.json?rss_url=', // RSS to JSON proxy
+                // Added a fallback local proxy for news in case rss2json.com fails
+                localNewsProxy: 'https://api.allorigins.win/get?url=', 
                 gemini: {
                     // Gemini API URL for text generation
                     apiUrl: (apiKey) => `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
@@ -1128,8 +1130,34 @@
 
                 const sourceUrl = sourceSelect.value;
                 const cacheKey = `news_${sourceUrl.replace(/[^a-zA-Z0-9]/g, '_')}`;
-                // Changed cache duration from 15 minutes to 1 minute for more real-time news
-                let newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, cacheKey, 1); // Cache 1 minute
+                // Changed cache duration to 1 minute for more real-time news
+                let newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, cacheKey, 1); 
+
+                // Fallback to local proxy if rss2json.com fails (e.g., Error 500 or 422)
+                if (!newsData || newsData.status !== 'ok' || !newsData.items || newsData.items.length === 0) {
+                    console.warn(`Initial fetch from rss2json.com failed for ${sourceUrl}. Attempting local proxy...`);
+                    // Use a more robust proxy like allorigins.win
+                    newsData = await apiFetch(`${config.api.localNewsProxy}${encodeURIComponent(sourceUrl)}`, `local_news_${sourceUrl.replace(/[^a-zA-Z0-9]/g, '_')}`, 1);
+                    if (newsData && newsData.status.http_code === 200 && newsData.contents) {
+                        try {
+                            const parser = new DOMParser();
+                            const xmlDoc = parser.parseFromString(newsData.contents, "text/xml");
+                            const items = Array.from(xmlDoc.querySelectorAll('item')).map(item => ({
+                                title: item.querySelector('title')?.textContent || '',
+                                link: item.querySelector('link')?.textContent || '',
+                                pubDate: item.querySelector('pubDate')?.textContent || '',
+                                description: item.querySelector('description')?.textContent || '',
+                                author: item.querySelector('author')?.textContent || item.querySelector('creator')?.textContent || ''
+                            }));
+                            newsData = { status: 'ok', items: items };
+                        } catch (parseError) {
+                            console.error("Error parsing XML from local proxy:", parseError);
+                            newsData = null; // Mark as failed
+                        }
+                    } else {
+                        newsData = null; // Mark as failed if local proxy also doesn't return valid data
+                    }
+                }
 
                 if (!newsData || newsData.status !== 'ok' || !newsData.items || newsData.items.length === 0) {
                     listEl.innerHTML = `<div class="glass-card-pro p-6 rounded-2xl text-red-500 text-center">
@@ -1266,13 +1294,14 @@
 
         // Renders the Trading Simulator page
         async function renderSimulator() {
-            $('#page-content').innerHTML = `
+            // Build the entire HTML string for the simulator
+            const simulatorHtml = `
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-2">
                         <div class="glass-card-pro p-6 rounded-2xl">
                             <div class="flex justify-between items-center mb-6">
                                 <h3 class="text-xl font-bold">Simulator Trading</h3>
-                                <div id="simulator-balance" class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">Saldo: $${state.simulatorBalance.toLocaleString('en-US')}</div>
+                                <div id="simulator-balance" class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">Saldo: $${state.simulatorBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
@@ -1322,6 +1351,10 @@
                         </div>
                     </div>
                 </div>`;
+            
+            // Set the innerHTML of page-content once
+            $('#page-content').innerHTML = simulatorHtml;
+
 
             // Populate coin list in simulator
             const coinListEl = $('#coin-list');
@@ -1626,7 +1659,7 @@
                 // Fetch conversion rates for all involved currencies including IDR
                 const rates = await fetchCoinPrices([fromCoinId, toCoinId, 'usd']); // Always fetch USD to ensure IDR conversion is possible
 
-                if (!rates || !rates[fromCoinId] || !rates[toCoinId]) {
+                if (!rates || (!rates[fromCoinId] && fromCoinId !== 'usd' && fromCoinId !== 'idr') || (!rates[toCoinId] && toCoinId !== 'usd' && toCoinId !== 'idr')) {
                     showToast('Gagal mendapatkan nilai tukar. Coba lagi.', 'error');
                     conversionResultEl.textContent = 'Gagal memuat nilai tukar.';
                     $('#convert-to').value = '';
@@ -1674,17 +1707,18 @@
                     } else if (toCoinId === 'idr') {
                         rateForDisplay = '1';
                     } else {
-                        rateForDisplay = (1 / (rates.usd?.idr || 1) * rates[toCoinId].usd / toPriceInUsd).toFixed(6); // 1 IDR to X crypto via USD
+                        // Correct calculation for IDR to crypto: 1 IDR -> USD -> Crypto
+                        rateForDisplay = ( (1 / (rates.usd?.idr || 1)) / (rates[toCoinId]?.usd || 1) ).toFixed(6); 
                     }
                 } else if (toCoinId === 'idr') {
                     toDisplay = 'Rp';
                     // Convert 1 source crypto/USD to IDR
                     if (fromCoinId === 'usd') {
-                        rateForDisplay = (rates.usd?.idr || 1).toLocaleString('id-ID');
+                        rateForDisplay = (rates.usd?.idr || 1).toLocaleString('id-ID', {minimumFractionDigits: 2, maximumFractionDigits: 2});
                     } else if (fromCoinId === 'idr') {
                         rateForDisplay = '1';
                     } else {
-                         rateForDisplay = (rates[fromCoinId].usd * (rates.usd?.idr || 1)).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                         rateForDisplay = ( (rates[fromCoinId]?.usd || 0) * (rates.usd?.idr || 1) ).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     }
                 } else {
                     // Crypto to Crypto or Crypto to USD
