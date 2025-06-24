@@ -107,6 +107,15 @@
         ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
         .dark ::-webkit-scrollbar-thumb { background: #374151; }
 
+        .custom-scrollbar {
+            /* Styles for scrollable containers */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: #d1d5db transparent; /* Firefox */
+        }
+        .dark .custom-scrollbar {
+            scrollbar-color: #374151 transparent; /* Firefox */
+        }
+
         .glass-card-pro {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(16px) saturate(180%);
@@ -306,11 +315,12 @@
             isAuthReady: false,
             currentPage: null,
             portfolioListener: null, // Holds the unsubscribe function for Firestore listener
-            watchlist: [], // Stored in-memory for simplicity, can be moved to Firebase
+            watchlist: [], // Now persistent via Firebase
             simulatorBalance: config.initialSimulatorBalance,
             simulatorPositions: {}, // { 'btc': { amount: 0.5, price: 60000 } }
             simulatorHistory: [], // [{ type: 'buy', coin: 'BTC', amount: 0.1, price: 61000, total: 6100, date: '...' }]
             simulatorPrices: {}, // { 'bitcoin': { usd: 61000 } } - Real-time prices for simulator coins
+            priceRefreshInterval: null, // To store the interval ID for simulator price refresh
         };
 
         // --- UTILITY FUNCTIONS ---
@@ -443,7 +453,7 @@
                 const data = await apiFetch(
                     `${config.api.coingecko}/simple/price?ids=${ids}&vs_currencies=usd`,
                     `realtime_prices_${ids}`,
-                    0.5 // Cache for 30 seconds for simulator prices
+                    0.5 // Cache for 30 seconds for simulator prices and live market
                 );
                 // Ensure data structure is flat (e.g., { bitcoin: { usd: 61000 } })
                 return data || {};
@@ -528,6 +538,33 @@
             });
         };
 
+        // --- FIREBASE WATCHLIST PERSISTENCE ---
+        async function loadWatchlist() {
+            if (!state.isAuthReady || !state.userId || state.userId.startsWith('offline-')) return;
+            try {
+                const watchlistDocPath = `artifacts/${config.appId}/users/${state.userId}/watchlist/doc`;
+                const docSnap = await getDoc(doc(state.db, watchlistDocPath));
+                state.watchlist = docSnap.exists() ? docSnap.data().coins || [] : [];
+                console.log("Watchlist loaded:", state.watchlist);
+            } catch (error) {
+                console.error("Error loading watchlist:", error);
+                showToast('Gagal memuat watchlist.', 'error');
+            }
+        }
+
+        async function saveWatchlist() {
+            if (!state.isAuthReady || !state.userId || state.userId.startsWith('offline-')) return;
+            try {
+                const watchlistDocPath = `artifacts/${config.appId}/users/${state.userId}/watchlist/doc`;
+                await setDoc(doc(state.db, watchlistDocPath), { coins: state.watchlist });
+                console.log("Watchlist saved.");
+            } catch (error) {
+                console.error("Error saving watchlist:", error);
+                showToast('Gagal menyimpan watchlist.', 'error');
+            }
+        }
+
+
         // --- PAGE RENDER FUNCTIONS ---
 
         // Renders the Dashboard page content
@@ -572,7 +609,7 @@
             if (!container) return; // Ensure container exists
             container.innerHTML = `<div class="w-full h-96 skeleton-loader flex items-center justify-center">Memuat data pasar...</div>`; // Loading indicator
 
-            const coins = await apiFetch(`${config.api.coingecko}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false`, 'market_data', 2);
+            const coins = await apiFetch(`${config.api.coingecko}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false`, 'market_data', 2); // Cache 2 minutes
 
             if (!coins || coins.length === 0) {
                 container.innerHTML = `<p class="text-red-500 text-center py-8">Gagal memuat data pasar. Coba refresh halaman.</p>`;
@@ -619,11 +656,12 @@
                     showCoinDetails(row.dataset.coinId);
                 }
             }));
-            $$('.add-watchlist-btn').forEach(btn => btn.addEventListener('click', (e) => {
+            $$('.add-watchlist-btn').forEach(btn => btn.addEventListener('click', async (e) => {
                 e.stopPropagation(); // Prevent row click from triggering
                 const coin = { id: btn.dataset.coinId, name: btn.dataset.coinName, symbol: btn.dataset.coinSymbol };
                 if (!state.watchlist.some(w => w.id === coin.id)) {
                     state.watchlist.push(coin);
+                    await saveWatchlist(); // Save to Firebase
                     showToast(`${coin.name} ditambahkan ke watchlist!`, 'success');
                     renderWatchlist(); // Re-render watchlist widget
                 } else {
@@ -638,7 +676,8 @@
             if (!container) return;
             container.innerHTML = `<div class="w-full h-full skeleton-loader flex items-center justify-center">Memuat F&G Index...</div>`;
 
-            const fngData = await apiFetch(config.api.fearAndGreed, 'fng_data', 60); // Cache for 1 hour
+            // Changed cache duration from 60 minutes to 10 minutes for more real-time data
+            const fngData = await apiFetch(config.api.fearAndGreed, 'fng_data', 10);
 
             if (!fngData || !fngData.data || fngData.data.length === 0) {
                 container.innerHTML = `<p class="text-red-500 text-center">Gagal memuat F&G Index.</p>`;
@@ -685,9 +724,6 @@
 
             watchlistListContainer.innerHTML = state.watchlist.map(w => {
                 const currentPrice = prices?.[w.id]?.usd || 0;
-                const priceChange24h = prices?.[w.id]?.usd_24h_change || 0; // Requires different API call for 24h change
-                const priceClass = currentPrice >= 0 ? 'price-up' : 'price-down'; // Simplified, needs proper logic from comprehensive API
-
                 // Note: For actual 24h change, you'd need a more comprehensive CoinGecko API call
                 // (e.g., /coins/markets?ids=...&vs_currency=usd&price_change_percentage=24h)
                 // For simplicity here, just showing current price.
@@ -700,7 +736,7 @@
                         </div>
                         <div class="text-right">
                             <div class="font-semibold">$${currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
-                            <!-- <div class="text-xs ${priceClass}">${priceChange24h.toFixed(2)}%</div> -->
+                            <!-- <div class="text-xs ${currentPrice >= 0 ? 'price-up' : 'price-down'}">${(prices?.[w.id]?.usd_24h_change || 0).toFixed(2)}%</div> -->
                         </div>
                         <button class="remove-watchlist-item-btn p-1 text-slate-400 hover:text-red-500 rounded-full" data-coin-id="${w.id}" title="Hapus dari Watchlist">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
@@ -709,9 +745,10 @@
             }).join('');
 
             // Attach event listener for removing watchlist items
-            $$('.remove-watchlist-item-btn').forEach(btn => btn.addEventListener('click', (e) => {
+            $$('.remove-watchlist-item-btn').forEach(btn => btn.addEventListener('click', async (e) => {
                 const coinIdToRemove = btn.dataset.coinId;
                 state.watchlist = state.watchlist.filter(w => w.id !== coinIdToRemove);
+                await saveWatchlist(); // Save to Firebase
                 showToast('Koin dihapus dari watchlist.', 'info');
                 renderWatchlist(); // Re-render to reflect changes
             }));
@@ -720,8 +757,9 @@
             $('#clear-watchlist-btn').addEventListener('click', () => {
                 openModal('Konfirmasi', `<p>Yakin mau hapus semua koin dari watchlist?</p><div class="flex justify-end gap-4 mt-4"><button id="confirm-clear-watchlist" class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700">Ya, Hapus</button><button id="cancel-clear-watchlist" class="bg-slate-200 dark:bg-slate-700 font-semibold py-2 px-4 rounded-lg">Batal</button></div>`);
                 $('#cancel-clear-watchlist').addEventListener('click', closeModal);
-                $('#confirm-clear-watchlist').addEventListener('click', () => {
+                $('#confirm-clear-watchlist').addEventListener('click', async () => {
                     state.watchlist = [];
+                    await saveWatchlist(); // Save to Firebase
                     showToast('Watchlist dibersihkan!', 'success');
                     renderWatchlist();
                     closeModal();
@@ -1053,17 +1091,19 @@
                         <span>Refresh</span>
                     </button>
                 </div>
-                <div id="news-list" class="space-y-6"></div>`;
+                <div id="news-list" class="space-y-6 custom-scrollbar"></div>`;
 
             const sourceSelect = $('#news-source-select');
-            sourceSelect.innerHTML = config.api.newsSources.map(s => `<option value="${s.url}">${s.name}</option>`).join('');
+            sourceSelect.innerHTML = config.newsSources.map(s => `<option value="${s.url}">${s.name}</option>`).join('');
 
             const fetchAndRender = async () => {
                 const listEl = $('#news-list');
                 listEl.innerHTML = Array(5).fill('<div class="h-40 skeleton-loader flex items-center justify-center">Memuat berita...</div>').join(''); // Loading skeletons
 
                 const sourceUrl = sourceSelect.value;
-                const newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, `news_${sourceUrl.replace(/[^a-zA-Z0-9]/g, '_')}`, 15); // Cache for 15 minutes, sanitize key
+                const cacheKey = `news_${sourceUrl.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                // Changed cache duration from 15 minutes to 5 minutes for more real-time news
+                let newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, cacheKey, 5);
 
                 if (!newsData || newsData.status !== 'ok' || !newsData.items || newsData.items.length === 0) {
                     listEl.innerHTML = `<div class="glass-card-pro p-6 rounded-2xl text-red-500 text-center">Gagal memuat berita dari sumber ini. Coba sumber lain atau refresh.</div>`;
@@ -1104,7 +1144,7 @@
                     summaryContainer.classList.remove('hidden');
                     summaryContainer.innerHTML = `<div class="flex items-center gap-2 text-sm text-slate-500"><div class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div><span>AI sedang merangkum...</span></div>`;
 
-                    const cleanDescription = item.description.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+                    const cleanDescription = item.description.replace(/<[^>]+>/g, '').replace(/ /g, ' ').trim();
                     const summary = await getAiSummary(cleanDescription);
                     summaryContainer.innerHTML = `<h4 class="font-bold mb-2">Ringkasan AI:</h4><div class="text-sm">${summary}</div>`;
                 }));
@@ -1337,6 +1377,7 @@
             if (selectedCoinElement) {
                 const selectedCoinSymbolMatch = selectedCoinElement.textContent.match(/\(([^)]+)\)/);
                 if (selectedCoinSymbolMatch && selectedCoinSymbolMatch[1]) {
+                    // FIX: Corrected typo from selectedCoinSymbolSymbolMatch to selectedCoinSymbolMatch
                     const selectedCoinSymbol = selectedCoinSymbolMatch[1].toLowerCase();
                     const selectedCoinId = config.simulatorCoins.find(c => c.symbol.toLowerCase() === selectedCoinSymbol)?.id;
                     if (selectedCoinId && state.simulatorPrices[selectedCoinId]?.usd) {
@@ -1359,25 +1400,26 @@
                 return;
             }
 
-            const spread = price * 0.002; // 0.2% spread for simulation
+            // More realistic spread: random between 0.2% and 0.3%
+            const spread = price * (0.002 + Math.random() * 0.001);
             const bids = [];
             const asks = [];
 
-            // Generate some realistic-looking bid prices and amounts
+            // Generate realistic-looking bid prices and amounts (amounts decrease further from current price)
             for (let i = 0; i < 5; i++) {
                 bids.push({
                     price: (price - spread * (0.5 + i * 0.2)).toFixed(2),
-                    amount: (Math.random() * 3 + 1).toFixed(3)
+                    amount: (10 - i * 1.5).toFixed(3) // Amounts decrease with distance
                 });
             }
             // Sort bids descending by price
             bids.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
 
-            // Generate some realistic-looking ask prices and amounts
+            // Generate realistic-looking ask prices and amounts (amounts decrease further from current price)
             for (let i = 0; i < 5; i++) {
                 asks.push({
                     price: (price + spread * (0.5 + i * 0.2)).toFixed(2),
-                    amount: (Math.random() * 3 + 1).toFixed(3)
+                    amount: (10 - i * 1.5).toFixed(3) // Amounts decrease with distance
                 });
             }
             // Sort asks ascending by price
@@ -1823,7 +1865,12 @@
             // Initialize Firebase authentication and wait for it to be ready
             await initAuth();
 
-            // After auth is ready, load the default page (Dashboard)
+            // After auth is ready, load watchlist (now persistent)
+            if (state.userId && !state.userId.startsWith('offline-')) {
+                await loadWatchlist();
+            }
+
+            // Load the default page (Dashboard)
             // Trigger a click on the dashboard link to load it
             $('.nav-link[data-id="dasbor"]').click();
         }
