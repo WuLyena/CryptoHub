@@ -399,7 +399,7 @@
         };
 
         // Get CoinGecko image URL, with a fallback placeholder
-        const getCoinImage = (coinId, symbol) => `https://assets.coingecko.com/coins/images/fallback/large/${coinId}.png` || `https://placehold.co/32x32/1e293b/ffffff?text=${symbol.charAt(0).toUpperCase()}`;
+        const getCoinImage = (coinId, symbol) => `https://assets.coingecko.com/coins/images/fallback/large/${coinId}.png` || `https://placehold.co/32x32/1e293b/ffffff?text=${symbol.charAt(0).toUpperCase()}'`;
 
 
         // --- API & DATA FETCHING UTILITIES ---
@@ -450,12 +450,12 @@
             if (!ids) return {};
 
             try {
+                // Fetch both USD and IDR for comprehensive display
                 const data = await apiFetch(
-                    `${config.api.coingecko}/simple/price?ids=${ids}&vs_currencies=usd,idr`, // Fetch both USD and IDR
+                    `${config.api.coingecko}/simple/price?ids=${ids}&vs_currencies=usd,idr`,
                     `realtime_prices_${ids}`,
                     0.5 // Cache for 30 seconds for simulator prices and live market
                 );
-                // Ensure data structure is flat (e.g., { bitcoin: { usd: 61000, idr: 900000000 } })
                 return data || {};
             } catch (error) {
                 console.error('Gagal fetch harga koin:', error);
@@ -953,8 +953,10 @@
                 const assetValueUSD = asset.amount * currentPriceUSD;
                 const investedValueUSD = asset.amount * asset.buyPrice; // Assuming buyPrice is in USD
 
+                // Calculate IDR values: convert USD buyPrice to IDR using available USD-IDR rate
+                const usdToIdrRate = prices?.usd?.idr || 1; // Get USD to IDR rate, fallback to 1 if not available
                 const assetValueIDR = asset.amount * currentPriceIDR;
-                const investedValueIDR = asset.amount * asset.buyPrice * (prices?.usd?.idr || 1); // Convert USD buyPrice to IDR using USD-IDR rate
+                const investedValueIDR = asset.amount * asset.buyPrice * usdToIdrRate; 
 
                 const pnlUSD = assetValueUSD - investedValueUSD;
                 const pnlPercentUSD = investedValueUSD > 0 ? (pnlUSD / investedValueUSD) * 100 : 0;
@@ -1130,7 +1132,10 @@
                 let newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, cacheKey, 1); // Cache 1 minute
 
                 if (!newsData || newsData.status !== 'ok' || !newsData.items || newsData.items.length === 0) {
-                    listEl.innerHTML = `<div class="glass-card-pro p-6 rounded-2xl text-red-500 text-center">Gagal memuat berita dari sumber ini. Coba sumber lain atau refresh.</div>`;
+                    listEl.innerHTML = `<div class="glass-card-pro p-6 rounded-2xl text-red-500 text-center">
+                                            <p>Gagal memuat berita dari sumber ini. Ini bisa jadi masalah sementara.</p>
+                                            <p class="mt-2 text-sm text-slate-400">Coba pilih sumber lain atau klik 'Refresh'.</p>
+                                        </div>`;
                     return;
                 }
 
@@ -1168,7 +1173,7 @@
                     summaryContainer.classList.remove('hidden');
                     summaryContainer.innerHTML = `<div class="flex items-center gap-2 text-sm text-slate-500"><div class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div><span>AI sedang merangkum...</span></div>`;
 
-                    const cleanDescription = item.description.replace(/<[^>]+>/g, '').replace(/ /g, ' ').trim();
+                    const cleanDescription = item.description.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
                     const summary = await getAiSummary(cleanDescription);
                     summaryContainer.innerHTML = `<h4 class="font-bold mb-2">Ringkasan AI:</h4><div class="text-sm">${summary}</div>`;
                 }));
@@ -1423,16 +1428,16 @@
                 return;
             }
 
-            // More realistic spread: random between 0.1% and 0.5%
-            const spread = price * (0.001 + Math.random() * 0.004); // Changed range for more activity
+            // More realistic spread: random between 0.1% and 0.5% for more dynamic changes
+            const spread = price * (0.001 + Math.random() * 0.004);
             const bids = [];
             const asks = [];
 
             // Generate realistic-looking bid prices and amounts (amounts decrease further from current price)
             for (let i = 0; i < 5; i++) {
                 bids.push({
-                    price: (price - spread * (0.2 + i * 0.1)).toFixed(2), // Smaller steps, more active around current price
-                    amount: (Math.random() * 5 + 1).toFixed(3) // More varied amounts
+                    price: (price - spread * (0.1 + i * 0.1)).toFixed(2), // Smaller steps, more active around current price
+                    amount: (Math.random() * 8 + 2).toFixed(3) // Increased range for amounts (2 to 10)
                 });
             }
             // Sort bids descending by price
@@ -1441,8 +1446,8 @@
             // Generate realistic-looking ask prices and amounts (amounts decrease further from current price)
             for (let i = 0; i < 5; i++) {
                 asks.push({
-                    price: (price + spread * (0.2 + i * 0.1)).toFixed(2), // Smaller steps, more active around current price
-                    amount: (Math.random() * 5 + 1).toFixed(3) // More varied amounts
+                    price: (price + spread * (0.1 + i * 0.1)).toFixed(2), // Smaller steps, more active around current price
+                    amount: (Math.random() * 8 + 2).toFixed(3) // Increased range for amounts (2 to 10)
                 });
             }
             // Sort asks ascending by price
@@ -1567,17 +1572,17 @@
                     </div>
                 </div>`;
 
-            // Populate currency converter options with popular cryptos + USD
+            // Populate currency converter options with popular cryptos + USD + IDR
             const allCoins = await apiFetch(`${config.api.coingecko}/coins/list`, 'coin_list_full', 1440); // Cache for 24 hours
             const popularCurrencies = [
                 { id: 'usd', symbol: 'USD', name: 'US Dollar' },
-                { id: 'idr', symbol: 'IDR', name: 'Indonesian Rupiah' }, // Added IDR
+                { id: 'idr', symbol: 'IDR', name: 'Indonesian Rupiah' }, // Explicitly added IDR
                 ...config.simulatorCoins
             ].map(c => `<option value="${c.id}">${c.symbol.toUpperCase()} (${c.name})</option>`).join('');
 
             $('#convert-from-currency').innerHTML = popularCurrencies;
             $('#convert-to-currency').innerHTML = popularCurrencies;
-            $('#convert-to-currency').value = 'idr'; // Default to IDR for 'to' currency
+            $('#convert-to-currency').value = 'idr'; // Default to IDR for 'to' currency for convenience
 
             // Populate Gas Fee Network & Activity options
             const gasNetworks = [
@@ -1619,7 +1624,7 @@
                 conversionResultEl.textContent = 'Mengkonversi...';
 
                 // Fetch conversion rates for all involved currencies including IDR
-                const rates = await fetchCoinPrices([fromCoinId, toCoinId]); 
+                const rates = await fetchCoinPrices([fromCoinId, toCoinId, 'usd']); // Always fetch USD to ensure IDR conversion is possible
 
                 if (!rates || !rates[fromCoinId] || !rates[toCoinId]) {
                     showToast('Gagal mendapatkan nilai tukar. Coba lagi.', 'error');
@@ -1628,34 +1633,65 @@
                     return;
                 }
                 
-                let fromUsdRate = rates[fromCoinId].usd;
-                let toUsdRate = rates[toCoinId].usd;
-
-                // Handle direct IDR conversion if either is IDR
-                if (fromCoinId === 'idr') {
-                    fromUsdRate = 1 / rates.usd.idr; // 1 USD in IDR
-                }
-                if (toCoinId === 'idr') {
-                    toUsdRate = 1 / rates.usd.idr; // 1 USD in IDR
+                let fromPriceInUsd;
+                if (fromCoinId === 'usd') {
+                    fromPriceInUsd = 1;
+                } else if (fromCoinId === 'idr') {
+                    fromPriceInUsd = 1 / (rates.usd?.idr || 1); // Get USD equivalent of 1 IDR
+                } else {
+                    fromPriceInUsd = rates[fromCoinId]?.usd;
                 }
 
-                const convertedValue = (amount * fromUsdRate) / toUsdRate;
+                let toPriceInUsd;
+                if (toCoinId === 'usd') {
+                    toPriceInUsd = 1;
+                } else if (toCoinId === 'idr') {
+                    toPriceInUsd = 1 / (rates.usd?.idr || 1); // Get USD equivalent of 1 IDR
+                } else {
+                    toPriceInUsd = rates[toCoinId]?.usd;
+                }
+
+                if (fromPriceInUsd === 0 || toPriceInUsd === 0 || isNaN(fromPriceInUsd) || isNaN(toPriceInUsd)) {
+                    showToast('Gagal mendapatkan nilai tukar yang valid untuk konversi.', 'error');
+                    conversionResultEl.textContent = 'Gagal memuat nilai tukar.';
+                    $('#convert-to').value = '';
+                    return;
+                }
+
+                const convertedValue = (amount * fromPriceInUsd) / toPriceInUsd;
                 $('#convert-to').value = convertedValue.toFixed(6);
 
                 // Format conversion result based on currency
                 let fromDisplay = fromCoinId.toUpperCase();
                 let toDisplay = toCoinId.toUpperCase();
-                let convertedRate = (fromUsdRate / toUsdRate).toFixed(6);
+                let rateForDisplay;
 
                 if (fromCoinId === 'idr') {
                     fromDisplay = 'Rp';
-                    convertedRate = (1 / (rates[toCoinId]?.idr || rates.usd.idr)).toFixed(6); // Convert 1 IDR to target coin
+                    // Convert 1 IDR to target crypto/USD
+                    if (toCoinId === 'usd') {
+                        rateForDisplay = (1 / (rates.usd?.idr || 1)).toFixed(6);
+                    } else if (toCoinId === 'idr') {
+                        rateForDisplay = '1';
+                    } else {
+                        rateForDisplay = (1 / (rates.usd?.idr || 1) * rates[toCoinId].usd / toPriceInUsd).toFixed(6); // 1 IDR to X crypto via USD
+                    }
                 } else if (toCoinId === 'idr') {
                     toDisplay = 'Rp';
-                    convertedRate = (rates[fromCoinId]?.idr || (rates[fromCoinId]?.usd * rates.usd.idr)).toLocaleString('id-ID'); // Convert 1 source coin to IDR
+                    // Convert 1 source crypto/USD to IDR
+                    if (fromCoinId === 'usd') {
+                        rateForDisplay = (rates.usd?.idr || 1).toLocaleString('id-ID');
+                    } else if (fromCoinId === 'idr') {
+                        rateForDisplay = '1';
+                    } else {
+                         rateForDisplay = (rates[fromCoinId].usd * (rates.usd?.idr || 1)).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    }
+                } else {
+                    // Crypto to Crypto or Crypto to USD
+                    rateForDisplay = (fromPriceInUsd / toPriceInUsd).toFixed(6);
                 }
 
-                conversionResultEl.textContent = `1 ${fromDisplay} = ${convertedRate} ${toDisplay}`;
+                conversionResultEl.textContent = `1 ${fromDisplay} = ${rateForDisplay} ${toDisplay}`;
             });
 
             $('#swap-currencies-btn').addEventListener('click', () => {
