@@ -451,11 +451,11 @@
 
             try {
                 const data = await apiFetch(
-                    `${config.api.coingecko}/simple/price?ids=${ids}&vs_currencies=usd`,
+                    `${config.api.coingecko}/simple/price?ids=${ids}&vs_currencies=usd,idr`, // Fetch both USD and IDR
                     `realtime_prices_${ids}`,
                     0.5 // Cache for 30 seconds for simulator prices and live market
                 );
-                // Ensure data structure is flat (e.g., { bitcoin: { usd: 61000 } })
+                // Ensure data structure is flat (e.g., { bitcoin: { usd: 61000, idr: 900000000 } })
                 return data || {};
             } catch (error) {
                 console.error('Gagal fetch harga koin:', error);
@@ -938,21 +938,36 @@
 
             // Fetch current prices for all assets in the portfolio
             const assetIds = portfolio.map(asset => asset.id).join(',');
-            const prices = await fetchCoinPrices(assetIds); // Use the dedicated fetcher
+            // Fetch prices in USD and IDR for portfolio
+            const prices = await fetchCoinPrices(assetIds); 
 
-            let totalInvested = 0;
-            let currentValue = 0;
+            let totalInvestedUSD = 0;
+            let currentValueUSD = 0;
+            let totalInvestedIDR = 0;
+            let currentValueIDR = 0;
 
             listEl.innerHTML = portfolio.map(asset => {
-                const currentPrice = prices?.[asset.id]?.usd || 0; // Get current price, fallback to 0
-                const assetValue = asset.amount * currentPrice;
-                const investedValue = asset.amount * asset.buyPrice;
-                const pnl = assetValue - investedValue;
-                const pnlPercent = investedValue > 0 ? (pnl / investedValue) * 100 : 0;
-                const pnlClass = pnl >= 0 ? 'price-up' : 'price-down';
+                const currentPriceUSD = prices?.[asset.id]?.usd || 0; // Get current USD price
+                const currentPriceIDR = prices?.[asset.id]?.idr || 0; // Get current IDR price
 
-                totalInvested += investedValue;
-                currentValue += assetValue;
+                const assetValueUSD = asset.amount * currentPriceUSD;
+                const investedValueUSD = asset.amount * asset.buyPrice; // Assuming buyPrice is in USD
+
+                const assetValueIDR = asset.amount * currentPriceIDR;
+                const investedValueIDR = asset.amount * asset.buyPrice * (prices?.usd?.idr || 1); // Convert USD buyPrice to IDR using USD-IDR rate
+
+                const pnlUSD = assetValueUSD - investedValueUSD;
+                const pnlPercentUSD = investedValueUSD > 0 ? (pnlUSD / investedValueUSD) * 100 : 0;
+                const pnlClassUSD = pnlUSD >= 0 ? 'price-up' : 'price-down';
+
+                const pnlIDR = assetValueIDR - investedValueIDR;
+                const pnlPercentIDR = investedValueIDR > 0 ? (pnlIDR / investedValueIDR) * 100 : 0;
+                const pnlClassIDR = pnlIDR >= 0 ? 'price-up' : 'price-down';
+
+                totalInvestedUSD += investedValueUSD;
+                currentValueUSD += assetValueUSD;
+                totalInvestedIDR += investedValueIDR;
+                currentValueIDR += assetValueIDR;
 
                 return `
                     <div class="border-b border-slate-200 dark:border-slate-800 pb-3 last:border-b-0">
@@ -964,11 +979,14 @@
                         </div>
                         <div class="flex justify-between text-sm mt-1">
                             <span>Jumlah: ${asset.amount.toLocaleString('en-US', { maximumFractionDigits: 6 })}</span>
-                            <span class="font-semibold">$${assetValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span class="font-semibold">$${assetValueUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / Rp${assetValueIDR.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                         </div>
                         <div class="flex justify-between text-xs text-slate-500">
                             <span>Avg. Beli: $${asset.buyPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                            <span class="${pnlClass}">${pnl >= 0 ? '+' : ''}$${pnl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pnlPercent.toFixed(2)}%)</span>
+                            <span class="${pnlClassUSD}">${pnlUSD >= 0 ? '+' : ''}$${pnlUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pnlPercentUSD.toFixed(2)}%)</span>
+                        </div>
+                        <div class="flex justify-end text-xs text-slate-500">
+                             <span class="${pnlClassIDR}">${pnlIDR >= 0 ? '+' : ''}Rp${pnlIDR.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${pnlPercentIDR.toFixed(2)}%)</span>
                         </div>
                     </div>`;
             }).join('');
@@ -976,15 +994,21 @@
             // Attach event listeners for remove buttons
             $$('.remove-asset-btn').forEach(btn => btn.addEventListener('click', () => handleRemoveAsset(btn.dataset.firestoreId)));
 
-            const totalPnl = currentValue - totalInvested;
-            const totalPnlPercent = totalInvested > 0 ? (totalPnl / totalInvested) * 100 : 0;
-            const totalPnlClass = totalPnl >= 0 ? 'price-up' : 'price-down';
+            const totalPnlUSD = currentValueUSD - totalInvestedUSD;
+            const totalPnlPercentUSD = totalInvestedUSD > 0 ? (totalPnlUSD / totalInvestedUSD) * 100 : 0;
+            const totalPnlClassUSD = totalPnlUSD >= 0 ? 'price-up' : 'price-down';
+
+            const totalPnlIDR = currentValueIDR - totalInvestedIDR;
+            const totalPnlPercentIDR = totalInvestedIDR > 0 ? (totalPnlIDR / totalInvestedIDR) * 100 : 0;
+            const totalPnlClassIDR = totalPnlIDR >= 0 ? 'price-up' : 'price-down';
+
 
             summaryEl.innerHTML = `
                 <p class="text-sm text-slate-400">Nilai Portofolio</p>
-                <p class="text-4xl font-extrabold">$${currentValue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
-                <p class="font-semibold ${totalPnlClass} mt-1">${totalPnl >= 0 ? '+' : ''}$${totalPnl.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${totalPnlPercent.toFixed(2)}%)</p>
-                <div class="text-xs text-slate-500 mt-2">Modal: $${totalInvested.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>`;
+                <p class="text-4xl font-extrabold">$${currentValueUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / Rp${currentValueIDR.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                <p class="font-semibold ${totalPnlClassUSD} mt-1">${totalPnlUSD >= 0 ? '+' : ''}$${totalPnlUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${totalPnlPercentUSD.toFixed(2)}%)</p>
+                <p class="font-semibold ${totalPnlClassIDR}">${totalPnlIDR >= 0 ? '+' : ''}Rp${totalPnlIDR.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} (${totalPnlPercentIDR.toFixed(2)}%)</p>
+                <div class="text-xs text-slate-500 mt-2">Modal: $${totalInvestedUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / Rp${totalInvestedIDR.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>`;
         }
 
         // Handles adding a new asset to the portfolio
@@ -1102,8 +1126,8 @@
 
                 const sourceUrl = sourceSelect.value;
                 const cacheKey = `news_${sourceUrl.replace(/[^a-zA-Z0-9]/g, '_')}`;
-                // Changed cache duration from 15 minutes to 5 minutes for more real-time news
-                let newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, cacheKey, 5);
+                // Changed cache duration from 15 minutes to 1 minute for more real-time news
+                let newsData = await apiFetch(`${config.api.rss2json}${encodeURIComponent(sourceUrl)}`, cacheKey, 1); // Cache 1 minute
 
                 if (!newsData || newsData.status !== 'ok' || !newsData.items || newsData.items.length === 0) {
                     listEl.innerHTML = `<div class="glass-card-pro p-6 rounded-2xl text-red-500 text-center">Gagal memuat berita dari sumber ini. Coba sumber lain atau refresh.</div>`;
@@ -1377,7 +1401,6 @@
             if (selectedCoinElement) {
                 const selectedCoinSymbolMatch = selectedCoinElement.textContent.match(/\(([^)]+)\)/);
                 if (selectedCoinSymbolMatch && selectedCoinSymbolMatch[1]) {
-                    // FIX: Corrected typo from selectedCoinSymbolSymbolMatch to selectedCoinSymbolMatch
                     const selectedCoinSymbol = selectedCoinSymbolMatch[1].toLowerCase();
                     const selectedCoinId = config.simulatorCoins.find(c => c.symbol.toLowerCase() === selectedCoinSymbol)?.id;
                     if (selectedCoinId && state.simulatorPrices[selectedCoinId]?.usd) {
@@ -1400,16 +1423,16 @@
                 return;
             }
 
-            // More realistic spread: random between 0.2% and 0.3%
-            const spread = price * (0.002 + Math.random() * 0.001);
+            // More realistic spread: random between 0.1% and 0.5%
+            const spread = price * (0.001 + Math.random() * 0.004); // Changed range for more activity
             const bids = [];
             const asks = [];
 
             // Generate realistic-looking bid prices and amounts (amounts decrease further from current price)
             for (let i = 0; i < 5; i++) {
                 bids.push({
-                    price: (price - spread * (0.5 + i * 0.2)).toFixed(2),
-                    amount: (10 - i * 1.5).toFixed(3) // Amounts decrease with distance
+                    price: (price - spread * (0.2 + i * 0.1)).toFixed(2), // Smaller steps, more active around current price
+                    amount: (Math.random() * 5 + 1).toFixed(3) // More varied amounts
                 });
             }
             // Sort bids descending by price
@@ -1418,8 +1441,8 @@
             // Generate realistic-looking ask prices and amounts (amounts decrease further from current price)
             for (let i = 0; i < 5; i++) {
                 asks.push({
-                    price: (price + spread * (0.5 + i * 0.2)).toFixed(2),
-                    amount: (10 - i * 1.5).toFixed(3) // Amounts decrease with distance
+                    price: (price + spread * (0.2 + i * 0.1)).toFixed(2), // Smaller steps, more active around current price
+                    amount: (Math.random() * 5 + 1).toFixed(3) // More varied amounts
                 });
             }
             // Sort asks ascending by price
@@ -1490,72 +1513,6 @@
             $('#simulator-balance').textContent = `Saldo: $${state.simulatorBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         }
 
-        // Handles buy/sell orders in the simulator
-        function handleSimulatorOrder(type) {
-            const amount = parseFloat($('#simulator-amount').value);
-            const price = parseFloat($('#simulator-price-input').value);
-            const selectedCoinText = $('#selected-coin').textContent;
-            const coinMatch = selectedCoinText.match(/(.*) \((.*)\)/); // e.g., "Bitcoin (BTC)"
-
-            if (!coinMatch || coinMatch.length < 3) {
-                showToast('Pilih aset yang valid terlebih dahulu.', 'error');
-                return;
-            }
-
-            const coinName = coinMatch[1].trim();
-            const coinSymbol = coinMatch[2].trim().toLowerCase();
-
-            const total = amount * price;
-
-            if (isNaN(amount) || isNaN(price) || amount <= 0 || price <= 0) {
-                showToast('Masukkan jumlah dan harga yang valid (harus positif).', 'error');
-                return;
-            }
-
-            if (type === 'buy') {
-                if (total > state.simulatorBalance) {
-                    showToast('Saldo tidak cukup untuk melakukan pembelian ini!', 'error');
-                    return;
-                }
-                state.simulatorBalance -= total;
-                // Update position: if coin exists, add amount and re-calculate avg price
-                if (state.simulatorPositions[coinSymbol]) {
-                    const existingAmount = state.simulatorPositions[coinSymbol].amount;
-                    const existingTotalCost = existingAmount * state.simulatorPositions[coinSymbol].price;
-                    state.simulatorPositions[coinSymbol].amount += amount;
-                    state.simulatorPositions[coinSymbol].price = (existingTotalCost + total) / state.simulatorPositions[coinSymbol].amount; // New average price
-                } else {
-                    state.simulatorPositions[coinSymbol] = { amount, price };
-                }
-                showToast(`Berhasil membeli ${amount.toLocaleString()} ${coinSymbol.toUpperCase()} seharga $${price.toLocaleString()} per koin!`, 'success');
-            } else { // type === 'sell'
-                if (!state.simulatorPositions[coinSymbol] || state.simulatorPositions[coinSymbol].amount < amount) {
-                    showToast('Anda tidak memiliki cukup aset ini untuk dijual!', 'error');
-                    return;
-                }
-                state.simulatorBalance += total;
-                state.simulatorPositions[coinSymbol].amount -= amount;
-                if (state.simulatorPositions[coinSymbol].amount <= 0.0000001) { // Use a small threshold for floating point comparison
-                    delete state.simulatorPositions[coinSymbol]; // Remove position if amount is zero or near zero
-                }
-                showToast(`Berhasil menjual ${amount.toLocaleString()} ${coinSymbol.toUpperCase()} seharga $${price.toLocaleString()} per koin!`, 'success');
-            }
-
-            // Add to history
-            state.simulatorHistory.unshift({
-                type,
-                coin: coinSymbol,
-                amount,
-                price,
-                total,
-                date: new Date().toLocaleString('id-ID', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-            });
-
-            triggerConfetti(); // Celebrate transaction success
-            updateSimulatorUI(); // Re-render simulator UI
-            updateOrderBook(coinSymbol); // Update order book
-        }
-
 
         // Renders the Tools page content
         async function renderTools() {
@@ -1614,12 +1571,13 @@
             const allCoins = await apiFetch(`${config.api.coingecko}/coins/list`, 'coin_list_full', 1440); // Cache for 24 hours
             const popularCurrencies = [
                 { id: 'usd', symbol: 'USD', name: 'US Dollar' },
-                ...config.simulatorCoins // Use the simulator coins as popular choices
+                { id: 'idr', symbol: 'IDR', name: 'Indonesian Rupiah' }, // Added IDR
+                ...config.simulatorCoins
             ].map(c => `<option value="${c.id}">${c.symbol.toUpperCase()} (${c.name})</option>`).join('');
 
             $('#convert-from-currency').innerHTML = popularCurrencies;
             $('#convert-to-currency').innerHTML = popularCurrencies;
-            $('#convert-to-currency').value = 'usd'; // Default to USD
+            $('#convert-to-currency').value = 'idr'; // Default to IDR for 'to' currency
 
             // Populate Gas Fee Network & Activity options
             const gasNetworks = [
@@ -1660,22 +1618,44 @@
 
                 conversionResultEl.textContent = 'Mengkonversi...';
 
-                // Fetch conversion rates
-                const rates = await fetchCoinPrices([fromCoinId, toCoinId]); // Fetch prices for both currencies
+                // Fetch conversion rates for all involved currencies including IDR
+                const rates = await fetchCoinPrices([fromCoinId, toCoinId]); 
 
-                if (!rates || !rates[fromCoinId]?.usd || !rates[toCoinId]?.usd) {
+                if (!rates || !rates[fromCoinId] || !rates[toCoinId]) {
                     showToast('Gagal mendapatkan nilai tukar. Coba lagi.', 'error');
                     conversionResultEl.textContent = 'Gagal memuat nilai tukar.';
                     $('#convert-to').value = '';
                     return;
                 }
+                
+                let fromUsdRate = rates[fromCoinId].usd;
+                let toUsdRate = rates[toCoinId].usd;
 
-                const fromUsdRate = rates[fromCoinId].usd;
-                const toUsdRate = rates[toCoinId].usd;
+                // Handle direct IDR conversion if either is IDR
+                if (fromCoinId === 'idr') {
+                    fromUsdRate = 1 / rates.usd.idr; // 1 USD in IDR
+                }
+                if (toCoinId === 'idr') {
+                    toUsdRate = 1 / rates.usd.idr; // 1 USD in IDR
+                }
 
                 const convertedValue = (amount * fromUsdRate) / toUsdRate;
                 $('#convert-to').value = convertedValue.toFixed(6);
-                conversionResultEl.textContent = `1 ${fromCoinId.toUpperCase()} = ${(fromUsdRate / toUsdRate).toFixed(6)} ${toCoinId.toUpperCase()}`;
+
+                // Format conversion result based on currency
+                let fromDisplay = fromCoinId.toUpperCase();
+                let toDisplay = toCoinId.toUpperCase();
+                let convertedRate = (fromUsdRate / toUsdRate).toFixed(6);
+
+                if (fromCoinId === 'idr') {
+                    fromDisplay = 'Rp';
+                    convertedRate = (1 / (rates[toCoinId]?.idr || rates.usd.idr)).toFixed(6); // Convert 1 IDR to target coin
+                } else if (toCoinId === 'idr') {
+                    toDisplay = 'Rp';
+                    convertedRate = (rates[fromCoinId]?.idr || (rates[fromCoinId]?.usd * rates.usd.idr)).toLocaleString('id-ID'); // Convert 1 source coin to IDR
+                }
+
+                conversionResultEl.textContent = `1 ${fromDisplay} = ${convertedRate} ${toDisplay}`;
             });
 
             $('#swap-currencies-btn').addEventListener('click', () => {
